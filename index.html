@@ -1,0 +1,174 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>VWA Scoresheets</title>
+        <meta name="generator" content="WYSIWYG Web Builder 16 Trial Version - https://www.wysiwygwebbuilder.com">
+        <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+        <meta http-equiv="Pragma" content="no-cache" />
+        <meta http-equiv="Expires" content="0" />
+        <link href="../static/base/jquery-ui.min.css" rel="stylesheet">
+        <link href="../static/Untitled1.css" rel="stylesheet">
+        <link href="../static/page1.css" rel="stylesheet">
+        <link rel="icon" href="https://volleyballwa.com.au/wp-content/uploads/2021/03/cropped-VWA_logo_vertical_forBlackBG-100x100.png" sizes="32x32">
+        <link rel="icon" href="https://volleyballwa.com.au/wp-content/uploads/2021/03/cropped-VWA_logo_vertical_forBlackBG-300x300.png" sizes="192x192">
+        <link rel="apple-touch-icon" href="https://volleyballwa.com.au/wp-content/uploads/2021/03/cropped-VWA_logo_vertical_forBlackBG-300x300.png">
+        <script src="../static/jquery-1.12.4.min.js"></script>
+        <script src="../static/jquery-ui.min.js"></script>
+        <script src="https://unpkg.com/pdf-lib@1.16.0"></script>
+        <script src="https://unpkg.com/pdf-lib@1.16.0/dist/pdf-lib.js"></script>
+        <script src="https://unpkg.com/pdf-lib@1.16.0/dist/pdf-lib.min.js"></script>
+        <script src="https://unpkg.com/downloadjs@1.4.7"></script>
+        <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+        <script>
+            function nextSunday(){
+                var d = new Date()
+                d.setDate(d.getDate() + (0+(7-d.getDay())) % 7);
+                console.log(d)
+                return d;
+            }
+            $(document).ready(function()
+            {
+               $("#DatePicker2").datepicker(
+               {
+                  dateFormat: 'yy-mm-dd',
+                  changeMonth: false,
+                  changeYear: false,
+                  showButtonPanel: false,
+                  showAnim: 'show'
+               });
+               $("#DatePicker2").datepicker("setDate", nextSunday());
+               $("#DatePicker2").change(function()
+               {
+                  $('#DatePicker2-input').attr('value',$(this).val());
+               });
+            });
+        </script>
+    </head>
+    <body>
+        <div id="container">
+            <a href="https://www.wysiwygwebbuilder.com" target="_blank"><img src="../static/images/builtwithwwb16.png" alt="WYSIWYG Web Builder" style="position:absolute;left:254px;top:230px;margin: 0;border-width:0;z-index:250"></a>
+            <div id="wb_Form2" style="position:absolute;left:56px;top:144px;width:858px;height:220px;z-index:276;">
+                <form name="WAVL_Advanced" id="Form2">
+                    <input type="button" id="Button4" name="Generate Scoresheets" value="Generate Scoresheets" style="position:absolute;left:450px;top:105px;width:243px;height:50px;z-index:89;background-color:#3370B7;" onclick="WAVL_ONLINE()">
+                    <!--<input type="button" id="Button45" name="ONLINE" value="ONLINE" style="position:absolute;left:450px;top:20px;width:243px;height:50px;z-index:89;" onclick="WAVL_ONLINE()">
+                    <div id="wb_Checkbox99">
+                        <input type="checkbox" id="Checkbox99" name="Force?" value="on" checked="" style="display:inline-block;" title="Use cached scoresheets?" style="position:absolute;left:450px;top:140px;z-index:89;">
+                        <label for="Checkbox99"></label>
+                        <div id="wb_Text99">
+                            <span style="color:#000000;font-family:Arial;font-size:15px;position:absolute;left:475px;top:130px;">Use cached scoresheets?</span>
+                            <span style="color:#000000;font-family:Arial;font-size:12px;position:absolute;left:475px;top:147px;">Faster, but ignores any fixture changes.</span>
+                        </div>
+                    </div><input type="button" id="Button4" name="Generate Scoresheets" value="Generate Scoresheets" style="position:absolute;left:436px;top:77px;width:223px;height:25px;z-index:89;" onclick="WAVL_MAIN()">
+                    <input type="button" id="Button1" name="Download Scoresheets" value="Download Scoresheets" style="position:absolute;left:436px;top:146px;width:223px;height:25px;z-index:91;" disabled="">
+                    -->
+                    <input id="DatePicker2-input" name="DatePicker2" style="display:none" type="text" value="">
+                    <div id="DatePicker2" style="position:absolute;left:69px;top:17px;width:222px;height:213px;z-index:90;"></div>
+                    <!--<button id="Button10" style="position:absolute;left:436px;top:146px;width:223px;height:25px;z-index:91;" onclick="console.log('wtf')">Download</button>
+                    --><div id="wb_Text1" style="position:absolute;left:315px;top:17px;width:500px;height:20px;text-align:center;z-index:92;">
+                        <span style="color:#000000;font-family:Arial;font-size:27px;"><strong>Volleyball WA Scoresheet Generator</strong></span>
+                    </div>
+                    <table style="position:absolute;left:0px;top:326px;width:858px;height:811px;z-index:93;" id="Table1">
+                        <tr>
+                            <td colspan="4" class="cell0">
+                                <div id="wb_Text2">
+                                    <span style="color:#000000;font-family:Arial;font-size:29px;">Venues</span>
+                                </div>
+                            </td>
+                            <td colspan="3" class="cell0">
+                                <div id="wb_Text3">
+                                    <span style="color:#000000;font-family:Arial;font-size:29px;">WAVL</span>
+                                </div>
+                            </td>
+                            <td colspan="3" class="cell0">
+                                <div id="wb_Text36">
+                                    <span style="color:#000000;font-family:Arial;font-size:29px;">WAVjL</span>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                        <td class="cell12"><p style="font-size:8px;line-height:9.5px;">&nbsp;</p></td>
+                        <td class="cell2"><div id="wb_Checkbox32" style="display:inline-block;width:16px;height:20px;z-index:3;">
+                        <input type="checkbox" id="Checkbox32" name="ALL_VENUES" value="on" checked="" style="display:inline-block;" title="Toggle All Venues" onclick="deselect_all_venue()"><label for="Checkbox32"></label>
+                        </div>
+                        </td>
+                        <td class="cell3"><div id="wb_Text35">
+                        <span style="color:#000000;font-family:Arial;font-size:18px;"><strong>Toggle All Venues</strong></span>
+                        </div>
+                        </td>
+                        <td class="cell1"><p style="font-size:8px;line-height:9.5px;">&nbsp;</p></td>
+                        <td class="cell2"><div id="wb_Checkbox33" style="display:inline-block;width:16px;height:20px;z-index:5;">
+                        <input type="checkbox" id="Checkbox33" name="ALL_WAVL" value="on" checked="" style="display:inline-block;" title="Toggle All WAVL Teams" onclick="deselect_all_wavl()"><label for="Checkbox33"></label>
+                        </div>
+                        </td>
+                        <td class="cell3"><div id="wb_Text37">
+                        <span style="color:#000000;font-family:Arial;font-size:18px;"><strong>Toggle All WAVL Teams</strong></span>
+                        </div>
+                        </td>
+                        <td class="cell1"><p style="font-size:8px;line-height:9.5px;">&nbsp;</p></td>
+                        <td class="cell2"><div id="wb_Checkbox34" style="display:inline-block;width:16px;height:20px;z-index:7;">
+                        <input type="checkbox" id="Checkbox34" name="ALL_WAVJL" value="on" checked="" style="display:inline-block;" title="Toggle All WAVjL Teams" onclick="deselect_all_wavjl()"><label for="Checkbox34"></label>
+                        </div>
+                        </td>
+                        <td colspan="2" class="cell5"><div id="wb_Text40">
+                        <span style="color:#000000;font-family:Arial;font-size:18px;"><strong>Toggle All WAVjL Teams</strong></span>
+                        </div>
+                        </td>
+                        </tr>
+                        <tr>
+                        <td class="cell6"><p style="font-size:8px;line-height:9.5px;">&nbsp;</p></td>
+                        <td class="cell7"><p style="font-size:8px;line-height:9.5px;">&nbsp;</p></td>
+                        <td class="cell8"><p style="font-size:8px;line-height:9.5px;">&nbsp;</p></td>
+                        <td class="cell1"><p style="font-size:8px;line-height:9.5px;">&nbsp;</p></td>
+                        <td class="cell7"><p style="font-size:8px;line-height:9.5px;">&nbsp;</p></td>
+                        <td class="cell8"><p style="font-size:8px;line-height:9.5px;">&nbsp;</p></td>
+                        <td class="cell1"><p style="font-size:8px;line-height:9.5px;">&nbsp;</p></td>
+                        <td class="cell7"><p style="font-size:8px;line-height:9.5px;">&nbsp;</p></td>
+                        <td class="cell8"><p style="font-size:8px;line-height:9.5px;">&nbsp;</p></td>
+                        <td class="cell12"><p style="font-size:8px;line-height:9.5px;">&nbsp;</p></td>
+                        </tr>
+                    </table>
+
+                    <!--<div id="wb_Line2" style="position:absolute;left:293px;top:229px;width:2px;height:831px;z-index:94;">
+                        <img src="../static/images/img0002.png" id="Line2" alt="">
+                    </div>
+                    <hr id="Line1" style="position:absolute;left:1px;top:216px;width:864px;z-index:95;">
+                    <div id="wb_Line3" style="position:absolute;left:576px;top:228px;width:2px;height:834px;z-index:96;">
+                        <img src="../static/images/img0003.png" id="Line3" alt="">
+                    </div>-->
+                </form>
+            </div>
+            <div id="wb_Image1" style="position:absolute;left:124px;top:1px;width:723px;height:110px;z-index:277;">
+                <img src="../static/images/logo.jpg" id="Image1" alt="">
+            </div>
+            <div id="individual" style="position:absolute;left:56px;top:377px;width:858px;height:80px;z-index:276;">
+            <!--<div id="individual" style="position:absolute;left:56px;top:377px;width:858px;height:80px;z-index:276;">
+                The plan here is to make blank 5 set, 3 set, WAVJL, and rotation slips available for download.
+                -->
+                <table style="position:absolute;left:0px;top:0px;width:858px;height:80px;z-index:276;table-layout:fixed" id="Table2">
+                    <tr>
+                        <td class="cell90" colspan="3" style="background:cornflowerblue;height:25px">
+                            <div style="text-align:center;font-size:17px">Download blank scoresheets</div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="cell91" colspan="1" style="background:lightcoral">
+                            <div style="text-align:center;font-size:14px">Rotation Slips</div>
+                        </td>
+                        <td class="cell91" colspan="1" style="background:orange">
+                            <div style="text-align:center;font-size:14px">WAVL Scoresheet</div>
+                        </td>
+                        <td class="cell91" colspan="1" style="background:yellow">
+                            <div style="text-align:center;font-size:14px">Junior League<br>Scoresheet</div>
+                        </td>
+                        <!--<td class="cell91" colspan="1" style="background:purple">
+                            <div style="text-align:center;font-size:14px">2021 Venue Schedules</div>
+                        </td>-->
+
+                    </tr>
+                </table>
+            </div>
+        </div>
+        <script src="../static/WAVL.js"></script>
+    </body>
+</html>
