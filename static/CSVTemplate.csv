@@ -1,0 +1,3 @@
+﻿!! zero_venue_split,_venue_0,_venue_1,_venue_2,_venue_full,_court,_team_a,_team_b,_duty,_division,_date_dd,_date_mm,_date_yyyy,_time_hr,_time_min,_sorting,_time_sorting,[_a_List],[b_List]
+!! Rows starting with !! are commented,,,,,,,,,"No spaces, use || to delimit",,,,,,yyyy mm dd Venue Court Time,yyyy mm dd Venue Time Court,|| to separate FN and SN,^^ to separate names
+!! HBF Stad. Claremont,,HBF,Stadium,HBF Stadium Claremont,3,183 UWA,182 Southern Cross,187 Northern Stars Blue,Division 5 Men||Div 5 M||130,14,8,2023,10,0,2022 08 14 HBF Stadium Claremont 3 10,2022 08 14 HBF Stadium Claremont 10 3,FN||SN^^FN||SN^^,FN||SN^^FN||SN^^
