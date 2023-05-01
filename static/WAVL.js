@@ -480,10 +480,10 @@ async function modifyPdf(fix, dates) {
     var total = new Array(fixtures.length);
 
     fixtures.sort(sorting);
-    var WAVLurl = "https://og1764.github.io/static/def.pdf";
-    var JLurl = "https://og1764.github.io/static/def_jl.pdf";
-    var newWAVLurl = "https://og1764.github.io/static/new_def.pdf";
-    var extraWAVLurl = "https://og1764.github.io/static/extra_def.pdf";
+    var WAVLurl = "https://volleyballwa.github.io/static/def.pdf";
+    var JLurl = "https://volleyballwa.github.io/static/def_jl.pdf";
+    var newWAVLurl = "https://volleyballwa.github.io/static/new_def.pdf";
+    var extraWAVLurl = "https://volleyballwa.github.io/static/extra_def.pdf";
     //var extraWAVLurl = "./static/extra_def.pdf"
 
     const WAVLexistingPdfBytes = await fetch(WAVLurl).then(res => res.arrayBuffer());
@@ -504,10 +504,10 @@ async function modifyPdf(fix, dates) {
 
     for (var i = 0; i < fixtures.length; i++) {
         // Load WAVL and Junior League scoresheets
-        var WAVLurl = "https://og1764.github.io/static/def.pdf";
-        var JLurl = "https://og1764.github.io/static/def_jl.pdf";
-        var newWAVLurl = "https://og1764.github.io/static/new_def.pdf";
-        var extraWAVLurl = "https://og1764.github.io/static/extra_def.pdf";
+        var WAVLurl = "https://volleyballwa.github.io/static/def.pdf";
+        var JLurl = "https://volleyballwa.github.io/static/def_jl.pdf";
+        var newWAVLurl = "https://volleyballwa.github.io/static/new_def.pdf";
+        var extraWAVLurl = "https://volleyballwa.github.io/static/extra_def.pdf";
 
         //var WAVLexistingPdfBytes = await fetch(WAVLurl).then(res => res.arrayBuffer());
 
