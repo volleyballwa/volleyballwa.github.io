@@ -540,7 +540,7 @@ async function modifyPdf(fix, dates) {
 
         // If WAVL Game (Divisions or State League)
         // use OLD scoresheet for divisions (for now)
-        if (fixtures[i][9][0][0] == "D" ) { // || fixtures[i][9][0][0] == "S") {
+        if ( false ) {  //fixtures[i][9][0][0] == "D" || fixtures[i][9][0][0] == "S") {
 
             // Team A Team List
             await WAVLfirstPage.drawText(fixtures[i][6], {
@@ -820,15 +820,45 @@ async function modifyPdf(fix, dates) {
                 })
             }
             var saved = await WAVLpdfDoc.saveAsBase64();
-        } else if (fixtures[i][9][0][0] == "S") {
+        } else if (fixtures[i][9][0][0] == "D" || fixtures[i][9][0][0] == "S") {
             if (fixtures[i][17].length > 18 || fixtures[i][18].length > 18){
-                // Team A Team List
-                await extraWAVLfirstPage.drawText(fixtures[i][6], {
-                    x: 295,
-                    y: 744, //739
-                    size: 12,
-                    font: extraWAVLhelveticaFont
-                })
+                
+
+                if (fixtures[i][6].length > 20 || fixtures[i][7].length > 20) {
+                    // Team A Team List
+                    await extraWAVLfirstPage.drawText(fixtures[i][6], {
+                        x: 295,
+                        y: 744, //739
+                        size: 9,
+                        font: extraWAVLhelveticaFont
+                    })
+
+                    // Team B Team List
+                    await extraWAVLfirstPage.drawText(fixtures[i][7], {
+                        x: 460,
+                        y: 744,
+                        size: 9,
+                        font: extraWAVLhelveticaFont
+                    })
+
+                } else {
+                    // Team A Team List
+                    await extraWAVLfirstPage.drawText(fixtures[i][6], {
+                        x: 295,
+                        y: 744, //739
+                        size: 12,
+                        font: extraWAVLhelveticaFont
+                    })
+
+                    // Team B Team List
+                    await extraWAVLfirstPage.drawText(fixtures[i][7], {
+                        x: 460,
+                        y: 744,
+                        size: 12,
+                        font: extraWAVLhelveticaFont
+                    })
+
+                }
 
                 // Team A Players
                 for (var k = 0; k < fixtures[i][17].length; k++) {
@@ -888,14 +918,6 @@ async function modifyPdf(fix, dates) {
                         opacity: 1
                     })
                 }
-
-                // Team B Team List
-                await extraWAVLfirstPage.drawText(fixtures[i][7], {
-                    x: 460,
-                    y: 744,
-                    size: 12,
-                    font: extraWAVLhelveticaFont
-                })
 
                 // Team B Players
                 for (var k = 0; k < fixtures[i][18].length; k++) {
@@ -1013,15 +1035,19 @@ async function modifyPdf(fix, dates) {
 
                 // Duty team
                 await extraWAVLfirstPage.drawText(fixtures[i][8], {
-                    x: parseInt((320 - measureText(fixtures[i][8], 14)).toString()),
+                    x: parseInt((332 - measureText(fixtures[i][8], 14)).toString()),
                     y: 797,
                     size: 14,
                     font: extraWAVLhelveticaFont
                 })
 
                 // Club President
+                console.log(fixtures[i][6].substring(fixtures[i][6].indexOf(' ') + 1));
+                console.log(fixtures[i][7].substring(fixtures[i][7].indexOf(' ') + 1));
                 let a_pres = __PRESIDENTS__[fixtures[i][6].substring(fixtures[i][6].indexOf(' ') + 1)];
                 let b_pres = __PRESIDENTS__[fixtures[i][7].substring(fixtures[i][7].indexOf(' ') + 1)];
+                console.log(a_pres);
+                console.log(b_pres);
                 await extraWAVLfirstPage.drawText(a_pres, {
                     x: parseInt((325 - measureText(a_pres, 10)).toString()),
                     y: 462,
@@ -1069,13 +1095,41 @@ async function modifyPdf(fix, dates) {
                 var saved = await extraWAVLpdfDoc.saveAsBase64();
                 
             } else {
-                // Team A Team List
-                await newWAVLfirstPage.drawText(fixtures[i][6], {
-                    x: 295,
-                    y: 743.5, //739
-                    size: 12,
-                    font: newWAVLhelveticaFont
-                })
+
+                if (fixtures[i][6].length > 20 || fixtures[i][7].length > 20) {
+                    // Team A Team List
+                    await newWAVLfirstPage.drawText(fixtures[i][6], {
+                        x: 295,
+                        y: 743.5, //739
+                        size: 9,
+                        font: newWAVLhelveticaFont
+                    })
+
+                    // Team B Team List
+                    await newWAVLfirstPage.drawText(fixtures[i][7], {
+                        x: 460,
+                        y: 743.5,
+                        size: 9,
+                        font: newWAVLhelveticaFont
+                    })
+
+                } else {
+                    // Team A Team List
+                    await newWAVLfirstPage.drawText(fixtures[i][6], {
+                        x: 295,
+                        y: 743.5, //739
+                        size: 12,
+                        font: newWAVLhelveticaFont
+                    })
+
+                    // Team B Team List
+                    await newWAVLfirstPage.drawText(fixtures[i][7], {
+                        x: 460,
+                        y: 743.5,
+                        size: 12,
+                        font: newWAVLhelveticaFont
+                    })
+                }
 
                 // Team A Players
                 for (var k = 0; k < fixtures[i][17].length; k++) {
@@ -1136,14 +1190,6 @@ async function modifyPdf(fix, dates) {
                         opacity: 1
                     })
                 }
-
-                // Team B Team List
-                await newWAVLfirstPage.drawText(fixtures[i][7], {
-                    x: 460,
-                    y: 743.5,
-                    size: 12,
-                    font: newWAVLhelveticaFont
-                })
 
                 // Team B Players
                 for (var k = 0; k < fixtures[i][18].length; k++) {
@@ -1261,15 +1307,21 @@ async function modifyPdf(fix, dates) {
 
                 // Duty team
                 await newWAVLfirstPage.drawText(fixtures[i][8], {
-                    x: parseInt((322 - measureText(fixtures[i][8], 14)).toString()),
+                    x: parseInt((332 - measureText(fixtures[i][8], 14)).toString()),
                     y: 784.5,
                     size: 14,
                     font: newWAVLhelveticaFont
                 })
 
-                // Club President
-                let a_pres = __PRESIDENTS__[fixtures[i][6].substring(fixtures[i][6].indexOf(' ') + 1)];
-                let b_pres = __PRESIDENTS__[fixtures[i][7].substring(fixtures[i][7].indexOf(' ') + 1)];
+                console.log(fixtures[i][6].substring(fixtures[i][6].indexOf(' ') + 1).replaceAll("*","").replace("(10)","").replace("(11)","").replace("(12)","").trim());
+                console.log(fixtures[i][7].substring(fixtures[i][7].indexOf(' ') + 1).replaceAll("*","").replace("(10)","").replace("(11)","").replace("(12)","").trim());
+                //let a_pres = __PRESIDENTS__[fixtures[i][6].substring(fixtures[i][6].indexOf(' ') + 1)];
+                //let b_pres = __PRESIDENTS__[fixtures[i][7].substring(fixtures[i][7].indexOf(' ') + 1)];
+
+                let a_pres = __PRESIDENTS__[fixtures[i][6].substring(fixtures[i][6].indexOf(' ') + 1).replaceAll("*","").replace("(10)","").replace("(11)","").replace("(12)","").trim()];
+                let b_pres = __PRESIDENTS__[fixtures[i][7].substring(fixtures[i][7].indexOf(' ') + 1).replaceAll("*","").replace("(10)","").replace("(11)","").replace("(12)","").trim()];
+                console.log(a_pres);
+                console.log(b_pres);
                 await newWAVLfirstPage.drawText(a_pres, {
                     x: parseInt((325 - measureText(a_pres, 10)).toString()),
                     y: 462,
@@ -1284,7 +1336,7 @@ async function modifyPdf(fix, dates) {
                 })
 
                 // Team Names
-                if (fixtures[i][6].length > 18 || fixtures[i][7].length > 18) {
+                if (fixtures[i][6].length > 20 || fixtures[i][7].length > 20) {
                     // Reduce text size if too long.
                     await newWAVLfirstPage.drawText(fixtures[i][6], {
                         x: parseInt((262 - measureText(fixtures[i][6], 10)).toString()),
