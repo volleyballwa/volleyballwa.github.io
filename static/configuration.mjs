@@ -201,6 +201,13 @@ const __CONFIG__ = {
             "bot": "The Rise",
             "alias": []
         },
+        "Trinity College": {
+            "name": "Trinity College",
+            "top": "",
+            "mid": "",
+            "bot": "Trinity",
+            "alias": ["Trinity", "Trinity Col."]
+        },
         "UWA Recreation Centre": {
             "name": "UWA Recreation Centre",
             "top": "UWA",
@@ -427,6 +434,10 @@ const __PRESIDENTS__ = {
     "Mandurah": "Charlie Grigio",
     "Murdoch": "Justine Ross",
     "Murdoch White": "Justine Ross",
+    "Murdoch Sylvie": "Justine Ross",
+    "Murdoch Valkyrie": "Justine Ross",
+    "Murdoch Thor": "Justine Ross",
+    "Murdoch Loki": "Justine Ross",
     "Murdoch Black": "Justine Ross",
     "Northern Stars": "Peter Woodthorpe",
     "Northern Stars Black": "Peter Woodthorpe",
