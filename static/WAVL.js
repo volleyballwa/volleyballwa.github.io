@@ -1743,8 +1743,7 @@ function html_to_fixture(venues, leagues, date, all_html) {
 
                     if (!(all_venues[0].includes(zero_venue_split))) {
                         if (!(alerted.includes(zero_venue_split))) {
-                            window.alert("Venue " + zero_venue_split + " not configured. Contact Oliver Guazzelli to resolve.")
-                            //console.log(("Venue " + zero_venue_split + " not configured. Contact Oliver Guazzelli to resolve."))
+                            window.alert("Venue " + zero_venue_split + " not configured. Contact Oliver Guazzelli on 0466 185 411 to resolve.")
                             alerted.push(zero_venue_split);
                         }
                     }
@@ -1925,7 +1924,7 @@ function generate_Table() {
 
 function catch_error(error){
     console.log(error)
-    window.alert("The webpage has encountered the following error.\nPlease contact Oliver Guazzelli to rectify.\n\n" + error.stack);
+    window.alert("The webpage has encountered the following error.\nPlease contact Oliver Guazzelli on 0466 185 411 to resolve.\n\n" + error.stack);
     window.clearInterval(dots);
     document.getElementById("Button4").value = "Generate Scoresheets";
     document.getElementById("Button4").style.backgroundColor = "#8b0000";
