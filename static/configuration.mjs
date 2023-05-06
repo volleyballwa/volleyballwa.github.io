@@ -1,4 +1,4 @@
-const FINALS_DATES = ["2022-09-04","2022-09-11","2022-09-18"];
+const FINALS_DATES = ["2022-09-04", "2022-09-11", "2022-09-18"];
 
 // This is used to get a list of all players. eg: https://vwa.bracketpal.com/leaders/season/27
 const SEASON_ID = "27";
@@ -221,7 +221,7 @@ const __CONFIG__ = {
             "mid": "Sport",
             "bot": "Science",
             "alias": []
-        },  
+        },
         "Wesley College": {
             "name": "Wesley College",
             "top": "",
@@ -257,83 +257,78 @@ const __CONFIG__ = {
             "long": "State League Women",
             "short": "SL Women"
         },
-        "State League Men": { // Updated
+        "State League Men": {
             "id": 132,
             "long": "State League Men",
             "short": "SL Men"
         },
-        "State League Reserve Women": { // Updated
+        "State League Reserve Women": {
             "id": 135,
             "long": "State League Reserve Women",
             "short": "SLR Women"
         },
-        "State League Reserve Men": { // Updated
+        "State League Reserve Men": {
             "id": 133,
             "long": "State League Reserve Men",
             "short": "SLR Men"
         },
         "Division 1 Women": {
-            "id": 107,
+            "id": 157,
             "long": "Division 1 Women",
             "short": "Div 1 W"
         },
         "Division 1 Men": {
-            "id": 106,
+            "id": 156,
             "long": "Division 1 Men",
             "short": "Div 1 M"
         },
         "Division 2 Women": {
-            "id": 109,
+            "id": 159,
             "long": "Division 2 Women",
             "short": "Div 2 W"
         },
         "Division 2 Men": {
-            "id": 108,
+            "id": 158,
             "long": "Division 2 Men",
             "short": "Div 2 M"
         },
         "Division 3 Women": {
-            "id": 111,
+            "id": 161,
             "long": "Division 3 Women",
             "short": "Div 3 W"
         },
         "Division 3 Men": {
-            "id": 115,
+            "id": 160,
             "long": "Division 3 Men",
             "short": "Div 3 M"
         },
         "Division 4 Men": {
-            "id": 129,
+            "id": 162,
             "long": "Division 4 Men",
             "short": "Div 4 M"
         },
         "Division 4 Women": {
-            "id": 112,
+            "id": 154,
             "long": "Division 4 Women",
             "short": "Div 4 W"
         },
         "Division 5 Men": {
-            "id": 130,
+            "id": 163,
             "long": "Division 5 Men",
             "short": "Div 5 M"
         },
-        "Division 5 Women": {
-            "id": 112,
-            "long": "Division 5 Women",
-            "short": "Div 5 W"
-        },
         "Division 6 Men": {
-            "id": 131,
+            "id": 164,
             "long": "Division 6 Men",
             "short": "Div 6 M"
         },
         "Division 7 Men": {
-            "id": 131,
+            "id": 155,
             "long": "Division 7 Men",
             "short": "Div 7 M"
         },
         "Division 8 Men": {
-            "id": 131,
+            "id": 165,
             "long": "Division 8 Men",
             "short": "Div 8 M"
         }
@@ -433,12 +428,10 @@ const __PRESIDENTS__ = {
     "Fremantle": "Kevin Gravestock",
     "Mandurah": "Charlie Grigio",
     "Murdoch": "Justine Ross",
-    "Murdoch White": "Justine Ross",
-    "Murdoch Sylvie": "Justine Ross",
-    "Murdoch Valkyrie": "Justine Ross",
-    "Murdoch Thor": "Justine Ross",
     "Murdoch Loki": "Justine Ross",
-    "Murdoch Black": "Justine Ross",
+    "Murdoch Sylvie": "Justine Ross",
+    "Murdoch Thor": "Justine Ross",
+    "Murdoch Valkyrie": "Justine Ross",
     "Northern Stars": "Peter Woodthorpe",
     "Northern Stars Black": "Peter Woodthorpe",
     "Northern Stars Blue": "Peter Woodthorpe",
@@ -446,13 +439,13 @@ const __PRESIDENTS__ = {
     "Northshore": "Jo-Han Bay",
     "Northshore Rockets": "Jo-Han Bay",
     "Perth Scorpions": "Shaun Barnett",
-    "Reds Junior": "Logan Vanderweide",
     "Reds": "Anthony Meo",
-    "Rossmoyne" : "Matt Waddington",
-    "Southern Cross Masters": "Nicholas Crawford",
+    "Reds Junior": "Logan Vanderweide",
+    "Rossmoyne": "Matt Waddington",
     "Southern Cross": "Codi Versteeg / Remi Cousin",
-    "United": "Tani Bernados",
+    "Southern Cross Masters": "Nicholas Crawford",
     "UWA": "Kieren Underwood",
+    "United": "Tani Bernados",
     "VIRSA": "Harpreet Dhillon"
 }
 
@@ -464,7 +457,7 @@ const __TEAMS__ = {
     '5 Balcatta': ['5', 'Balcatta', '1296', 'State League Men', 'Layne van Smaalen'],
     '6 Rossmoyne': ['6', 'Rossmoyne', '1297', 'State League Men', ' '],
     '7 ECU': ['7', 'ECU', '1298', 'State League Men', 'Dylan Wood'],
-    
+
     // Updated
     '11 UWA': ['11', 'UWA', '1299', 'State League Reserve Men', ' '],
     '12 Northern Stars': ['12', 'Northern Stars', '1300', 'State League Reserve Men', ' '],
@@ -476,7 +469,7 @@ const __TEAMS__ = {
     '18 Busselton': ['18', 'Busselton', '1306', 'State League Reserve Men', ' '],
     '19 Fremantle': ['19', 'Fremantle', '1307', 'State League Reserve Men', ' '],
     '26 Apex': ['26', 'Apex', '1308', 'State League Reserve Men', 'Peter Woodthorpe'],
-    
+
     // Not Updated
     '21 Fremantle': ['21', 'Fremantle', '1033', 'Division 1 Men'],
     '23 UWA': ['23', 'UWA', '1035', 'Division 1 Men'],
@@ -521,7 +514,7 @@ const __TEAMS__ = {
     '88 Rossmoyne': ['88', 'Rossmoyne', '1267', 'Division 4 Men'],
     '91 Murdoch': ['91', 'Murdoch', '1269', 'Division 4 Men'],
     '92 Reds Junior': ['92', 'Reds Junior', '1268', 'Division 4 Men'],
-    
+
     // Updated
     '101 UWA': ['101', 'UWA', '1309', 'State League Women', ' '],
     '103 Southern Cross': ['103', 'Southern Cross', '1310', 'State League Women', ' '],
@@ -529,7 +522,7 @@ const __TEAMS__ = {
     '105 Balcatta': ['105', 'Balcatta', '1312', 'State League Women', ' '],
     '106 Rossmoyne': ['106', 'Rossmoyne', '1313', 'State League Women', 'Layne van Smaalen'],
     '107 ECU': ['107', 'ECU', '1314', 'State League Women', ' '],
-    
+
     // Updated
     '111 UWA': ['111', 'UWA', '1315', 'State League Reserve Women', ' '],
     '113 Southern Cross': ['113', 'Southern Cross', '1317', 'State League Reserve Women', ' '],
@@ -541,7 +534,7 @@ const __TEAMS__ = {
     '119 Fremantle': ['119', 'Fremantle', '1323', 'State League Reserve Women', ' '],
     '123 United': ['123', 'United', '1316', 'State League Reserve Women', ' '],
     '126 Apex': ['126', 'Apex', '1324', 'State League Reserve Women', ' '],
-    
+
     // Not Updated
     '121 Fremantle': ['121', 'Fremantle', '1043', 'Division 1 Women'],
     '122 Southern Cross': ['122', 'Southern Cross', '1044', 'Division 1 Women'],
@@ -594,7 +587,7 @@ const __TEAMS__ = {
     '209 ECU White': ['209', 'ECU White', '1289', 'Division 5 Men'],
     '210 Northern Stars': ['210', 'Northern Stars', '1290', 'Division 5 Men'],
     '211 Murdoch': ['211', 'Murdoch', '1287', 'Division 5 Men'],
-    
+
     '221 Northern Stars Black': ['221', 'Northern Stars Black', '1270', 'Division 6 Men'],
     '222 Southern Cross Green': ['222', 'Southern Cross Green', '1271', 'Division 6 Men'],
     '223 UWA': ['223', 'UWA', '1272', 'Division 6 Men'],

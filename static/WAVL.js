@@ -1045,6 +1045,14 @@ async function modifyPdf(fix, dates) {
                 let a_pres = __PRESIDENTS__[fixtures[i][6].substring(fixtures[i][6].indexOf(' ') + 1)];
                 let b_pres = __PRESIDENTS__[fixtures[i][7].substring(fixtures[i][7].indexOf(' ') + 1)];
 
+                if (a_pres == __PRESIDENTS__["a"]){
+                    a_pres = " ";
+                }
+
+                if (b_pres == __PRESIDENTS__["a"]){
+                    b_pres = " ";
+                }
+
                 await extraWAVLfirstPage.drawText(a_pres, {
                     x: parseInt((325 - measureText(a_pres, 10)).toString()),
                     y: 462,
@@ -1310,8 +1318,17 @@ async function modifyPdf(fix, dates) {
                     font: newWAVLhelveticaFont
                 })
 
+                // Club President
                 let a_pres = __PRESIDENTS__[fixtures[i][6].substring(fixtures[i][6].indexOf(' ') + 1)];
                 let b_pres = __PRESIDENTS__[fixtures[i][7].substring(fixtures[i][7].indexOf(' ') + 1)];
+
+                if (a_pres == __PRESIDENTS__["a"]){
+                    a_pres = " ";
+                }
+
+                if (b_pres == __PRESIDENTS__["a"]){
+                    b_pres = " ";
+                }
 
                 await newWAVLfirstPage.drawText(a_pres, {
                     x: parseInt((325 - measureText(a_pres, 10)).toString()),
@@ -1575,10 +1592,12 @@ function add_aliases(venues) {
  */
 function html_to_fixture(venues, leagues, date, all_html) {
     console.log("html_to_fixture");
-    let fixtures_list = []
+    let fixtures_list = [];
+    let alerted = [];
     let temporary = add_aliases(venues);
     let alias_layer = temporary[1];
     let venue_usage = temporary[0];
+    let all_venues = add_aliases(Object.keys(__CONFIG__.venues));
     const NamesArr = leagues.flat();
     
     for (let x = 0; x < all_html.length; x++) {
@@ -1586,7 +1605,7 @@ function html_to_fixture(venues, leagues, date, all_html) {
         let htmlDoc = parser.parseFromString(all_html[x].request.responseText, 'text/html');
         let all_tables = htmlDoc.getElementsByTagName("table")
         let numFix = all_tables.length;
-
+        
         for (let y = 0; y < numFix; y = y + 3) {
             let meta = y + 1;
             let data = y + 2;
@@ -1629,11 +1648,9 @@ function html_to_fixture(venues, leagues, date, all_html) {
                         let _time_hr = " ";
                         let _time_min = " ";
                         let _division = [];
-                        console.log(venue_split);
                         try {
                             if (Number.isInteger(parseInt(venue_split[0].slice(-2).trim()))) {
                                 _court = parseInt(venue_split[0].slice(-2).trim()).toString();
-                                console.log(parseInt(venue_split[0].slice(-2).trim()));
                             } else {
                                 _court = cells.item(1).innerText.split("Ct")[1].trim();
                             }
@@ -1722,6 +1739,18 @@ function html_to_fixture(venues, leagues, date, all_html) {
                             console.log("UNUSED VENUE\n***")
                             console.log(zero_venue_split)
                             console.log("***")
+                        }
+                    }
+                    console.log(zero_venue_split)
+                    console.log(all_venues);
+                    console.log(alerted)
+                    console.log(all_venues[0].includes(zero_venue_split))
+                    console.log(alerted.includes(zero_venue_split))
+                    if (!(all_venues[0].includes(zero_venue_split))) {
+                        if (!(alerted.includes(zero_venue_split))) {
+                            window.alert("Venue " + zero_venue_split + " not configured. Contact Oliver Guazzelli to resolve.")
+                            //console.log(("Venue " + zero_venue_split + " not configured. Contact Oliver Guazzelli to resolve."))
+                            alerted.push(zero_venue_split);
                         }
                     }
                 }
