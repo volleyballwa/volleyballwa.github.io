@@ -208,9 +208,9 @@ function WAVL_ONLINE() {
                         document.getElementById("Button4").disabled = false;
                         document.getElementById("csvUpload").disabled = false;
                         document.getElementById("csvUpload").value = "";
-                    })
-                })
-            })
+                    }).catch(error => catch_error(error))
+                }).catch(error => catch_error(error))
+            }).catch(error => catch_error(error))
         };
     } else {
         pdf_init(venues, wavl, wavjl, dates);
@@ -346,11 +346,11 @@ function pdf_init(venues, wavl, wavjl, dates) {
                         document.getElementById("Button4").disabled = false;
                         document.getElementById("csvUpload").disabled = false;
                         document.getElementById("csvUpload").value = "";
-                    })
-                })
-            })
-        })
-    })
+                    }).catch(error => catch_error(error))
+                }).catch(error => catch_error(error))
+            }).catch(error => catch_error(error))
+        }).catch(error => catch_error(error))
+    }).catch(error => catch_error(error))
 }
 
 /**
@@ -1662,7 +1662,6 @@ function html_to_fixture(venues, leagues, date, all_html) {
                         if (_court == null) {
                             _court = "";
                         }
-                        console.log(_court);
                         const _team_a = cells.item(2).innerText;
                         const _team_b = cells.item(5).innerText;
 
@@ -1741,11 +1740,7 @@ function html_to_fixture(venues, leagues, date, all_html) {
                             console.log("***")
                         }
                     }
-                    console.log(zero_venue_split)
-                    console.log(all_venues);
-                    console.log(alerted)
-                    console.log(all_venues[0].includes(zero_venue_split))
-                    console.log(alerted.includes(zero_venue_split))
+
                     if (!(all_venues[0].includes(zero_venue_split))) {
                         if (!(alerted.includes(zero_venue_split))) {
                             window.alert("Venue " + zero_venue_split + " not configured. Contact Oliver Guazzelli to resolve.")
@@ -1926,6 +1921,18 @@ function generate_Table() {
     var fin_row = table.insertRow(-1);
     var fin_cell = fin_row.insertCell(0);
     fin_cell.classList.add("cell99")
+}
+
+function catch_error(error){
+    console.log(error)
+    window.alert("The webpage has encountered the following error.\nPlease contact Oliver Guazzelli to rectify.\n\n" + error.stack);
+    window.clearInterval(dots);
+    document.getElementById("Button4").value = "Generate Scoresheets";
+    document.getElementById("Button4").style.backgroundColor = "#8b0000";
+    document.getElementById("Button4").style.color = "#FFFFFF"
+    document.getElementById("Button4").disabled = false;
+    document.getElementById("csvUpload").disabled = false;
+    document.getElementById("csvUpload").value = "";
 }
 
 generate_Table()
