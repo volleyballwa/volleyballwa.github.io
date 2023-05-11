@@ -52,7 +52,7 @@ const __CONFIG__ = {
             "top": "Geographe",
             "mid": "Leisure",
             "bot": "Centre",
-            "alias": ["Geographe", "Geographe Leisure", "Geographe Lei. Centr", "Geographe Lei. Cntr", "Geographe L. Ctr"]
+            "alias": ["Geographe", "Geographe Leisure", "Geographe Lei. Centr", "Geographe Lei. Cntr", "Geographe L. Ctr", "Geographe Lei."]
         },
         "Gold Netball Centre": {
             "name": "Gold Netball Centre",
