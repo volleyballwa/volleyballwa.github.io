@@ -443,7 +443,7 @@ const __PRESIDENTS__ = {
     "Reds Junior": "Logan Vanderweide",
     "Rossmoyne": "Matt Waddington",
     "Southern Cross": "Codi Versteeg / Remi Cousin",
-    "Southern Cross Masters": "Nicholas Crawford",
+    "Southern Cross Masters": "Toma Stanca",
     "UWA": "Kieren Underwood",
     "United": "Tani Bernados",
     "VIRSA": "Harpreet Dhillon"
