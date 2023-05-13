@@ -314,7 +314,6 @@ function pdf_init(venues, wavl, wavjl, dates) {
     // Get config data from selected teams, and add to an array
     var leagues = [];
     var fixtures = [];
-    console.log(wavjl);
     for (var i = 0; i < wavl.length; i++) {
         leagues.push([__CONFIG__.wavl[wavl[i]].long, __CONFIG__.wavl[wavl[i]].short, __CONFIG__.wavl[wavl[i]].id])
     }
@@ -350,7 +349,65 @@ function pdf_init(venues, wavl, wavjl, dates) {
                 }).catch(error => catch_error(error))
             }).catch(error => catch_error(error))
         }).catch(error => catch_error(error))
-    }).catch(error => catch_error(error))
+    }).catch((e) => {
+        console.log(e)
+        console.log(e.response.status)
+        if (e.response.status == 500){
+            window.alert("Error with BracketPal. Trying a slower method...")
+            document.getElementById("Button4").style.backgroundColor = "#FFA500";
+            var fixtures = [];
+            // If we get this dumb error, try running it again but requesting EACH team on EACH date.
+            if (document.getElementById("Checkbox99").checked) {       
+                for (var j = -6; j <= 0; j++) {
+                    var looping_date = $("#DatePicker2").datepicker("getDate");
+                    looping_date.setTime(looping_date.getTime() + (j * (24*60*60*1000)));
+                    var mon = looping_date.getMonth() + 1;
+                    var date_time = looping_date.getFullYear().toString().split(-2) + "-" +
+                                        mon.toString().padStart(2, '0') + "-" +
+                                        looping_date.getDate().toString().padStart(2, '0');
+                    for (var i = 0; i < leagues.length; i++) {
+                        var indiv = individual_fixture(leagues[i][2], date_time);
+                        fixtures.push(indiv);
+                    }
+                }
+            } else {
+                for (var i = 0; i < leagues.length; i++) {
+                    var indiv = individual_fixture(leagues[i][2], dates[2]);
+                    fixtures.push(indiv);
+                }
+            }
+            
+
+            Promise.all(fixtures).then(fix_val => {
+                var team_list = []
+        
+                var upd_fixtures = html_to_fixture(venues, leagues, dates[2], fix_val);
+                var player_List = getPlayerList();
+                Promise.all([player_List]).then(players_list => {
+                    let finalised_fixtures = parsePlayerList(players_list, upd_fixtures);
+                    modifyPdf(finalised_fixtures, dates[2]).then(value => {
+                        Promise.all(value).then(value_3 => {
+                            mergePDFDocuments(value_3).then(value_2 => {
+                                let filename = "Scoresheets " + dates[2].toString() + ".pdf"
+                                
+                                download(value_2, filename, "application/pdf");
+                                
+                                window.clearInterval(dots);
+                                document.getElementById("Button4").value = "Generate Scoresheets";
+                                document.getElementById("Button4").style.backgroundColor = "#3370B7";
+                                document.getElementById("Button4").style.color = "#FFFFFF"
+                                document.getElementById("Button4").disabled = false;
+                                document.getElementById("csvUpload").disabled = false;
+                                document.getElementById("csvUpload").value = "";
+                            }).catch(error => catch_error(error))
+                        }).catch(error => catch_error(error))
+                    }).catch(error => catch_error(error))
+                }).catch(error => catch_error(error))
+            }).catch(error => catch_error(error))
+        } else {
+            catch_error(error);
+        }
+    })
 }
 
 /**
@@ -366,6 +423,21 @@ async function get_single_fixture(start_date, end_date) {
     console.log("get_single_fixture: " + url);
     return await axios.get(url);
 }
+
+/**
+ * Axios request to get fixture.
+ * @param {String} id           id of team
+ * @param {String} start_date   First date in range
+ * @returns 
+ */
+async function individual_fixture(id, start_date) {
+    axios;
+    const head = 'https://cors-anywhere-og-v5kf.onrender.com/vwa.bracketpal.com/dailyform/';
+    var url = head + id.toString() + "/" + start_date.toString();
+    console.log("get_single_fixture: " + url);
+    return await axios.get(url);
+}
+
 
 /**
  * NOT USED
@@ -1397,7 +1469,7 @@ async function modifyPdf(fix, dates) {
 
             try {
                 // Time (hh:mm)
-                let time = parseInt(fixtures[i][13]).toString() + ":" + fixtures[1][14];
+                let time = parseInt(fixtures[i][13]).toString() + ":" + fixtures[i][14];
                 if (parseInt(fixtures[i][13]).toString().length == 1) {
                     time = " " + time;
                 }
@@ -1605,17 +1677,23 @@ function html_to_fixture(venues, leagues, date, all_html) {
         let htmlDoc = parser.parseFromString(all_html[x].request.responseText, 'text/html');
         let all_tables = htmlDoc.getElementsByTagName("table")
         let numFix = all_tables.length;
+        console.log(all_tables);
         
         for (let y = 0; y < numFix; y = y + 3) {
             let meta = y + 1;
             let data = y + 2;
             
-            let meta_table = all_tables[meta];
-            let data_table = all_tables[data];
-
+            let meta_table = all_tables[0].getElementsByTagName("table")[0];
+            let data_table = all_tables[1];
+            
+            if (numFix > 2){
+                meta_table = all_tables[meta];
+                data_table = all_tables[data];
+            } 
+            
             let dt = meta_table.rows.item(1).cells.item(0).innerText;
             let match_division = meta_table.rows.item(1).cells.item(2).innerText;
-            
+
             if (!(NamesArr.includes(match_division))) {
                 // If division is not selected, then break the for loop. No need to continue parsing data.
                 console.log(match_division);
@@ -1634,118 +1712,121 @@ function html_to_fixture(venues, leagues, date, all_html) {
                 let rowLength = data_table.rows.length;
                 for (let i = 1; i < rowLength; i++) {
                     let cells = data_table.rows.item(i).cells;
-                    let venue = cells.item(1).innerText;
-                    let venue_split = venue.split(" Ct")
-                    let zero_venue_split = venue_split[0].replaceAll(" Ct", "");
-                    if (Number.isInteger(parseInt(zero_venue_split.slice(-2).trim()))) {
-                        zero_venue_split = zero_venue_split.slice(0, -1).trim();
-                    }
-                    //console.log("*"+zero_venue_split+"*");
-                    //console.log(venue_usage);
-                    if (venue_usage.includes(zero_venue_split)) {
-                        let _court = "";
-                        let _duty = " ";
-                        let _time_hr = " ";
-                        let _time_min = " ";
-                        let _division = [];
-                        try {
-                            if (Number.isInteger(parseInt(venue_split[0].slice(-2).trim()))) {
-                                _court = parseInt(venue_split[0].slice(-2).trim()).toString();
-                            } else {
-                                _court = cells.item(1).innerText.split("Ct")[1].trim();
-                            }
-                        } catch (e) {
-                            _court = "";
-                            console.log("Why");
+                    if (cells.length > 4) {
+                        let venue = cells.item(1).innerText;
+                        let venue_split = venue.split(" Ct")
+                        let zero_venue_split = venue_split[0].replaceAll(" Ct", "");
+                        if (Number.isInteger(parseInt(zero_venue_split.slice(-2).trim()))) {
+                            zero_venue_split = zero_venue_split.slice(0, -1).trim();
                         }
-
-                        if (_court == null) {
-                            _court = "";
-                        }
-                        const _team_a = cells.item(2).innerText;
-                        const _team_b = cells.item(5).innerText;
-
-                        // Try Catch exists for junior league and home rounds.
-                        if (match_division[0] == "D" || match_division[0] == "S") {
+                        if (venue_usage.includes(zero_venue_split)) {
+                            let _court = "";
+                            let _duty = " ";
+                            let _time_hr = " ";
+                            let _time_min = " ";
+                            let _division = [];
                             try {
-                                _duty = cells.item(7).innerText.slice(5);
+                                if (Number.isInteger(parseInt(venue_split[0].slice(-2).trim()))) {
+                                    _court = parseInt(venue_split[0].slice(-2).trim()).toString();
+                                } else {
+                                    _court = cells.item(1).innerText.split("Ct")[1].trim();
+                                }
+                            } catch (e) {
+                                _court = "";
+                                console.log("Why");
+                            }
+
+                            if (_court == null) {
+                                _court = "";
+                            }
+                            const _team_a = cells.item(2).innerText;
+                            const _team_b = cells.item(5).innerText;
+
+                            // Try Catch exists for junior league and home rounds.
+                            if (match_division[0] == "D" || match_division[0] == "S") {
+                                try {
+                                    _duty = cells.item(7).innerText.slice(5);
+                                } catch (e) {
+                                    console.log(e);
+                                    _duty = " ";
+                                }
+                            }
+
+                            // Update duty if using Previous Loser.
+                            if (FINALS_DATES.includes(dt) && _duty.length < 4) {
+                                _duty = "Previous Loser";
+                            }
+
+                            if (match_division[0] == "D" || match_division[0] == "S") {
+                                _division = [
+                                    __CONFIG__.wavl[match_division].long,
+                                    __CONFIG__.wavl[match_division].short,
+                                    __CONFIG__.wavl[match_division].id
+                                ];
+                            } else {
+                                _division = [
+                                    __CONFIG__.jl[match_division].long,
+                                    __CONFIG__.jl[match_division].short,
+                                    __CONFIG__.jl[match_division].id
+                                ];
+                            }
+
+                            let _date = dt.split('-');
+                            let _date_dd = _date[2].padStart(2, "0");
+                            let _date_mm = _date[1].padStart(2, "0");
+                            let _date_yyyy = _date[0];
+                            
+                            // Check if time exists. Some home rounds (Busselton) don't put times on Bracketpal.
+                            try {
+                                let time = cells.item(0).innerText.split(":")
+                                _time_hr = time[0].padStart(2, "0");
+                                _time_min = time[1].padStart(2, "0");
                             } catch (e) {
                                 console.log(e);
-                                _duty = " ";
+                                _time_hr = " ";
+                                _time_min = " ";
                             }
-                        }
 
-                        // Update duty if using Previous Loser.
-                        if (FINALS_DATES.includes(dt) && _duty.length < 4) {
-                            _duty = "Previous Loser";
-                        }
+                            let venue_realname = alias_layer[zero_venue_split];
 
-                        if (match_division[0] == "D" || match_division[0] == "S") {
-                            _division = [
-                                __CONFIG__.wavl[match_division].long,
-                                __CONFIG__.wavl[match_division].short,
-                                __CONFIG__.wavl[match_division].id
-                            ];
+                            const _venue_0 = __CONFIG__.venues[venue_realname].top;
+                            const _venue_1 = __CONFIG__.venues[venue_realname].mid;
+                            const _venue_2 = __CONFIG__.venues[venue_realname].bot;
+
+                            let _venue_full = __CONFIG__.venues[venue_realname].name;
+                            let _sorting = _date_yyyy + " " + _date_mm + " " + _date_dd + " " + _venue_full + " " + _court + " " + _time_hr
+                            let _time_sorting = _date_yyyy + " " + _date_mm + " " + _date_dd + " " + _venue_full + " " + _time_hr + " " + _court;
+
+                            fixtures_list.push([zero_venue_split, _venue_0, _venue_1, _venue_2, _venue_full, _court,
+                                _team_a, _team_b, _duty, _division, _date_dd, _date_mm, _date_yyyy, _time_hr, _time_min, 
+                                _sorting, _time_sorting, [], []
+                            ])
                         } else {
-                            _division = [
-                                __CONFIG__.jl[match_division].long,
-                                __CONFIG__.jl[match_division].short,
-                                __CONFIG__.jl[match_division].id
-                            ];
-                        }
-
-                        let _date = dt.split('-');
-                        let _date_dd = _date[2].padStart(2, "0");
-                        let _date_mm = _date[1].padStart(2, "0");
-                        let _date_yyyy = _date[0];
-                        
-                        // Check if time exists. Some home rounds (Busselton) don't put times on Bracketpal.
-                        try {
-                            let time = cells.item(0).innerText.split(":")
-                            _time_hr = time[0].padStart(2, "0");
-                            _time_min = time[1].padStart(2, "0");
-                        } catch (e) {
-                            console.log(e);
-                            _time_hr = " ";
-                            _time_min = " ";
-                        }
-
-                        let venue_realname = alias_layer[zero_venue_split];
-
-                        const _venue_0 = __CONFIG__.venues[venue_realname].top;
-                        const _venue_1 = __CONFIG__.venues[venue_realname].mid;
-                        const _venue_2 = __CONFIG__.venues[venue_realname].bot;
-
-                        let _venue_full = __CONFIG__.venues[venue_realname].name;
-                        let _sorting = _date_yyyy + " " + _date_mm + " " + _date_dd + " " + _venue_full + " " + _court + " " + _time_hr
-                        let _time_sorting = _date_yyyy + " " + _date_mm + " " + _date_dd + " " + _venue_full + " " + _time_hr + " " + _court;
-
-                        fixtures_list.push([zero_venue_split, _venue_0, _venue_1, _venue_2, _venue_full, _court,
-                            _team_a, _team_b, _duty, _division, _date_dd, _date_mm, _date_yyyy, _time_hr, _time_min, 
-                            _sorting, _time_sorting, [], []
-                        ])
-                    } else {
-                        // Venue either not in list OR is a bye.
-                        try {
-                            if (Number.isInteger(parseInt(zero_venue_split.substring(0, 2).trim()))) {
-                                console.log("BYE: " + zero_venue_split);
-                            } else {
+                            // Venue either not in list OR is a bye.
+                            try {
+                                console.log(cells)
+                                if (Number.isInteger(parseInt(zero_venue_split.substring(0, 2).trim()))) {
+                                    console.log("BYE: " + zero_venue_split);
+                                } else {
+                                    console.log("UNUSED VENUE\n***")
+                                    console.log(zero_venue_split)
+                                    console.log("***")
+                                }
+                            } catch (e) {
                                 console.log("UNUSED VENUE\n***")
                                 console.log(zero_venue_split)
                                 console.log("***")
                             }
-                        } catch (e) {
-                            console.log("UNUSED VENUE\n***")
-                            console.log(zero_venue_split)
-                            console.log("***")
                         }
-                    }
 
-                    if (!(all_venues[0].includes(zero_venue_split))) {
-                        if (!(alerted.includes(zero_venue_split))) {
-                            window.alert("Venue " + zero_venue_split + " not configured. Contact Oliver Guazzelli on 0466 185 411 to resolve.")
-                            alerted.push(zero_venue_split);
+                        if (!(all_venues[0].includes(zero_venue_split))) {
+                            if (!(alerted.includes(zero_venue_split))) {
+                                window.alert("Venue " + zero_venue_split + " not configured. Contact Oliver Guazzelli on 0466 185 411 to resolve.")
+                                alerted.push(zero_venue_split);
+                            }
                         }
+                    } else {
+                        console.log("BYE: " + cells[1])
                     }
                 }
             } catch (e) {
