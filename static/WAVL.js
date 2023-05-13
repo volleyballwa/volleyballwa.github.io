@@ -158,6 +158,13 @@ function WAVL_ONLINE() {
         }
     })
 
+    console.log(venues.length);
+    if (venues.length == 0) {
+        document.getElementsByName("Venues").forEach((checkbox) => {
+            venues.push(document.getElementById(checkbox.id).title)
+        })
+    }
+
     // Get all selected WAVL teams
     document.getElementsByName("WAVL_teams").forEach((checkbox) => {
         if (document.getElementById(checkbox.id).checked) {
