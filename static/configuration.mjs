@@ -379,11 +379,11 @@ const __CONFIG__ = {
             "long": "10 Female South Pool 1",
             "short": "10 F S 1"
         },
-        "10 Female South Pool 2": {
+        /*"10 Female South Pool 2": {
             "id": 153,
             "long": "10 Female South Pool 2",
             "short": "10 F S 2"
-        },
+        },*/
         "10 Male North": {
             "id": 140,
             "long": "10 Male North",
