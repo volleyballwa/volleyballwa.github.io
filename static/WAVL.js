@@ -306,7 +306,12 @@ function parsePlayerList(players_list, upd_fixtures) {
         if (Object.keys(dict).includes(team_a) && Object.keys(dict).includes(team_b)) {
             upd_fixtures[i][17] = dict[team_a];
             upd_fixtures[i][18] = dict[team_b];
-        }
+        } else {
+		upd_fixtures[i][17] = [["",""]];
+		upd_fixtures[i][18] = [["",""]];
+		if (Object.keys(dict).includes(team_a)) {upd_fixtures[i][17] = dict[team_a];}
+		if (Object.keys(dict).includes(team_b)) {upd_fixtures[i][18] = dict[team_b];}
+	}
     }
     return upd_fixtures;
 }
@@ -909,7 +914,7 @@ async function modifyPdf(fix, dates) {
                 }
 
                 // Team A, Second column numbers
-                if (fixtures[i][17].length > 6) {
+                if (fixtures[i][17].length > 1) {
                     let line_y_a = 739-(12.8*Math.ceil(fixtures[i][17].length /2));
                     //console.log(line_y_a);
                     await extraWAVLfirstPage.drawLine({
@@ -966,7 +971,7 @@ async function modifyPdf(fix, dates) {
                     }
                 }
                 
-                if (fixtures[i][18].length > 6) {
+                if (fixtures[i][18].length > 1) {
                     // Team B, second column numbers
                     let line_y_b = 739-(12.8*Math.ceil(fixtures[i][18].length /2));
                     //console.log(line_y_b);
@@ -1147,7 +1152,7 @@ async function modifyPdf(fix, dates) {
                 }
 
                 // Team A Players
-                if (fixtures[i][17].length >= 4) {
+                if (fixtures[i][17].length >= 1) {
                     for (var k = 0; k < fixtures[i][17].length; k++) {
                         if (k < Math.ceil(fixtures[i][17].length / 2)) {
                             // first name, first column
@@ -1186,7 +1191,7 @@ async function modifyPdf(fix, dates) {
                     }
                     
                     // Team A, Second column numbers
-                    if (fixtures[i][17].length > 6) {
+                    if (fixtures[i][17].length > 1) {
                         let line_y_a = 717.5-(15.75*Math.ceil(fixtures[i][17].length /2) - 5);
 
                         //console.log(line_y_a);
@@ -1209,7 +1214,7 @@ async function modifyPdf(fix, dates) {
                 }
 
                 // Team B Players
-                if (fixtures[i][18].length >= 4) {
+                if (fixtures[i][18].length >= 1) {
                     for (var k = 0; k < fixtures[i][18].length; k++) {
                         if (k < Math.ceil(fixtures[i][18].length / 2)) {
                             // first name, first column
@@ -1246,7 +1251,7 @@ async function modifyPdf(fix, dates) {
                         }
                     }
                     
-                    if (fixtures[i][18].length > 6) {
+                    if (fixtures[i][18].length > 1) {
                         // Team B, second column numbers
                         let line_y_b = 717.5-(15.75*Math.ceil(fixtures[i][18].length /2) - 5);
                         //console.log(line_y_b);
