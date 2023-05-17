@@ -598,7 +598,7 @@ async function modifyPdf(fix, dates) {
             }
 
             // Team A, Second column numbers
-            if (fixtures[i][17].length > 6) {
+            if (fixtures[i][17].length > 1) {
                 let line_y_a = 472-Math.floor(17*Math.ceil(fixtures[i][17].length /2)-6);
                 if (fixtures[i][17].length > 18) {
                     line_y_a = 274;
@@ -665,7 +665,7 @@ async function modifyPdf(fix, dates) {
                 }
             }
             
-            if (fixtures[i][17].length > 6) {
+            if (fixtures[i][17].length > 1) {
                 // Team B, second column numbers
                 let line_y_b = 472-Math.floor(17*Math.ceil(fixtures[i][18].length /2)-6);
                 if (fixtures[i][18].length > 18) {
