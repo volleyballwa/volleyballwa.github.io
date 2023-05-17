@@ -352,7 +352,7 @@ const __CONFIG__ = {
             "short": "7/8 F S 1"
         },
         "7/8 Female South Pool 2": {
-            "id": 149,
+            "id": 150,
             "long": "7/8 Female South Pool 2",
             "short": "7/8 F S 2"
         },
