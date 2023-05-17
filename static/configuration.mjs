@@ -115,7 +115,7 @@ const __CONFIG__ = {
             "top": "",
             "mid": "Leschanault",
             "bot": "Leisure",
-            "alias": ["Leschanault"]
+            "alias": ["Leschanault", "Leschanault Lei."]
         },
         "Loftus": {
             "name": "Loftus",
@@ -185,7 +185,14 @@ const __CONFIG__ = {
             "top": "",
             "mid": "Santa",
             "bot": "Maria",
-            "alias": ["Santa Maria College"]
+            "alias": ["Santa Maria College", "Santa Maria Col."]
+        },
+        "Southern River": {
+            "name": "Southern River",
+            "top": "",
+            "mid": "Santa",
+            "bot": "Maria",
+            "alias": ["Southern River College", "Southern River Colle", "Southern River Col."]
         },
         "St Mary's": {
             "name": "St Mary's",

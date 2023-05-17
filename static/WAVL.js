@@ -835,7 +835,7 @@ async function modifyPdf(fix, dates) {
             }
             var saved = await WAVLpdfDoc.saveAsBase64();
         } else if (fixtures[i][9][0][0] == "D" || fixtures[i][9][0][0] == "S") {
-            console.log(fixtures[i][9])
+            //console.log(fixtures[i][9])
             if (fixtures[i][17].length > 18 || fixtures[i][18].length > 18){
                 
 
@@ -879,36 +879,76 @@ async function modifyPdf(fix, dates) {
                 for (var k = 0; k < fixtures[i][17].length; k++) {
                     if (k < Math.ceil(fixtures[i][17].length / 2)) {
                         // first name, first column
-                        await extraWAVLfirstPage.drawText(fixtures[i][17][k][0].toUpperCase(), {
-                            x: 275.5,
-                            y: 733.5-((12.8*k)),
-                            size: 6,
-                            font: extraWAVLhelveticaFont
-                        })
+                        //console.log(fixtures[i][17][k][0].toUpperCase() + ": " + measureText(fixtures[i][17][k][0].toUpperCase(),6))
+                        if (measureText(fixtures[i][17][k][0].toUpperCase(), 6) >= 32){
+                            await extraWAVLfirstPage.drawText(fixtures[i][17][k][0].toUpperCase(), {
+                                x: 276,
+                                y: 733.5-((12.8*k)),
+                                size: 5,
+                                font: extraWAVLhelveticaFont
+                            })
+                        } else {
+                            await extraWAVLfirstPage.drawText(fixtures[i][17][k][0].toUpperCase(), {
+                                x: 276,
+                                y: 733.5-((12.8*k)),
+                                size: 6,
+                                font: extraWAVLhelveticaFont
+                            })
+                        }
 
                         // surname, first column
-                        await extraWAVLfirstPage.drawText(fixtures[i][17][k][1].toUpperCase(), {
-                            x: 275.5,
-                            y: 733.5-((12.8*k+6.0)),
-                            size: 6,
-                            font: extraWAVLhelveticaFont
-                        })
+                        //console.log(fixtures[i][17][k][1].toUpperCase() + ": " + measureText(fixtures[i][17][k][1].toUpperCase(),6))
+                        if (measureText(fixtures[i][17][k][1].toUpperCase(), 6) >= 32) {
+                            await extraWAVLfirstPage.drawText(fixtures[i][17][k][1].toUpperCase(), {
+                                x: 276,
+                                y: 733.5-((12.8*k+6.0)),
+                                size: 5,
+                                font: extraWAVLhelveticaFont
+                            })
+                        } else {
+                            await extraWAVLfirstPage.drawText(fixtures[i][17][k][1].toUpperCase(), {
+                                x: 276,
+                                y: 733.5-((12.8*k+6.0)),
+                                size: 6,
+                                font: extraWAVLhelveticaFont
+                            })
+                        }
                     } else {
                         // first name, second column
-                        await extraWAVLfirstPage.drawText(fixtures[i][17][k][0].toUpperCase(), {
-                            x: 353,
-                            y: 733.5-((12.8*(k-Math.ceil(fixtures[i][17].length / 2)))),
-                            size: 6,
-                            font: extraWAVLhelveticaFont
-                        })
+                        //console.log(fixtures[i][17][k][0].toUpperCase() + ": " + measureText(fixtures[i][17][k][0].toUpperCase(),6))
+                        if (measureText(fixtures[i][17][k][0].toUpperCase(), 6) >= 32){
+                            await extraWAVLfirstPage.drawText(fixtures[i][17][k][0].toUpperCase(), {
+                                x: 355,
+                                y: 733.5-((12.8*(k-Math.ceil(fixtures[i][17].length / 2)))),
+                                size: 5,
+                                font: extraWAVLhelveticaFont
+                            })
+                        } else {
+                            await extraWAVLfirstPage.drawText(fixtures[i][17][k][0].toUpperCase(), {
+                                x: 355,
+                                y: 733.5-((12.8*(k-Math.ceil(fixtures[i][17].length / 2)))),
+                                size: 6,
+                                font: extraWAVLhelveticaFont
+                            })
+                        }
 
                         // surname, second column
-                        await extraWAVLfirstPage.drawText(fixtures[i][17][k][1].toUpperCase(), {
-                            x: 353,
-                            y: 733.5-((12.8*(k-Math.ceil(fixtures[i][17].length / 2))+6.0)),
-                            size: 6,
-                            font: extraWAVLhelveticaFont
-                        })
+                        //console.log(fixtures[i][17][k][1].toUpperCase() + ": " + measureText(fixtures[i][17][k][1].toUpperCase(),6))
+                        if (measureText(fixtures[i][17][k][1].toUpperCase(), 6) >= 32) {
+                            await extraWAVLfirstPage.drawText(fixtures[i][17][k][1].toUpperCase(), {
+                                x: 355,
+                                y: 733.5-((12.8*(k-Math.ceil(fixtures[i][17].length / 2))+6.0)),
+                                size: 5,
+                                font: extraWAVLhelveticaFont
+                            })
+                        } else {
+                            await extraWAVLfirstPage.drawText(fixtures[i][17][k][1].toUpperCase(), {
+                                x: 355,
+                                y: 733.5-((12.8*(k-Math.ceil(fixtures[i][17].length / 2))+6.0)),
+                                size: 6,
+                                font: extraWAVLhelveticaFont
+                            })
+                        }
                     }
                     
                 }
@@ -918,16 +958,16 @@ async function modifyPdf(fix, dates) {
                     let line_y_a = 739-(12.8*Math.ceil(fixtures[i][17].length /2));
                     //console.log(line_y_a);
                     await extraWAVLfirstPage.drawLine({
-                        start: { x: 336, y: 738.6 },
-                        end: { x: 336, y: line_y_a },
+                        start: { x: 339, y: 738.6 },
+                        end: { x: 339, y: line_y_a },
                         thickness: 0.5,
                         color: rgb(0,0,0),
                         opacity: 1
                     })
                     
                     await extraWAVLfirstPage.drawLine({
-                        start: { x: 351, y: 738.6 },
-                        end: { x: 351, y: line_y_a },
+                        start: { x: 354, y: 738.6 },
+                        end: { x: 354, y: line_y_a },
                         thickness: 0.5,
                         color: rgb(0,0,0),
                         opacity: 1
@@ -938,36 +978,76 @@ async function modifyPdf(fix, dates) {
                 for (var k = 0; k < fixtures[i][18].length; k++) {
                     if (k < Math.ceil(fixtures[i][18].length / 2)) {
                         // first name, first column
-                        await extraWAVLfirstPage.drawText(fixtures[i][18][k][0].toUpperCase(), {
-                            x: 440,
-                            y: 733.5-((12.8*k)),
-                            size: 6,
-                            font: extraWAVLhelveticaFont
-                        })
+                        //console.log(fixtures[i][18][k][0].toUpperCase() + ": " + measureText(fixtures[i][18][k][0].toUpperCase(),6))
+                        if (measureText(fixtures[i][18][k][0].toUpperCase(), 6) >= 32) {
+                            await extraWAVLfirstPage.drawText(fixtures[i][18][k][0].toUpperCase(), {
+                                x: 440.5,
+                                y: 733.5-((12.8*k)),
+                                size: 5,
+                                font: extraWAVLhelveticaFont
+                            })
+                        } else {
+                            await extraWAVLfirstPage.drawText(fixtures[i][18][k][0].toUpperCase(), {
+                                x: 440.5,
+                                y: 733.5-((12.8*k)),
+                                size: 6,
+                                font: extraWAVLhelveticaFont
+                            })
+                        }
 
                         // surname, first column
-                        await extraWAVLfirstPage.drawText(fixtures[i][18][k][1].toUpperCase(), {
-                            x: 440,
-                            y: 733.5-((12.8*k+6.0)),
-                            size: 6,
-                            font: extraWAVLhelveticaFont
-                        })
+                        //console.log(fixtures[i][18][k][1].toUpperCase() + ": " + measureText(fixtures[i][18][k][1].toUpperCase(),6))
+                        if (measureText(fixtures[i][18][k][1].toUpperCase(), 6) >= 32) {
+                            await extraWAVLfirstPage.drawText(fixtures[i][18][k][1].toUpperCase(), {
+                                x: 440.5,
+                                y: 733.5-((12.8*k+6.0)),
+                                size: 5,
+                                font: extraWAVLhelveticaFont
+                            })
+                        } else {
+                            await extraWAVLfirstPage.drawText(fixtures[i][18][k][1].toUpperCase(), {
+                                x: 440.5,
+                                y: 733.5-((12.8*k+6.0)),
+                                size: 6,
+                                font: extraWAVLhelveticaFont
+                            })
+                        }
                     } else {
                         // first name, second column
-                        await extraWAVLfirstPage.drawText(fixtures[i][18][k][0].toUpperCase(), {
-                            x: 517,
-                            y: 733.5-((12.8*(k-Math.ceil(fixtures[i][18].length / 2)))),
-                            size: 6,
-                            font: extraWAVLhelveticaFont
-                        })
+                        //console.log(fixtures[i][18][k][0].toUpperCase() + ": " + measureText(fixtures[i][18][k][0].toUpperCase(),6))
+                        if (measureText(fixtures[i][18][k][0].toUpperCase(), 6) >= 32) {
+                            await extraWAVLfirstPage.drawText(fixtures[i][18][k][0].toUpperCase(), {
+                                x: 519.5,
+                                y: 733.5-((12.8*(k-Math.ceil(fixtures[i][18].length / 2)))),
+                                size: 5,
+                                font: extraWAVLhelveticaFont
+                            })
+                        } else {
+                            await extraWAVLfirstPage.drawText(fixtures[i][18][k][0].toUpperCase(), {
+                                x: 519.5,
+                                y: 733.5-((12.8*(k-Math.ceil(fixtures[i][18].length / 2)))),
+                                size: 6,
+                                font: extraWAVLhelveticaFont
+                            })
+                        }
 
                         // surname, second column
-                        await extraWAVLfirstPage.drawText(fixtures[i][18][k][1].toUpperCase(), {
-                            x: 517,
-                            y: 733.5-((12.8*(k-Math.ceil(fixtures[i][18].length / 2))+6.0)),
-                            size: 6,
-                            font: extraWAVLhelveticaFont
-                        })
+                        //console.log(fixtures[i][18][k][1].toUpperCase() + ": " + measureText(fixtures[i][18][k][1].toUpperCase(),6))
+                        if (measureText(fixtures[i][18][k][1].toUpperCase(), 6) >= 32) {
+                            await extraWAVLfirstPage.drawText(fixtures[i][18][k][1].toUpperCase(), {
+                                x: 519.5,
+                                y: 733.5-((12.8*(k-Math.ceil(fixtures[i][18].length / 2))+6.0)),
+                                size: 5,
+                                font: extraWAVLhelveticaFont
+                            })
+                        } else {
+                            await extraWAVLfirstPage.drawText(fixtures[i][18][k][1].toUpperCase(), {
+                                x: 519.5,
+                                y: 733.5-((12.8*(k-Math.ceil(fixtures[i][18].length / 2))+6.0)),
+                                size: 6,
+                                font: extraWAVLhelveticaFont
+                            })
+                        }
                     }
                 }
                 
@@ -977,16 +1057,16 @@ async function modifyPdf(fix, dates) {
                     //console.log(line_y_b);
 
                     await extraWAVLfirstPage.drawLine({
-                        start: { x: 515, y: 738.6 },
-                        end: { x: 515, y: line_y_b },
+                        start: { x: 518, y: 738.6 },
+                        end: { x: 518, y: line_y_b },
                         thickness: 0.5,
                         color: rgb(0,0,0),
                         opacity: 1
                     })
                     
                     await extraWAVLfirstPage.drawLine({
-                        start: { x: 500, y: 738.6 },
-                        end: { x: 500, y: line_y_b },
+                        start: { x: 503, y: 738.6 },
+                        end: { x: 503, y: line_y_b },
                         thickness: 0.5,
                         color: rgb(0,0,0),
                         opacity: 1
@@ -1004,7 +1084,7 @@ async function modifyPdf(fix, dates) {
                 try {
                     // Court Number
                     await extraWAVLfirstPage.drawText(fixtures[i][5], {
-                        x: parseInt((387.5 - measureBold(fixtures[i][5], 13).toString()).toString()),
+                        x: parseInt((388 - measureBold(fixtures[i][5], 13).toString()).toString()),
                         y: 781,
                         size: 13,
                         font: extraWAVLhelveticaBold
@@ -1156,36 +1236,76 @@ async function modifyPdf(fix, dates) {
                     for (var k = 0; k < fixtures[i][17].length; k++) {
                         if (k < Math.ceil(fixtures[i][17].length / 2)) {
                             // first name, first column
-                            await newWAVLfirstPage.drawText(fixtures[i][17][k][0].toUpperCase(), {
-                                x: 276,
-                                y: 716-((15.75*k)),
-                                size: 6,
-                                font: newWAVLhelveticaFont
-                            })
+                            //console.log(fixtures[i][17][k][0].toUpperCase() + ": " + measureText(fixtures[i][17][k][0].toUpperCase(),6))
+                            if (measureText(fixtures[i][17][k][0].toUpperCase(), 6) >= 32) {
+                                await newWAVLfirstPage.drawText(fixtures[i][17][k][0].toUpperCase(), {
+                                    x: 276.25,
+                                    y: 716-((15.75*k)),
+                                    size: 5,
+                                    font: newWAVLhelveticaFont
+                                })
+                            } else {
+                                await newWAVLfirstPage.drawText(fixtures[i][17][k][0].toUpperCase(), {
+                                    x: 276.25,
+                                    y: 716-((15.75*k)),
+                                    size: 6,
+                                    font: newWAVLhelveticaFont
+                                })
+                            }
 
                             // surname, first column
-                            await newWAVLfirstPage.drawText(fixtures[i][17][k][1].toUpperCase(), {
-                                x: 276,
-                                y: 716-((15.75*k+7.0)),
-                                size: 6,
-                                font: newWAVLhelveticaFont
-                            })
+                            //console.log(fixtures[i][17][k][1].toUpperCase() + ": " + measureText(fixtures[i][17][k][1].toUpperCase(),6))
+                            if (measureText(fixtures[i][17][k][1].toUpperCase(), 6) >= 32) {
+                                await newWAVLfirstPage.drawText(fixtures[i][17][k][1].toUpperCase(), {
+                                    x: 276.25,
+                                    y: 716-((15.75*k+7.0)),
+                                    size: 5,
+                                    font: newWAVLhelveticaFont
+                                })
+                            } else {
+                                await newWAVLfirstPage.drawText(fixtures[i][17][k][1].toUpperCase(), {
+                                    x: 276.25,
+                                    y: 716-((15.75*k+7.0)),
+                                    size: 6,
+                                    font: newWAVLhelveticaFont
+                                })
+                            }
                         } else {
                             // first name, second column
-                            await newWAVLfirstPage.drawText(fixtures[i][17][k][0].toUpperCase(), {
-                                x: 353,
-                                y: 716-((15.75*(k-Math.ceil(fixtures[i][17].length / 2)))),
-                                size: 6,
-                                font: newWAVLhelveticaFont
-                            })
+                            //console.log(fixtures[i][17][k][0].toUpperCase() + ": " + measureText(fixtures[i][17][k][0].toUpperCase(),6))
+                            if (measureText(fixtures[i][17][k][0].toUpperCase(), 6) >= 32) {
+                                await newWAVLfirstPage.drawText(fixtures[i][17][k][0].toUpperCase(), {
+                                    x: 355,
+                                    y: 716-((15.75*(k-Math.ceil(fixtures[i][17].length / 2)))),
+                                    size: 5,
+                                    font: newWAVLhelveticaFont
+                                })
+                            } else {
+                                await newWAVLfirstPage.drawText(fixtures[i][17][k][0].toUpperCase(), {
+                                    x: 355,
+                                    y: 716-((15.75*(k-Math.ceil(fixtures[i][17].length / 2)))),
+                                    size: 6,
+                                    font: newWAVLhelveticaFont
+                                })
+                            }
 
                             // surname, second column
-                            await newWAVLfirstPage.drawText(fixtures[i][17][k][1].toUpperCase(), {
-                                x: 353,
-                                y: 716-((15.75*(k-Math.ceil(fixtures[i][17].length / 2))+7.0)),
-                                size: 6,
-                                font: newWAVLhelveticaFont
-                            })
+                            //console.log(fixtures[i][17][k][1].toUpperCase() + ": " + measureText(fixtures[i][17][k][1].toUpperCase(),6))
+                            if (measureText(fixtures[i][17][k][1].toUpperCase(), 6) >= 32){
+                                await newWAVLfirstPage.drawText(fixtures[i][17][k][1].toUpperCase(), {
+                                    x: 355,
+                                    y: 716-((15.75*(k-Math.ceil(fixtures[i][17].length / 2))+7.0)),
+                                    size: 5,
+                                    font: newWAVLhelveticaFont
+                                })
+                            } else {
+                                await newWAVLfirstPage.drawText(fixtures[i][17][k][1].toUpperCase(), {
+                                    x: 355,
+                                    y: 716-((15.75*(k-Math.ceil(fixtures[i][17].length / 2))+7.0)),
+                                    size: 6,
+                                    font: newWAVLhelveticaFont
+                                })
+                            }
                         }
                         
                     }
@@ -1196,16 +1316,16 @@ async function modifyPdf(fix, dates) {
 
                         //console.log(line_y_a);
                         await newWAVLfirstPage.drawLine({
-                            start: { x: 336, y: 722 },
-                            end: { x: 336, y: line_y_a },
+                            start: { x: 339, y: 722 },
+                            end: { x: 339, y: line_y_a },
                             thickness: 0.5,
                             color: rgb(0,0,0),
                             opacity: 1
                         })
                         
                         await newWAVLfirstPage.drawLine({
-                            start: { x: 351, y: 722 },
-                            end: { x: 351, y: line_y_a },
+                            start: { x: 354, y: 722 },
+                            end: { x: 354, y: line_y_a },
                             thickness: 0.5,
                             color: rgb(0,0,0),
                             opacity: 1
@@ -1218,36 +1338,76 @@ async function modifyPdf(fix, dates) {
                     for (var k = 0; k < fixtures[i][18].length; k++) {
                         if (k < Math.ceil(fixtures[i][18].length / 2)) {
                             // first name, first column
-                            await newWAVLfirstPage.drawText(fixtures[i][18][k][0].toUpperCase(), {
-                                x: 440,
-                                y: 716-((15.75*k)),
-                                size: 6,
-                                font: newWAVLhelveticaFont
-                            })
+                            //console.log(fixtures[i][18][k][0].toUpperCase() + ": " + measureText(fixtures[i][18][k][0].toUpperCase(),6))
+                            if (measureText(fixtures[i][18][k][0].toUpperCase(), 6) >= 32) {
+                                await newWAVLfirstPage.drawText(fixtures[i][18][k][0].toUpperCase(), {
+                                    x: 439.5,
+                                    y: 716-((15.75*k)),
+                                    size: 5,
+                                    font: newWAVLhelveticaFont
+                                })
+                            } else {
+                                await newWAVLfirstPage.drawText(fixtures[i][18][k][0].toUpperCase(), {
+                                    x: 439.5,
+                                    y: 716-((15.75*k)),
+                                    size: 6,
+                                    font: newWAVLhelveticaFont
+                                })
+                            }
 
                             // surname, first column
-                            await newWAVLfirstPage.drawText(fixtures[i][18][k][1].toUpperCase(), {
-                                x: 440,
-                                y: 716-((15.75*k+7.0)),
-                                size: 6,
-                                font: newWAVLhelveticaFont
-                            })
+                            //console.log(fixtures[i][18][k][1].toUpperCase() + ": " + measureText(fixtures[i][18][k][1].toUpperCase(),6))
+                            if (measureText(fixtures[i][18][k][1].toUpperCase(), 6) >= 32) {
+                                await newWAVLfirstPage.drawText(fixtures[i][18][k][1].toUpperCase(), {
+                                    x: 439.5,
+                                    y: 716-((15.75*k+7.0)),
+                                    size: 5,
+                                    font: newWAVLhelveticaFont
+                                })
+                            } else {
+                                await newWAVLfirstPage.drawText(fixtures[i][18][k][1].toUpperCase(), {
+                                    x: 439.5,
+                                    y: 716-((15.75*k+7.0)),
+                                    size: 6,
+                                    font: newWAVLhelveticaFont
+                                })
+                            }
                         } else {
                             // first name, second column
-                            await newWAVLfirstPage.drawText(fixtures[i][18][k][0].toUpperCase(), {
-                                x: 517,
-                                y: 716-((15.75*(k-Math.ceil(fixtures[i][18].length / 2)))),
-                                size: 6,
-                                font: newWAVLhelveticaFont
-                            })
+                            //console.log(fixtures[i][18][k][0].toUpperCase() + ": " + measureText(fixtures[i][18][k][0].toUpperCase(),6))
+                            if (measureText(fixtures[i][18][k][0].toUpperCase(), 6) >= 32) {
+                                await newWAVLfirstPage.drawText(fixtures[i][18][k][0].toUpperCase(), {
+                                    x: 519,
+                                    y: 716-((15.75*(k-Math.ceil(fixtures[i][18].length / 2)))),
+                                    size: 5,
+                                    font: newWAVLhelveticaFont
+                                })
+                            } else {
+                                await newWAVLfirstPage.drawText(fixtures[i][18][k][0].toUpperCase(), {
+                                    x: 519,
+                                    y: 716-((15.75*(k-Math.ceil(fixtures[i][18].length / 2)))),
+                                    size: 6,
+                                    font: newWAVLhelveticaFont
+                                })
+                            }
 
                             // surname, second column
-                            await newWAVLfirstPage.drawText(fixtures[i][18][k][1].toUpperCase(), {
-                                x: 517,
-                                y: 716-((15.75*(k-Math.ceil(fixtures[i][18].length / 2))+7.0)),
-                                size: 6,
-                                font: newWAVLhelveticaFont
-                            })
+                            //console.log(fixtures[i][18][k][1].toUpperCase() + ": " + measureText(fixtures[i][18][k][1].toUpperCase(),6))
+                            if (measureText(fixtures[i][18][k][1].toUpperCase(), 6) >= 32) {
+                                await newWAVLfirstPage.drawText(fixtures[i][18][k][1].toUpperCase(), {
+                                    x: 519,
+                                    y: 716-((15.75*(k-Math.ceil(fixtures[i][18].length / 2))+7.0)),
+                                    size: 5,
+                                    font: newWAVLhelveticaFont
+                                })
+                            } else {
+                                await newWAVLfirstPage.drawText(fixtures[i][18][k][1].toUpperCase(), {
+                                    x: 519,
+                                    y: 716-((15.75*(k-Math.ceil(fixtures[i][18].length / 2))+7.0)),
+                                    size: 6,
+                                    font: newWAVLhelveticaFont
+                                })
+                            }
                         }
                     }
                     
@@ -1257,16 +1417,16 @@ async function modifyPdf(fix, dates) {
                         //console.log(line_y_b);
 
                         await newWAVLfirstPage.drawLine({
-                            start: { x: 515, y: 722 },
-                            end: { x: 515, y: line_y_b },
+                            start: { x: 518, y: 722 },
+                            end: { x: 518, y: line_y_b },
                             thickness: 0.5,
                             color: rgb(0,0,0),
                             opacity: 1
                         })
                         
                         await newWAVLfirstPage.drawLine({
-                            start: { x: 500, y: 722  },
-                            end: { x: 500, y: line_y_b },
+                            start: { x: 503, y: 722  },
+                            end: { x: 503, y: line_y_b },
                             thickness: 0.5,
                             color: rgb(0,0,0),
                             opacity: 1
@@ -1285,7 +1445,7 @@ async function modifyPdf(fix, dates) {
                 try {
                     // Court Number
                     await newWAVLfirstPage.drawText(fixtures[i][5], {
-                        x: parseInt((387.5 - measureBold(fixtures[i][5], 13).toString()).toString()),
+                        x: parseInt((388.5 - measureBold(fixtures[i][5], 13).toString()).toString()),
                         y: 767.5,
                         size: 13,
                         font: newWAVLhelveticaBold
@@ -1654,8 +1814,11 @@ function html_to_fixture(venues, leagues, date, all_html) {
                 for (let i = 1; i < rowLength; i++) {
                     let cells = data_table.rows.item(i).cells;
                     let venue = cells.item(1).innerText;
-                    let venue_split = venue.split(" Ct")
-                    let zero_venue_split = venue_split[0].replaceAll(" Ct", "");
+                    
+                    let venue_split = venue.split(/\d/);
+                    let zero_venue_split = venue_split[0].trim().replaceAll(" Ctr", "&");
+                    zero_venue_split = zero_venue_split.replaceAll(" Ct", "");
+                    zero_venue_split = zero_venue_split.replaceAll("&", " Ctr");
                     if (Number.isInteger(parseInt(zero_venue_split.slice(-2).trim()))) {
                         zero_venue_split = zero_venue_split.slice(0, -1).trim();
                     }
@@ -1668,14 +1831,18 @@ function html_to_fixture(venues, leagues, date, all_html) {
                         let _time_min = " ";
                         let _division = [];
                         try {
-                            if (Number.isInteger(parseInt(venue_split[0].slice(-2).trim()))) {
+                            /*if (Number.isInteger(parseInt(venue_split[0].slice(-2).trim()))) {
                                 _court = parseInt(venue_split[0].slice(-2).trim()).toString();
                             } else {
                                 _court = cells.item(1).innerText.split("Ct")[1].trim();
-                            }
+                            }*/
+                            _court = cells.item(1).innerText.split(/^[^0-9]+/)[1].trim()
                         } catch (e) {
                             _court = "";
                             console.log("Why");
+                            console.log(cells.item(2))
+                            console.log(cells.item(1))
+                            console.log(cells.item(0))
                         }
 
                         if (_court == null) {
