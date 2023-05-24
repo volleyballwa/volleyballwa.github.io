@@ -166,6 +166,13 @@ const __CONFIG__ = {
             "bot": "Active",
             "alias": []
         },
+        "Newman College": {
+            "name": "Newman College",
+            "top": "",
+            "mid": "Newman",
+            "bot": "College",
+            "alias": ["Newman"]
+        },
         "Penrhos College": {
             "name": "Penrhos College",
             "top": "",
