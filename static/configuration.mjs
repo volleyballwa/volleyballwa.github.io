@@ -1,4 +1,6 @@
-const FINALS_DATES = ["2022-09-04", "2022-09-11", "2022-09-18", "2023-07-14", "2023-07-16", "2023-07-22", "2023-08-27", "2023-09-03", "2023-09-10"];
+const FINALS_DATES = ["2022-09-04", "2022-09-11", "2022-09-18", "2023-08-27", "2023-09-03", "2023-09-10"];
+
+const SL_FINALS_DATES = ["2023-07-14", "2023-07-16", "2023-07-22"]
 
 // This is used to get a list of all players. eg: https://vwa.bracketpal.com/leaders/season/27
 const SEASON_ID = "27";
