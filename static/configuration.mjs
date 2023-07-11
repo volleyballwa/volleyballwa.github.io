@@ -168,6 +168,13 @@ const __CONFIG__ = {
             "bot": "Active",
             "alias": []
         },
+        "Newman College": {
+            "name": "Newman College",
+            "top": "",
+            "mid": "Newman",
+            "bot": "College",
+            "alias": ["Newman"]
+        },
         "Penrhos College": {
             "name": "Penrhos College",
             "top": "",
@@ -383,10 +390,10 @@ const __CONFIG__ = {
             "long": "10 Female North",
             "short": "10 F N"
         },
-        "10 Female South Pool 1": {
+        "10 Female South": {
             "id": 152,
-            "long": "10 Female South Pool 1",
-            "short": "10 F S 1"
+            "long": "10 Female South",
+            "short": "10 F S"
         },
         /*"10 Female South Pool 2": {
             "id": 153,
