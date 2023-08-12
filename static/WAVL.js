@@ -1776,6 +1776,9 @@ function html_to_fixture(venues, leagues, date, all_html) {
                                     _duty = cells.item(7).innerText.slice(5);
                                 } catch (e) {
                                     console.log(e);
+				    console.log(_team_a);
+				    console.log(_team_b);
+				    console.log("~~~");
                                     _duty = " ";
                                 }
                             }
