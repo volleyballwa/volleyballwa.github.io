@@ -89,7 +89,7 @@ const __CONFIG__ = {
             "top": "",
             "mid": "Hartfield",
             "bot": "Park",
-            "alias": ["Hartfield"]
+            "alias": ["Hartfield", "Hartfield Rec Cntr"]
         },
         "HBF Stadium Claremont": {
             "name": "HBF Stadium Claremont",
