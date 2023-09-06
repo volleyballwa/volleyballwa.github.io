@@ -1,4 +1,13 @@
 /**
+ * TO-DO
+ * 1. Add the teams playing, the duty team, the division, the date, the time, and the venue to the bottom of the second page, for easier collating
+ * 2. Make sure the live version has the spreadsheet download working correctly.
+ * 3. ?
+ * 4. ?
+ */
+
+
+/**
  * Sets all venue checkboxes to be selected.
  * @param {*} checked 
  */
