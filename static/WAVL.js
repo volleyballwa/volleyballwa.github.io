@@ -1,4 +1,13 @@
 /**
+ * TO-DO
+ * 1. Add the teams playing, the duty team, the division, the date, the time, and the venue to the bottom of the second page, for easier collating
+ * 2. Make sure the live version has the spreadsheet download working correctly.
+ * 3. ?
+ * 4. ?
+ */
+
+
+/**
  * Sets all venue checkboxes to be selected.
  * @param {*} checked 
  */
@@ -310,55 +319,59 @@ function parsePlayerList(players_list, upd_fixtures) {
         let team_id = player_data[i][2].split(" ")[0];
         let games_played = player_data[i][5]
         // if name has (DP) do not add to dict.
-        if (name.toLowerCase().includes("(dp)") || name.toLowerCase().includes("*") || name.toLowerCase().includes("^") || name.toLowerCase().includes('"') || name.toLowerCase().includes("\\")){
-            console.log(name);
-
-            if (name.toLowerCase().includes("*") || name.toLowerCase().includes("^") || (name.toLowerCase().includes('"'))) {
-                name = name.replaceAll("*","");
-                name = name.replaceAll("^","");
-                name = name.replaceAll('"',"");
-                name = name.replaceAll("\\","");
-
-                if (!(Object.keys(dict).includes(team_id))) {
-                    dict[team_id] = [[split_name(name.trim()), games_played]]
-                } else {
-                    dict[team_id].push([split_name(name.trim()), games_played])
-                }
-            }
-
-            // If SLM / SLW / SLrM / SLrW, add (dp) for FINALS / AFTER SL Finals
-            if (["1","2","3",'4','5','6','7','8','9','10','11','12','13','14','15','16','17','18','19','26','101','102','103','104','105','106','107','108','109','110','111','112','113','114','115','116','117','118','119','123','126'].includes(team_id) && name.toLowerCase().includes("(dp)") ){
-                name = name.replaceAll("(DP)","");
-                name = name.replaceAll("(dp)","");
-                if (!(Object.keys(dict).includes(team_id))) {
-                    dict[team_id] = [[split_name(name.trim()), games_played]]
-                } else {
-                    dict[team_id].push([split_name(name.trim()), games_played])
-                }
-            }
-
-        } else {
-            if (["1","2","3",'4','5','6','7','8','9','101','102','103','104','105','106','107','108','109'].includes(team_id)){
-                // If SL
-                if (!(Object.keys(dict).includes(team_id))) {
-                    dict[team_id] = [[split_name(name.trim()), games_played]]
-                } else {
-                    dict[team_id].push([split_name(name.trim()), games_played])
-                }
-            } else {
-                // if NOT SL
-                //console.log(SL_Only_Players);
-                if (SL_Only_Players.includes(name)){
-                    console.log(player_data[i]);
-                } else {
-                    if (!(Object.keys(dict).includes(team_id))) {
-                        dict[team_id] = [[split_name(name.trim()), games_played]]
-                    } else {
-                        dict[team_id].push([split_name(name.trim()), games_played])
-                    }
-                }
-            }
-        }
+	if (DO_NOT_PRINT.includes(name)){
+		console.log(name)
+	} else {
+	        if (name.toLowerCase().includes("(dp)") || name.toLowerCase().includes("*") || name.toLowerCase().includes("^") || name.toLowerCase().includes('"') || name.toLowerCase().includes("\\")){
+	            console.log(name);
+	
+	            if (name.toLowerCase().includes("*") || name.toLowerCase().includes("^") || (name.toLowerCase().includes('"'))) {
+	                name = name.replaceAll("*","");
+	                name = name.replaceAll("^","");
+	                name = name.replaceAll('"',"");
+	                name = name.replaceAll("\\","");
+	
+	                if (!(Object.keys(dict).includes(team_id))) {
+	                    dict[team_id] = [[split_name(name.trim()), games_played]]
+	                } else {
+	                    dict[team_id].push([split_name(name.trim()), games_played])
+	                }
+	            }
+	
+	            // If SLM / SLW / SLrM / SLrW, add (dp) for FINALS / AFTER SL Finals
+	            if (["1","2","3",'4','5','6','7','8','9','10','11','12','13','14','15','16','17','18','19','26','101','102','103','104','105','106','107','108','109','110','111','112','113','114','115','116','117','118','119','123','126'].includes(team_id) && name.toLowerCase().includes("(dp)") ){
+	                name = name.replaceAll("(DP)","");
+	                name = name.replaceAll("(dp)","");
+	                if (!(Object.keys(dict).includes(team_id))) {
+	                    dict[team_id] = [[split_name(name.trim()), games_played]]
+	                } else {
+	                    dict[team_id].push([split_name(name.trim()), games_played])
+	                }
+	            }
+	
+	        } else {
+	            if (["1","2","3",'4','5','6','7','8','9','101','102','103','104','105','106','107','108','109'].includes(team_id)){
+	                // If SL
+	                if (!(Object.keys(dict).includes(team_id))) {
+	                    dict[team_id] = [[split_name(name.trim()), games_played]]
+	                } else {
+	                    dict[team_id].push([split_name(name.trim()), games_played])
+	                }
+	            } else {
+	                // if NOT SL
+	                //console.log(SL_Only_Players);
+	                if (SL_Only_Players.includes(name)){
+	                    console.log(player_data[i]);
+	                } else {
+	                    if (!(Object.keys(dict).includes(team_id))) {
+	                        dict[team_id] = [[split_name(name.trim()), games_played]]
+	                    } else {
+	                        dict[team_id].push([split_name(name.trim()), games_played])
+	                    }
+	                }
+	            }
+	        }
+	}
     }
 
     for (i = 0; i < upd_fixtures.length; i++) {
@@ -1975,9 +1988,15 @@ function html_to_fixture(venues, leagues, date, all_html) {
                                     _duty = cells.item(7).innerText.slice(5);
                                 } catch (e) {
                                     console.log(e);
+<<<<<<< HEAD
 				                    console.log(_team_a);
  				                    console.log(_team_b);
  				                    console.log("~~~");
+=======
+				    console.log(_team_a);
+				    console.log(_team_b);
+				    console.log("~~~");
+>>>>>>> a953aa63eb1152520cafc7bf43e0eeb21bcd902b
                                     _duty = " ";
                                 }
                             }
