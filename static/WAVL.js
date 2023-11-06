@@ -80,16 +80,6 @@ function deselect_all_wavjl(checked = false) {
 }
 
 /**
- * NOT USED
- * 
- * Enable all WAVL buttons
-
-function enable_button() {
-    document.getElementById("WAVL").disabled = false;
-}
-*/
-
-/**
  * Initialises loading dots.
  */
 var dots = window.setInterval(function() {
@@ -401,6 +391,7 @@ function parsePlayerList(players_list, upd_fixtures) {
     }
     return upd_fixtures;
 }
+
 /**
  * "Parent" function that basically everything else flows through. 
  * @param {String[]}    venues      Array of selected venues
@@ -477,7 +468,6 @@ function pdf_init(venues, wavl, wavjl, dates) {
                 }
             }
 
-
             Promise.all(fixtures).then(fix_val => {
                 var team_list = []
 
@@ -522,67 +512,6 @@ async function get_single_fixture(start_date, end_date) {
     var url = head + start_date.toString() + "&end_date=" + end_date.toString();
     console.log("get_single_fixture: " + url);
     return await axios.get(url);
-}
-
-/**
- * NOT USED
- * 
- * Axios request to get single team list.
- * @param {Integer} team_id Team ID
- * @returns 
- */
-async function get_single_team_list_html(team_id) {
-    axios;
-    const head = 'https://cors-anywhere-og-v5kf.onrender.com/vwa.bracketpal.com/teaminfo/';
-    var url = head + team_id.toString();
-    // console.log("get_single_fixture: " + url);
-    return await axios.get(url);
-}
-
-/**
- * NOT USED
- * 
- * Parse Team List HTML and add to relevant fixture. 
- * @param {HTML[]} player_names_html 
- * @param {Fixtures[]} fixtures 
- * @returns {Fixtures[]} Updated array of fixtures
- */
-function addTeamList(player_names_html, fixtures) {
-    console.log("addTeamList");
-    let j = 0;
-
-    // Loop over each match (hence i+2)
-    for (i = 0; i < player_names_html.length; i = i + 2){
-
-        // Ensure that the fixture lines up with the player names. 
-        // No need to check as the order the fixtures were added is the same order that the player HTML was added
-        while (fixtures[j][9][0][0] != "D" && fixtures[j][9][0][0] != "S") {j = j + 1};
-        
-        // Parse Team A
-        var Aparser = new DOMParser();
-	    var Adoc = Aparser.parseFromString(player_names_html[i].request.responseText, "text/html");
-        let Aselector = '[class^="team_roster_player wfid_temp"]';
-        var Aelements = Adoc.querySelectorAll(Aselector);
-	    const Anames = [...Aelements];
-        console.log(Anames);
-        console.log(Aelements);
-        let Aplayer_names = Anames.map((tmp => split_name(tmp.innerText.trim())));
-
-        // Parse Team B
-        var Bparser = new DOMParser();
-	    var Bdoc = Bparser.parseFromString(player_names_html[i+1].request.responseText, "text/html");
-        let Bselector = '[class^="team_roster_player wfid_temp"]';
-        var Belements = Bdoc.querySelectorAll(Bselector);
-	    const Bnames = [...Belements];
-        console.log(Bnames);
-        console.log(Belements);
-        let Bplayer_names = Bnames.map((tmp => split_name(tmp.innerText.trim())));
-
-        fixtures[j][17] = Aplayer_names;
-        fixtures[j][18] = Bplayer_names;
-        j = j + 1;
-    }
-    return fixtures;
 }
 
 /**
@@ -694,12 +623,14 @@ async function modifyPdf(fix, dates) {
         var newWAVLhelveticaBold = await newWAVLpdfDoc.embedFont(PDFLib.StandardFonts.HelveticaBold);
         var newWAVLpages = await newWAVLpdfDoc.getPages();
         var newWAVLfirstPage = await newWAVLpages[0];
+        var newWAVLbackpage = await newWAVLpages[1];
 
         var extraWAVLpdfDoc = await PDFLib.PDFDocument.load(extraWAVLexistingPdfBytes);
         var extraWAVLhelveticaFont = await extraWAVLpdfDoc.embedFont(PDFLib.StandardFonts.Helvetica);
         var extraWAVLhelveticaBold = await extraWAVLpdfDoc.embedFont(PDFLib.StandardFonts.HelveticaBold);
         var extraWAVLpages = await extraWAVLpdfDoc.getPages();
         var extraWAVLfirstPage = await extraWAVLpages[0];
+        var extraWAVLbackPage = await extraWAVLpages[1];
 
 
         //var JLexistingPdfBytes = await fetch(JLurl).then(resp => resp.arrayBuffer());
@@ -710,8 +641,6 @@ async function modifyPdf(fix, dates) {
         var JLpages = await JLpdfDoc.getPages();
         var JLfirstPage = await JLpages[0];
 
-        // If WAVL Game (Divisions or State League)
-        // use OLD scoresheet for divisions (for now)
         if (fixtures[i][9][0].includes("Division") || fixtures[i][9][0].includes("State")) {
             // If we need to use the scoresheet with more names
             if (fixtures[i][17].length > 18 || fixtures[i][18].length > 18){
@@ -975,10 +904,22 @@ async function modifyPdf(fix, dates) {
                     size: 10,
                     font: extraWAVLhelveticaFont
                 })
+                await extraWAVLbackPage.drawText(__venues__[fixtures[i][0]], {
+                    x: parseInt((275 - measureText(__venues__[fixtures[i][0]], 10)).toString()),
+                    y: 781,
+                    size: 10,
+                    font: extraWAVLhelveticaFont
+                })
 
                 try {
                     // Court Number
                     await extraWAVLfirstPage.drawText(fixtures[i][5], {
+                        x: parseInt((388 - measureBold(fixtures[i][5], 13).toString()).toString()),
+                        y: 781,
+                        size: 13,
+                        font: extraWAVLhelveticaBold
+                    })
+                    await extraWAVLbackPage.drawText(fixtures[i][5], {
                         x: parseInt((388 - measureBold(fixtures[i][5], 13).toString()).toString()),
                         y: 781,
                         size: 13,
@@ -999,6 +940,12 @@ async function modifyPdf(fix, dates) {
                             size: 13,
                             font: extraWAVLhelveticaBold
                         })
+                        await extraWAVLbackPage.drawText(time, {
+                            x: parseInt((457 - measureBold(time, 13)).toString()),
+                            y: 781,
+                            size: 13,
+                            font: extraWAVLhelveticaBold
+                        })
                     }
                 } catch (e) {
                     // catch - continue
@@ -1014,6 +961,12 @@ async function modifyPdf(fix, dates) {
                     size: 13,
                     font: extraWAVLhelveticaBold
                 })
+                await extraWAVLbackPage.drawText(ddmmyy, {
+                    x: parseInt((546 - measureBold(ddmmyy, 13)).toString()),
+                    y: 781,
+                    size: 13,
+                    font: extraWAVLhelveticaBold
+                })
 
                 // Division (short)
                 await extraWAVLfirstPage.drawText(fixtures[i][9][1], {
@@ -1022,9 +975,21 @@ async function modifyPdf(fix, dates) {
                     size: 13,
                     font: extraWAVLhelveticaBold
                 })
+                await extraWAVLbackPage.drawText(fixtures[i][9][1], {
+                    x: parseInt((528 - measureBold(fixtures[i][9][1], 13)).toString()),
+                    y: 797,
+                    size: 13,
+                    font: extraWAVLhelveticaBold
+                })
 
                 // Duty team
                 await extraWAVLfirstPage.drawText(fixtures[i][8], {
+                    x: parseInt((332 - measureText(fixtures[i][8], 14)).toString()),
+                    y: 797,
+                    size: 14,
+                    font: extraWAVLhelveticaFont
+                })
+                await extraWAVLbackPage.drawText(fixtures[i][8], {
                     x: parseInt((332 - measureText(fixtures[i][8], 14)).toString()),
                     y: 797,
                     size: 14,
@@ -1071,6 +1036,18 @@ async function modifyPdf(fix, dates) {
                         size: 10,
                         font: extraWAVLhelveticaBold
                     })
+                    await extraWAVLbackPage.drawText(fixtures[i][6], {
+                        x: parseInt((262 - measureText(fixtures[i][6], 10)).toString()),
+                        y: 813.5,
+                        size: 10,
+                        font: extraWAVLhelveticaBold
+                    })
+                    await extraWAVLbackPage.drawText(fixtures[i][7], {
+                        x: parseInt((480 - measureText(fixtures[i][7], 10)).toString()),
+                        y: 118133.5,
+                        size: 10,
+                        font: extraWAVLhelveticaBold
+                    })
                 } else {
                     extraWAVLpdfDoc.TextAlignment = 1;
                     await extraWAVLfirstPage.drawText(fixtures[i][6], {
@@ -1080,6 +1057,18 @@ async function modifyPdf(fix, dates) {
                         font: extraWAVLhelveticaBold
                     })
                     await extraWAVLfirstPage.drawText(fixtures[i][7], {
+                        x: parseInt((480 - measureText(fixtures[i][7], 14)).toString()),
+                        y: 813.5,
+                        size: 14,
+                        font: extraWAVLhelveticaBold
+                    })
+                    await extraWAVLbackPage.drawText(fixtures[i][6], {
+                        x: parseInt((260 - measureText(fixtures[i][6], 14)).toString()),
+                        y: 813.5,
+                        size: 14,
+                        font: extraWAVLhelveticaBold
+                    })
+                    await extraWAVLbackPage.drawText(fixtures[i][7], {
                         x: parseInt((480 - measureText(fixtures[i][7], 14)).toString()),
                         y: 813.5,
                         size: 14,
@@ -1353,10 +1342,22 @@ async function modifyPdf(fix, dates) {
                     size: 10,
                     font: newWAVLhelveticaFont
                 })
+                await newWAVLbackpage.drawText(__venues__[fixtures[i][0]], {
+                    x: parseInt((275 - measureText(__venues__[fixtures[i][0]], 10)).toString()),
+                    y: 767.5,
+                    size: 10,
+                    font: newWAVLhelveticaFont
+                })
 
                 try {
                     // Court Number
                     await newWAVLfirstPage.drawText(fixtures[i][5], {
+                        x: parseInt((388.5 - measureBold(fixtures[i][5], 13).toString()).toString()),
+                        y: 767.5,
+                        size: 13,
+                        font: newWAVLhelveticaBold
+                    })
+                    await newWAVLbackpage.drawText(fixtures[i][5], {
                         x: parseInt((388.5 - measureBold(fixtures[i][5], 13).toString()).toString()),
                         y: 767.5,
                         size: 13,
@@ -1377,6 +1378,12 @@ async function modifyPdf(fix, dates) {
                             size: 13,
                             font: newWAVLhelveticaBold
                         })
+                        await newWAVLbackpage.drawText(time, {
+                            x: parseInt((459 - measureBold(time, 13)).toString()),
+                            y: 767.5,
+                            size: 13,
+                            font: newWAVLhelveticaBold
+                        })
                     }
                 } catch (e) {
                     // catch - continue
@@ -1392,6 +1399,12 @@ async function modifyPdf(fix, dates) {
                     size: 13,
                     font: newWAVLhelveticaBold
                 })
+                await newWAVLbackpage.drawText(ddmmyy, {
+                    x: parseInt((547 - measureBold(ddmmyy, 13)).toString()),
+                    y: 767.5,
+                    size: 13,
+                    font: newWAVLhelveticaBold
+                })
 
                 // Division (short)
                 await newWAVLfirstPage.drawText(fixtures[i][9][1], {
@@ -1400,9 +1413,21 @@ async function modifyPdf(fix, dates) {
                     size: 13,
                     font: newWAVLhelveticaBold
                 })
+                await newWAVLbackpage.drawText(fixtures[i][9][1], {
+                    x: parseInt((529 - measureBold(fixtures[i][9][1], 13)).toString()),
+                    y: 784.5,
+                    size: 13,
+                    font: newWAVLhelveticaBold
+                })
 
                 // Duty team
                 await newWAVLfirstPage.drawText(fixtures[i][8], {
+                    x: parseInt((332 - measureText(fixtures[i][8], 14)).toString()),
+                    y: 784.5,
+                    size: 14,
+                    font: newWAVLhelveticaFont
+                })
+                await newWAVLbackpage.drawText(fixtures[i][8], {
                     x: parseInt((332 - measureText(fixtures[i][8], 14)).toString()),
                     y: 784.5,
                     size: 14,
@@ -1449,6 +1474,18 @@ async function modifyPdf(fix, dates) {
                         size: 10,
                         font: newWAVLhelveticaBold
                     })
+                    await newWAVLbackpage.drawText(fixtures[i][6], {
+                        x: parseInt((262 - measureText(fixtures[i][6], 10)).toString()),
+                        y: 804.5,
+                        size: 10,
+                        font: newWAVLhelveticaBold
+                    })
+                    await newWAVLbackpage.drawText(fixtures[i][7], {
+                        x: parseInt((480 - measureText(fixtures[i][7], 10)).toString()),
+                        y: 804.5,
+                        size: 10,
+                        font: newWAVLhelveticaBold
+                    })
                 } else {
                     newWAVLpdfDoc.TextAlignment = 1;
                     await newWAVLfirstPage.drawText(fixtures[i][6], {
@@ -1458,6 +1495,18 @@ async function modifyPdf(fix, dates) {
                         font: newWAVLhelveticaBold
                     })
                     await newWAVLfirstPage.drawText(fixtures[i][7], {
+                        x: parseInt((480 - measureText(fixtures[i][7], 14)).toString()),
+                        y: 804.5,
+                        size: 14,
+                        font: newWAVLhelveticaBold
+                    })
+                    await newWAVLbackpage.drawText(fixtures[i][6], {
+                        x: parseInt((262 - measureText(fixtures[i][6], 14)).toString()),
+                        y: 804.5,
+                        size: 14,
+                        font: newWAVLhelveticaBold
+                    })
+                    await newWAVLbackpage.drawText(fixtures[i][7], {
                         x: parseInt((480 - measureText(fixtures[i][7], 14)).toString()),
                         y: 804.5,
                         size: 14,
@@ -1564,6 +1613,7 @@ async function modifyPdf(fix, dates) {
             ["Date", "Venue", "Time", "Div", "Court", "Team A", "Team B", "Duty Team", "Time", "Sets", "Referee 1st", "Qualifications", "Referee 2nd", "Qualifications", "Assessor"]
         ];
         fixtures.sort(time_sorting);
+        let prev_date = ""
         for (var i = 0; i < fixtures.length; i++) {
             // Don't include junior league games in spreadsheet
             if (fixtures[i][9][0][0] == "D" || fixtures[i][9][0][0] == "S"){
@@ -1571,6 +1621,12 @@ async function modifyPdf(fix, dates) {
                 let full_time = fixtures[i][13] + ":" + fixtures[i][14];
                 let crt = fixtures[i][5];
                 
+                if (date != prev_date) {
+                    prev_date = date
+                } else {
+                    date = "";
+                }
+
                 if (!(crt)) {
                     crt = "";
                 } else {
@@ -1582,20 +1638,187 @@ async function modifyPdf(fix, dates) {
             }
         }
 
-        try {
-            // Download CSV
-            let csvContent = "data:text/csv;charset=utf-8," + csv.map(e => e.join(",")).join("\n");
-            var encodedUri = encodeURI(csvContent);
-            var link = document.createElement("a");
-            link.setAttribute("href", encodedUri);
-            let filename = "Runsheet" + dates + ".csv";
-            link.setAttribute("download", filename);
-            document.body.appendChild(link); // Required for File Download
+        //const ExcelJS = require('exceljs');
+        var excel_url = "https://volleyballwa.github.io/static/Ref_Template.xlsx";
+        const default_bytes = await fetch(excel_url).then(res => res.arrayBuffer());
+        const workbook = new ExcelJS.Workbook();
+        //const excelReader = new FileReader();
+        workbook.xlsx.load(default_bytes)
+            .then(function() {
+            const sheet = workbook.getWorksheet('Referee Spreadsheet');
 
-            link.click();
-        } catch (e) {
-            console.log(e)
-        }
+            for (var i = 0; i < csv.length; i++) {
+                let row = sheet.getRow(i+1);
+                for (var j = 0; j < csv[i].length; j++){
+                    row.getCell(j+1).value = csv[i][j]
+                    row.commit()
+                }
+                //sheet.insertRow(i,csv[i])
+            }
+
+            sheet.addConditionalFormatting({
+                ref: '$A$1:$O$199',
+                rules: [
+                    {
+                        type: 'expression',
+                        formulae: ['AND(NOT($A2=$A1), LEN($A1)>1)'],
+                        style: {border: {top: {style: 'thin'}}}
+                    }
+                ]
+            })
+
+            sheet.addConditionalFormatting({
+                ref: '$A$1:$O$199',
+                rules: [
+                    {
+                        type: 'expression',
+                        formulae: ['AND(NOT($B2=$B1), LEN($B2)<1)'],
+                        style: {border: {bottom: {style: 'thin'}}}
+                    }
+                ]
+            })
+
+            sheet.addConditionalFormatting({
+                ref: '$B$1:$O$199',
+                rules: [
+                    {
+                        type: 'expression',
+                        formulae: ['NOT($B2=$B1)'],
+                        style: {border: {bottom: {style: 'dotted'}}}
+                    }
+                ]
+            })
+
+            sheet.addConditionalFormatting({
+                ref: '$H$2:$H$199',
+                rules: [
+                    {
+                        type: 'expression',
+                        formulae: ['NOT($H2="Duty Team")'],
+                        style: {font: {'italic': true}}
+                    }
+                ]
+            })
+
+	    sheet.addConditionalFormatting({
+                ref: '$E$2:$E$199',
+                rules: [
+                    {
+                        type: 'expression',
+                        formulae: ['NOT($H2="Court")'],
+                        style: {alignment: { vertical: 'middle', horizontal: 'center' }}
+                    }
+                ]
+            })
+
+	    // Maybe experiment with having these in the config file, and looping over them?
+	    sheet.addConditionalFormatting({
+                ref: '$B$2:$B$199',
+                rules: [
+                    {
+                        type: 'expression',
+                        formulae: ['OR($B2="Loftus")'],
+                        style: {fill: {type: 'pattern', pattern:'solid', fgColor:{argb:'00B0F0'}, bgColor:{argb:'00B0F0'}}}
+                    }
+                ]
+            })
+
+	    sheet.addConditionalFormatting({
+                ref: '$B$2:$B$199',
+                rules: [
+                    {
+                        type: 'expression',
+                        formulae: ['OR($B2="Cockburn")'],
+                        style: {fill: {type: 'pattern', pattern:'solid', fgColor:{argb:'AFAFAF'}, bgColor:{argb:'AFAFAF'}}}
+                    }
+                ]
+            })
+
+	    sheet.addConditionalFormatting({
+                ref: '$B$2:$B$199',
+                rules: [
+                    {
+                        type: 'expression',
+                        formulae: ['OR($B2="Warwick")'],
+                        style: {fill: {type: 'pattern', pattern:'solid', fgColor:{argb:'00B050'}, bgColor:{argb:'00B050'}}}
+                    }
+                ]
+            })
+
+	    sheet.addConditionalFormatting({
+                ref: '$B$2:$B$199',
+                rules: [
+                    {
+                        type: 'expression',
+                        formulae: ['OR($B2="Kingsway", $B2="The Rise", $B2="Bendat")'],
+                        style: {fill: {type: 'pattern', pattern:'solid', fgColor:{argb:'FFC000'}, bgColor:{argb:'FFC000'}}}
+                    }
+                ]
+            })
+
+	    sheet.addConditionalFormatting({
+                ref: '$B$2:$B$199',
+                rules: [
+                    {
+                        type: 'expression',
+                        formulae: ['OR($B2="Curtin Stadium")'],
+                        style: {fill: {type: 'pattern', pattern:'solid', fgColor:{argb:'0CFFFF'}, bgColor:{argb:'0CFFFF'}}}
+                    }
+                ]
+            })
+
+	    sheet.addConditionalFormatting({
+                ref: '$B$2:$B$199',
+                rules: [
+                    {
+                        type: 'expression',
+                        formulae: ['OR($B2="Aquinas")'],
+                        style: {fill: {type: 'pattern', pattern:'solid', fgColor:{argb:'FF18FF'}, bgColor:{argb:'FF18FF'}}}
+                    }
+                ]
+            })
+
+	    sheet.addConditionalFormatting({
+                ref: '$B$2:$B$199',
+                rules: [
+                    {
+                        type: 'expression',
+                        formulae: ['OR($B2="Melville Leisure Centre", $B2="Melville LeisureFit")'],
+                        style: {fill: {type: 'pattern', pattern:'solid', fgColor:{argb:'00FF00'}, bgColor:{argb:'00FF00'}}}
+                    }
+                ]
+            })
+
+            /*sheet.columns.forEach(column => {
+                const lengths = column.values.map(v => v.toString().length);
+                const maxLength = Math.max(...lengths.filter(v => typeof v === 'number'));
+                column.width = Math.max(5, maxLength+1);
+              }); */
+
+            workbook.xlsx.writeBuffer( {
+                base64: true
+            })
+            .then( function (xls64) {
+                // build anchor tag and attach file (works in chrome)
+                var a = document.createElement("a");
+                var data = new Blob([xls64], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
+
+                var url = URL.createObjectURL(data);
+                a.href = url;
+                let filename = "Runsheet" + dates + ".xlsx";
+                a.download = filename;
+                document.body.appendChild(a);
+                a.click();
+                setTimeout(function() {
+                        document.body.removeChild(a);
+                        window.URL.revokeObjectURL(url);
+                    },
+                    0);
+            })
+            .catch(function(error) {
+                console.log(error.message);
+            });
+        })
     }
     return await total;
 }
@@ -1617,30 +1840,6 @@ async function mergePDFDocuments(documents) {
     }
     var saved = await mergedPdf.save();
     return await saved;
-}
-
-/**
- * NOT USED
- * 
- * Get a div from an ID
- * @param {*} id 
- * @returns 
- */
-function div_from_id(id) {
-    console.log("div_from_id");
-    let wavl_keys = Object.keys(__CONFIG__.wavl);
-    let jl_keys = Object.keys(__CONFIG__.jl);
-    for (var i = 0; i < wavl_keys.length; i++) {
-        if (__CONFIG__.wavl[wavl_keys[i]].id == id) {
-            return [__CONFIG__.wavl[wavl_keys[i]].long, __CONFIG__.wavl[wavl_keys[i]].short, __CONFIG__.wavl[wavl_keys[i]].id]
-        }
-    }
-    for (var i = 0; i < __CONFIG__.jl.length; i++) {
-        if (__CONFIG__.jl[jl_keys[i]].id == id) {
-            return [__CONFIG__.jl[jl_keys[i]].long, __CONFIG__.jl[jl_keys[i]].short, __CONFIG__.jl[jl_keys[i]].id]
-        }
-    }
-    return false
 }
 
 /**
@@ -1776,6 +1975,9 @@ function html_to_fixture(venues, leagues, date, all_html) {
                                     _duty = cells.item(7).innerText.slice(5);
                                 } catch (e) {
                                     console.log(e);
+				                    console.log(_team_a);
+ 				                    console.log(_team_b);
+ 				                    console.log("~~~");
                                     _duty = " ";
                                 }
                             }
@@ -1785,7 +1987,11 @@ function html_to_fixture(venues, leagues, date, all_html) {
                                 _duty = "Previous Loser";
                             }
 
-                            if (match_division[0] == "D" || match_division[0] == "S") {
+                            if (SL_FINALS_DATES.includes(dt) && _duty.length < 4 && match_division.includes("State") && !(match_division.includes("Reserve"))) {
+                                _duty = "Previous Loser";
+                            }
+
+                            if (match_division.includes("Division") || match_division.includes("State")) {
                                 _division = [
                                     __CONFIG__.wavl[match_division].long,
                                     __CONFIG__.wavl[match_division].short,
@@ -1837,6 +2043,8 @@ function html_to_fixture(venues, leagues, date, all_html) {
                                     console.log("BYE: " + zero_venue_split);
                                 } else {
                                     console.log("UNUSED VENUE\n***")
+				                    console.log(venue)
+				                    console.log(venue_split)
                                     console.log(zero_venue_split)
                                     console.log("***")
                                 }
