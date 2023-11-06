@@ -1988,15 +1988,9 @@ function html_to_fixture(venues, leagues, date, all_html) {
                                     _duty = cells.item(7).innerText.slice(5);
                                 } catch (e) {
                                     console.log(e);
-<<<<<<< HEAD
-				                    console.log(_team_a);
- 				                    console.log(_team_b);
- 				                    console.log("~~~");
-=======
 				    console.log(_team_a);
 				    console.log(_team_b);
 				    console.log("~~~");
->>>>>>> a953aa63eb1152520cafc7bf43e0eeb21bcd902b
                                     _duty = " ";
                                 }
                             }
