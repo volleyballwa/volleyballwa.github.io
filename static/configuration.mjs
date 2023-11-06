@@ -2,6 +2,8 @@ const FINALS_DATES = ["2022-09-04", "2022-09-11", "2022-09-18", "2023-08-27", "2
 
 const SL_FINALS_DATES = ["2023-07-14", "2023-07-16", "2023-07-22"]
 
+const DO_NOT_PRINT = ["David Poulivaati"]
+
 // This is used to get a list of all players. eg: https://vwa.bracketpal.com/leaders/season/27
 const SEASON_ID = "27";
 
@@ -89,7 +91,7 @@ const __CONFIG__ = {
             "top": "",
             "mid": "Hartfield",
             "bot": "Park",
-            "alias": ["Hartfield"]
+            "alias": ["Hartfield", "Hartfield Rec Cntr"]
         },
         "HBF Stadium Claremont": {
             "name": "HBF Stadium Claremont",
