@@ -437,7 +437,7 @@ const __CONFIG__ = {
 
 const __PRESIDENTS__ = {
     "Apex": "Eugene Lee",
-    "Balcatta": "Layne van Smaalen",
+    "Balcatta": "Ari Zuvela",
     "Busselton": "David Boyle",
     "Chequers": "Dylan Wood",
     "Chequers White": "Dylan Wood",

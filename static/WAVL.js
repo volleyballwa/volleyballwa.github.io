@@ -1146,7 +1146,7 @@ async function modifyPdf(fix, dates) {
                 }
 
                 // Team A Players
-                if (fixtures[i][17].length >= 1) {
+                if (fixtures[i][17].length > 1) {
                     for (var k = 0; k < fixtures[i][17].length; k++) {
                         if (k < Math.ceil(fixtures[i][17].length / 2)) {
                             // first name, first column
@@ -1248,7 +1248,7 @@ async function modifyPdf(fix, dates) {
                 }
 
                 // Team B Players
-                if (fixtures[i][18].length >= 1) {
+                if (fixtures[i][18].length > 1) {
                     for (var k = 0; k < fixtures[i][18].length; k++) {
                         if (k < Math.ceil(fixtures[i][18].length / 2)) {
                             // first name, first column
