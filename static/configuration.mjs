@@ -438,6 +438,8 @@ const __CONFIG__ = {
 const __PRESIDENTS__ = {
     "Apex": "Eugene Lee",
     "Balcatta": "Ari Zuvela",
+    "Baldivis": "Denzil Fernandes",
+    "Bunbury": "Tony Thornhill",
     "Busselton": "David Boyle",
     "Chequers": "Dylan Wood",
     "Chequers White": "Dylan Wood",
@@ -450,21 +452,21 @@ const __PRESIDENTS__ = {
     "Murdoch Sylvie": "Justine Ross",
     "Murdoch Thor": "Justine Ross",
     "Murdoch Valkyrie": "Justine Ross",
-    "Northern Stars": "Peter Woodthorpe",
-    "Northern Stars Black": "Peter Woodthorpe",
-    "Northern Stars Blue": "Peter Woodthorpe",
-    "Northern Stars White": "Peter Woodthorpe",
+    "Northern Stars": "Chapmann Chan",
+    "Northern Stars Black": "Chapmann Chan",
+    "Northern Stars Blue": "Chapmann Chan",
+    "Northern Stars White": "Chapmann Chan",
     "Northshore": "Jo-Han Bay",
     "Northshore Rockets": "Jo-Han Bay",
     "Perth Scorpions": "Shaun Barnett",
     "Reds": "Anthony Meo",
     "Reds Junior": "Logan Vanderweide",
-    "Rossmoyne": "Matt Waddington",
+    "Rossmoyne": "Matthew Waddington",
     "Southern Cross": "Codi Versteeg / Remi Cousin",
     "Southern Cross Masters": "Toma Stanca",
-    "UWA": "Kieren Underwood",
-    "United": "Tani Bernados",
-    "VIRSA": "Harpreet Dhillon"
+    "UWA": "Nick Bew",
+    // "United": "Tani Bernados",
+    "VIRSA": "Paramdeep Gill"
 }
 
 const __TEAMS__ = {
