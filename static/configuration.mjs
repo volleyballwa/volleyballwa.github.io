@@ -445,7 +445,7 @@ const __PRESIDENTS__ = {
     "Chequers White": "Dylan Wood",
     "Chequers Yellow": "Dylan Wood",
     "ECU": "Dylan Wood",
-    "Fremantle": "Kevin Gravestock",
+    "Fremantle": "Matthew Andrews",
     "Mandurah": "Charlie Grigio",
     "Murdoch": "Justine Ross",
     "Murdoch Loki": "Justine Ross",
