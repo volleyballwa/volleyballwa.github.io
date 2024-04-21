@@ -453,7 +453,7 @@ const __PRESIDENTS__ = {
     "Murdoch Sylvie": "Justine Ross",
     "Murdoch Thor": "Justine Ross",
     "Murdoch Valkyrie": "Justine Ross",
-    "Murdoch Knights": "Justine Ross",
+    "Murdoch Knights": "Michael Tran",
     "Northern Stars": "Chapmann Chan",
     "Northern Stars Black": "Chapmann Chan",
     "Northern Stars Blue": "Chapmann Chan",
