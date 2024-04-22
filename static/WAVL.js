@@ -1,13 +1,4 @@
 /**
- * TO-DO
- * 1. Add the teams playing, the duty team, the division, the date, the time, and the venue to the bottom of the second page, for easier collating
- * 2. Make sure the live version has the spreadsheet download working correctly.
- * 3. ?
- * 4. ?
- */
-
-
-/**
  * Sets all venue checkboxes to be selected.
  * @param {*} checked 
  */
@@ -87,6 +78,16 @@ function deselect_all_wavjl(checked = false) {
     });
     document.getElementById("Checkbox34").setAttribute("onClick", "javascript: select_all_wavjl();");
 }
+
+/**
+ * NOT USED
+ * 
+ * Enable all WAVL buttons
+
+function enable_button() {
+    document.getElementById("WAVL").disabled = false;
+}
+*/
 
 /**
  * Initialises loading dots.
@@ -263,10 +264,87 @@ function getDates(){
  */
 async function getPlayerList() {
     axios;
-    const head = 'https://cors-anywhere-og-v5kf.onrender.com/vwa.bracketpal.com/leaders/season/';
+    //const head = "https://cors-anywhere-og-v5kf.onrender.com/volleyball.exposureevents.com/220866/wavl/documents/players"
+    const head = "https://volleyball.exposureevents.com/220866/wavl/documents/players"
+    /*const head = 'https://cors-anywhere-og-v5kf.onrender.com/vwa.bracketpal.com/leaders/season/';
     var url = head + SEASON_ID + "?csv=1";
-    console.log("get_player_list: " + url);
-    return await axios.get(url);
+    console.log("get_player_list: " + url);*/
+    console.log("get_player_list: " + head)
+    /*var headers = {
+        "Referer": "https://volleyball.exposureevents.com/220866/wavl/documents",
+        "Sec-Fetch-Mode": "navigate",
+        "Host": "volleyball.exposureevents.com",
+        "Sec-Fetch-Dest": "document"
+    }*/
+    return await axios.get(head);
+}
+
+function parsePlayerList(players_list, upd_fixtures) {
+    let parser = new DOMParser();
+    let htmlDoc = parser.parseFromString(players_list[0].request.responseText, 'text/html');
+
+    let all_tables = htmlDoc.getElementsByClassName("team")
+    let numFix = all_tables.length;
+
+    let all_team_lists = {}
+
+    for (let i = 0; i < numFix; i = i + 1) {
+        let division = all_tables[i].getElementsByTagName("h3")[0].textContent
+        let all_divs = all_tables[i].getElementsByClassName("roster")
+        for (let k = 0; k < all_divs.length; k++) {
+            let all_rows = all_divs[k].getElementsByTagName("tr")
+            for (let j = 1; j < all_rows.length; j = j + 1) {
+                let all_td = all_rows[j].getElementsByTagName("td")
+                console.log(all_td)
+                console.log(all_td[1])
+                let player_name = all_td[1].innerText
+                player_name = player_name.replace("\uFFFD","")
+                let team_name = all_td[2].innerText
+                if (!(Object.keys(all_team_lists).includes(team_name))) {
+                    all_team_lists[team_name] = [[split_name(player_name.trim()),5]]
+                } else {
+                    all_team_lists[team_name].push([split_name(player_name.trim()),5])
+                }
+            }
+        }
+    }
+
+    console.log(all_team_lists)
+
+    for (i = 0; i < upd_fixtures.length; i++) {
+        let fixture_date = upd_fixtures[i][12]+"-"+upd_fixtures[i][11]+"-"+upd_fixtures[i][10]
+        let fixture_division = upd_fixtures[i][9]
+        let team_a = upd_fixtures[i][6].toUpperCase()//.split(" ")[0];
+        let team_b = upd_fixtures[i][7].toUpperCase()//.split(" ")[0];
+        console.log(team_a)
+        console.log(team_b)
+        upd_fixtures[i][17] = [["",""]];
+        upd_fixtures[i][18] = [["",""]];
+
+        /*if (SL_FINALS_DATES.includes(fixture_date) && (fixture_division[0] == "State League Men" || fixture_division[0] == "State League Women")){
+            if (Object.keys(all_team_lists).includes(team_a)) {
+                team_a_list = [];
+                for (j = 0; j < all_team_lists[team_a].length; j++) {
+                    if (all_team_lists[team_a][j][1] >= 5) {team_a_list.push(all_team_lists[team_a][j])}
+                }
+                upd_fixtures[i][17] = team_a_list;
+            }
+            if (Object.keys(dict).includes(team_b)) {
+                team_b_list = [];
+                for (j = 0; j < dict[team_b].length; j++) {
+                    if (dict[team_b][j][1] >= 5) {team_b_list.push(dict[team_b][j])}
+                }
+                upd_fixtures[i][18] = team_b_list;
+            }
+        } else {
+            if (Object.keys(dict).includes(team_a)) {upd_fixtures[i][17] = dict[team_a];}
+            if (Object.keys(dict).includes(team_b)) {upd_fixtures[i][18] = dict[team_b];}
+        }*/
+        if (Object.keys(all_team_lists).includes(team_a)) {upd_fixtures[i][17] = all_team_lists[team_a];}
+        if (Object.keys(all_team_lists).includes(team_b)) {upd_fixtures[i][18] = all_team_lists[team_b];}
+    }
+    return upd_fixtures;
+
 }
 
 /**
@@ -275,7 +353,7 @@ async function getPlayerList() {
  * @param {Fixture} upd_fixtures 
  * @returns Updated Fixture with Team Lists
  */
-function parsePlayerList(players_list, upd_fixtures) {
+function parsePlayerList_old(players_list, upd_fixtures) {
     let dict = {};
 
     // Split the CSV into an Array
@@ -319,59 +397,60 @@ function parsePlayerList(players_list, upd_fixtures) {
         let team_id = player_data[i][2].split(" ")[0];
         let games_played = player_data[i][5]
         // if name has (DP) do not add to dict.
-	if (DO_NOT_PRINT.includes(name)){
-		console.log(name)
-	} else {
-	        if (name.toLowerCase().includes("(dp)") || name.toLowerCase().includes("*") || name.toLowerCase().includes("^") || name.toLowerCase().includes('"') || name.toLowerCase().includes("\\")){
-	            console.log(name);
-	
-	            if (name.toLowerCase().includes("*") || name.toLowerCase().includes("^") || (name.toLowerCase().includes('"'))) {
-	                name = name.replaceAll("*","");
-	                name = name.replaceAll("^","");
-	                name = name.replaceAll('"',"");
-	                name = name.replaceAll("\\","");
-	
-	                if (!(Object.keys(dict).includes(team_id))) {
-	                    dict[team_id] = [[split_name(name.trim()), games_played]]
-	                } else {
-	                    dict[team_id].push([split_name(name.trim()), games_played])
-	                }
-	            }
-	
-	            // If SLM / SLW / SLrM / SLrW, add (dp) for FINALS / AFTER SL Finals
-	            if (["1","2","3",'4','5','6','7','8','9','10','11','12','13','14','15','16','17','18','19','26','101','102','103','104','105','106','107','108','109','110','111','112','113','114','115','116','117','118','119','123','126'].includes(team_id) && name.toLowerCase().includes("(dp)") ){
-	                name = name.replaceAll("(DP)","");
-	                name = name.replaceAll("(dp)","");
-	                if (!(Object.keys(dict).includes(team_id))) {
-	                    dict[team_id] = [[split_name(name.trim()), games_played]]
-	                } else {
-	                    dict[team_id].push([split_name(name.trim()), games_played])
-	                }
-	            }
-	
-	        } else {
-	            if (["1","2","3",'4','5','6','7','8','9','101','102','103','104','105','106','107','108','109'].includes(team_id)){
-	                // If SL
-	                if (!(Object.keys(dict).includes(team_id))) {
-	                    dict[team_id] = [[split_name(name.trim()), games_played]]
-	                } else {
-	                    dict[team_id].push([split_name(name.trim()), games_played])
-	                }
-	            } else {
-	                // if NOT SL
-	                //console.log(SL_Only_Players);
-	                if (SL_Only_Players.includes(name)){
-	                    console.log(player_data[i]);
-	                } else {
-	                    if (!(Object.keys(dict).includes(team_id))) {
-	                        dict[team_id] = [[split_name(name.trim()), games_played]]
-	                    } else {
-	                        dict[team_id].push([split_name(name.trim()), games_played])
-	                    }
-	                }
-	            }
-	        }
-	}
+        if (name.toLowerCase().includes("(dp)") || name.toLowerCase().includes("*") || name.toLowerCase().includes("^") || name.toLowerCase().includes('"') || name.toLowerCase().includes("\\")){
+            console.log(name);
+
+            if (name.toLowerCase().includes("*") || name.toLowerCase().includes("^") || (name.toLowerCase().includes('"'))) {
+                name = name.replaceAll("*","");
+                name = name.replaceAll("^","");
+                name = name.replaceAll('"',"");
+                name = name.replaceAll("\\","");
+
+                if (!(Object.keys(dict).includes(team_id))) {
+                    dict[team_id] = [[split_name(name.trim()), games_played]]
+                } else {
+                    dict[team_id].push([split_name(name.trim()), games_played])
+                }
+            }
+
+            // If SLM / SLW / SLrM / SLrW, add (dp) for FINALS / AFTER SL Finals
+            if (["1","2","3",'4','5','6','7','8','9','10','11','12','13','14','15','16','17','18','19','26','101','102','103','104','105','106','107','108','109','110','111','112','113','114','115','116','117','118','119','123','126'].includes(team_id) && name.toLowerCase().includes("(dp)") ){
+                name = name.replaceAll("(DP)","");
+                name = name.replaceAll("(dp)","");
+                if (!(Object.keys(dict).includes(team_id))) {
+                    dict[team_id] = [[split_name(name.trim()), games_played]]
+                } else {
+                    dict[team_id].push([split_name(name.trim()), games_played])
+                }
+            }
+
+        } else {
+            if (["1","2","3",'4','5','6','7','8','9','101','102','103','104','105','106','107','108','109'].includes(team_id)){
+                // If SL
+                if (!(Object.keys(dict).includes(team_id))) {
+                    dict[team_id] = [[split_name(name.trim()), games_played]]
+                } else {
+                    dict[team_id].push([split_name(name.trim()), games_played])
+                }
+            } else {
+                // if NOT SL
+                //console.log(SL_Only_Players);
+                if (SL_Only_Players.includes(name)){
+                    console.log(player_data[i]);
+                } else {
+                    if (!(Object.keys(dict).includes(team_id))) {
+                        dict[team_id] = [[split_name(name.trim()), games_played]]
+                    } else {
+                        dict[team_id].push([split_name(name.trim()), games_played])
+                    }
+                }
+            }
+            /*if (!(Object.keys(dict).includes(team_id))) {
+                dict[team_id] = [[split_name(name.trim()), games_played]]
+            } else {
+                dict[team_id].push([split_name(name.trim()), games_played])
+            }*/
+        }
     }
 
     for (i = 0; i < upd_fixtures.length; i++) {
@@ -431,7 +510,7 @@ function pdf_init(venues, wavl, wavjl, dates) {
     Promise.all(fixtures).then(fix_val => {
         var team_list = []
 
-        var upd_fixtures = html_to_fixture(venues, leagues, dates[2], fix_val);
+        var upd_fixtures = html_to_fixture(venues, leagues, dates, fix_val);
         var player_List = getPlayerList();
         Promise.all([player_List]).then(players_list => {
             let finalised_fixtures = parsePlayerList(players_list, upd_fixtures);
@@ -452,7 +531,47 @@ function pdf_init(venues, wavl, wavjl, dates) {
                     }).catch(error => catch_error(error))
                 }).catch(error => catch_error(error))
             }).catch(error => catch_error(error))
-        }).catch(error => catch_error(error))
+        }).catch((e) => {
+            console.log(e)
+            console.log(e.response.status)
+            if (e.response.status == 410) {
+                window.alert("Warning: Athletes Page not loaded.\nPlease go to https://volleyball.exposureevents.com/220866/wavl/documents and click the ATHLETES report, then try again.")
+                window.alert("Continuing without player names...")
+                
+                /*window.clearInterval(dots);
+                document.getElementById("Button4").value = "Generate Scoresheets";
+                document.getElementById("Button4").style.backgroundColor = "#3370B7";
+                document.getElementById("Button4").style.color = "#FFFFFF"
+                document.getElementById("Button4").disabled = false;
+                document.getElementById("csvUpload").disabled = false;
+                document.getElementById("csvUpload").value = "";
+                window.open("https://volleyball.exposureevents.com/220866/wavl/documents", '_blank').focus();*/
+
+                for (i = 0; i < upd_fixtures.length; i++) {
+                    upd_fixtures[i][17] = [["",""]];
+                    upd_fixtures[i][18] = [["",""]];
+                }
+
+                let finalised_fixtures = upd_fixtures;
+                
+                modifyPdf(finalised_fixtures, dates[2]).then(value => {
+                    Promise.all(value).then(value_3 => {
+                        mergePDFDocuments(value_3).then(value_2 => {
+                            let filename = "Scoresheets " + dates[2].toString() + ".pdf"
+                            download(value_2, filename, "application/pdf");
+                            window.clearInterval(dots);
+                            document.getElementById("Button4").value = "Generate Scoresheets";
+                            document.getElementById("Button4").style.backgroundColor = "#3370B7";
+                            document.getElementById("Button4").style.color = "#FFFFFF"
+                            document.getElementById("Button4").disabled = false;
+                            document.getElementById("csvUpload").disabled = false;
+                            document.getElementById("csvUpload").value = "";
+                        }).catch(error => catch_error(error))
+                    }).catch(error => catch_error(error))
+                }).catch(error => catch_error(error))
+                
+            }
+        })
     }).catch((e) => {
         console.log(e)
         console.log(e.response.status)
@@ -481,10 +600,11 @@ function pdf_init(venues, wavl, wavjl, dates) {
                 }
             }
 
+
             Promise.all(fixtures).then(fix_val => {
                 var team_list = []
 
-                var upd_fixtures = html_to_fixture(venues, leagues, dates[2], fix_val);
+                var upd_fixtures = html_to_fixture(venues, leagues, dates, fix_val);
                 var player_List = getPlayerList();
                 Promise.all([player_List]).then(players_list => {
                     let finalised_fixtures = parsePlayerList(players_list, upd_fixtures);
@@ -507,6 +627,9 @@ function pdf_init(venues, wavl, wavjl, dates) {
                     }).catch(error => catch_error(error))
                 }).catch(error => catch_error(error))
             }).catch(error => catch_error(error))
+        } else if (e.response.status == 410) {
+            // If this error occurs, then you need to go to the athletes page to manually load it.
+            catch_error(error);
         } else {
             catch_error(error);
         }
@@ -520,11 +643,78 @@ function pdf_init(venues, wavl, wavjl, dates) {
  * @returns 
  */
 async function get_single_fixture(start_date, end_date) {
+    console.log(start_date);
+    console.log(end_date);
     axios;
-    const head = 'https://cors-anywhere-og-v5kf.onrender.com/vwa.bracketpal.com/dailyform/range?start_date=';
-    var url = head + start_date.toString() + "&end_date=" + end_date.toString();
-    console.log("get_single_fixture: " + url);
+    //const head = 'https://cors-anywhere-og-v5kf.onrender.com/vwa.bracketpal.com/dailyform/range?start_date=';
+    //var url = head + start_date.toString() + "&end_date=" + end_date.toString();
+    //console.log("get_single_fixture: " + url);
+    //return await axios.get(url);
+    const head = "https://cors-anywhere-og-v5kf.onrender.com/volleyball.exposureevents.com/220866/wavl/documents/schedule?layout=datetime"
+    console.log("get_single_fixture -" + head)
+    return await axios.get(head);
+
+}
+
+/**
+ * NOT USED
+ * 
+ * Axios request to get single team list.
+ * @param {Integer} team_id Team ID
+ * @returns 
+ */
+async function get_single_team_list_html(team_id) {
+    axios;
+    const head = 'https://cors-anywhere-og-v5kf.onrender.com/vwa.bracketpal.com/teaminfo/';
+    var url = head + team_id.toString();
+    // console.log("get_single_fixture: " + url);
     return await axios.get(url);
+}
+
+/**
+ * NOT USED
+ * 
+ * Parse Team List HTML and add to relevant fixture. 
+ * @param {HTML[]} player_names_html 
+ * @param {Fixtures[]} fixtures 
+ * @returns {Fixtures[]} Updated array of fixtures
+ */
+function addTeamList(player_names_html, fixtures) {
+    console.log("addTeamList");
+    let j = 0;
+
+    // Loop over each match (hence i+2)
+    for (i = 0; i < player_names_html.length; i = i + 2){
+
+        // Ensure that the fixture lines up with the player names. 
+        // No need to check as the order the fixtures were added is the same order that the player HTML was added
+        while (fixtures[j][9][0][0] != "D" && fixtures[j][9][0][0] != "S") {j = j + 1};
+        
+        // Parse Team A
+        var Aparser = new DOMParser();
+	    var Adoc = Aparser.parseFromString(player_names_html[i].request.responseText, "text/html");
+        let Aselector = '[class^="team_roster_player wfid_temp"]';
+        var Aelements = Adoc.querySelectorAll(Aselector);
+	    const Anames = [...Aelements];
+        console.log(Anames);
+        console.log(Aelements);
+        let Aplayer_names = Anames.map((tmp => split_name(tmp.innerText.trim())));
+
+        // Parse Team B
+        var Bparser = new DOMParser();
+	    var Bdoc = Bparser.parseFromString(player_names_html[i+1].request.responseText, "text/html");
+        let Bselector = '[class^="team_roster_player wfid_temp"]';
+        var Belements = Bdoc.querySelectorAll(Bselector);
+	    const Bnames = [...Belements];
+        console.log(Bnames);
+        console.log(Belements);
+        let Bplayer_names = Bnames.map((tmp => split_name(tmp.innerText.trim())));
+
+        fixtures[j][17] = Aplayer_names;
+        fixtures[j][18] = Bplayer_names;
+        j = j + 1;
+    }
+    return fixtures;
 }
 
 /**
@@ -535,10 +725,11 @@ async function get_single_fixture(start_date, end_date) {
  */
 async function individual_fixture(id, start_date) {
     axios;
-    const head = 'https://cors-anywhere-og-v5kf.onrender.com/vwa.bracketpal.com/dailyform/';
-    var url = head + id.toString() + "/" + start_date.toString();
-    console.log("get_single_fixture: " + url);
-    return await axios.get(url);
+    //const head = 'https://cors-anywhere-og-v5kf.onrender.com/vwa.bracketpal.com/dailyform/';
+    //var url = head + id.toString() + "/" + start_date.toString();
+    const head = "https://cors-anywhere-og-v5kf.onrender.com/volleyball.exposureevents.com/220866/wavl/documents/schedule?layout=datetime"
+    console.log("get_single_fixture: " + head);
+    return await axios.get(head);
 }
 
 /**
@@ -654,7 +845,289 @@ async function modifyPdf(fix, dates) {
         var JLpages = await JLpdfDoc.getPages();
         var JLfirstPage = await JLpages[0];
 
-        if (fixtures[i][9][0].includes("Division") || fixtures[i][9][0].includes("State")) {
+        // If WAVL Game (Divisions or State League)
+        // use OLD scoresheet for divisions (for now)
+        if ( false ) {  //fixtures[i][9][0][0] == "D" || fixtures[i][9][0][0] == "S") {
+
+            // Team A Team List
+            await WAVLfirstPage.drawText(fixtures[i][6], {
+                x: 471,
+                y: 498,
+                size: 12,
+                font: WAVLhelveticaFont
+            })
+
+            // Team A Players
+            for (var k = 0; k < fixtures[i][17].length; k++) {
+                if (k < Math.ceil(fixtures[i][17].length / 2)) {
+                    // first name, first column
+                    await WAVLfirstPage.drawText(fixtures[i][17][k][0].toUpperCase(), {
+                        x: 442,
+                        y: 472-Math.floor((17*k)),
+                        size: 6,
+                        font: WAVLhelveticaFont
+                    })
+
+                    // surname, first column
+                    await WAVLfirstPage.drawText(fixtures[i][17][k][1].toUpperCase(), {
+                        x: 442,
+                        y: 472-Math.floor((17*k+8.5)),
+                        size: 6,
+                        font: WAVLhelveticaFont
+                    })
+                } else {
+                    // first name, second column
+                    await WAVLfirstPage.drawText(fixtures[i][17][k][0].toUpperCase(), {
+                        x: 541,
+                        y: 472-Math.floor((17*(k-Math.ceil(fixtures[i][17].length / 2)))),
+                        size: 6,
+                        font: WAVLhelveticaFont
+                    })
+
+                    // surname, second column
+                    await WAVLfirstPage.drawText(fixtures[i][17][k][1].toUpperCase(), {
+                        x: 541,
+                        y: 472-Math.floor((17*(k-Math.ceil(fixtures[i][17].length / 2))+8.5)),
+                        size: 6,
+                        font: WAVLhelveticaFont
+                    })
+                }
+                
+            }
+
+            // Team A, Second column numbers
+            if (fixtures[i][17].length > 1) {
+                let line_y_a = 472-Math.floor(17*Math.ceil(fixtures[i][17].length /2)-6);
+                if (fixtures[i][17].length > 18) {
+                    line_y_a = 274;
+                }
+                await WAVLfirstPage.drawLine({
+                    start: { x: 539, y: 478 },
+                    end: { x: 539, y: line_y_a },
+                    thickness: 0.5,
+                    color: rgb(0,0,0),
+                    opacity: 1
+                })
+                
+                await WAVLfirstPage.drawLine({
+                    start: { x: 519, y: 478 },
+                    end: { x: 519, y: line_y_a },
+                    thickness: 0.5,
+                    color: rgb(0,0,0),
+                    opacity: 1
+                })
+            }
+
+            // Team B Team List
+            await WAVLfirstPage.drawText(fixtures[i][7], {
+                x: 672,
+                y: 498,
+                size: 12,
+                font: WAVLhelveticaFont
+            })
+
+            // Team B Players
+            for (var k = 0; k < fixtures[i][18].length; k++) {
+                if (k < Math.ceil(fixtures[i][18].length / 2)) {
+                    // first name, first column
+                    await WAVLfirstPage.drawText(fixtures[i][18][k][0].toUpperCase(), {
+                        x: 645,
+                        y: 472-Math.floor((17*k)),
+                        size: 6,
+                        font: WAVLhelveticaFont
+                    })
+
+                    // surname, first column
+                    await WAVLfirstPage.drawText(fixtures[i][18][k][1].toUpperCase(), {
+                        x: 645,
+                        y: 472-Math.floor((17*k+8.5)),
+                        size: 6,
+                        font: WAVLhelveticaFont
+                    })
+                } else {
+                    // first name, second column
+                    await WAVLfirstPage.drawText(fixtures[i][18][k][0].toUpperCase(), {
+                        x: 745,
+                        y: 472-Math.floor((17*(k-Math.ceil(fixtures[i][18].length / 2)))),
+                        size: 6,
+                        font: WAVLhelveticaFont
+                    })
+
+                    // surname, second column
+                    await WAVLfirstPage.drawText(fixtures[i][18][k][1].toUpperCase(), {
+                        x: 745,
+                        y: 472-Math.floor((17*(k-Math.ceil(fixtures[i][18].length / 2))+8.5)),
+                        size: 6,
+                        font: WAVLhelveticaFont
+                    })
+                }
+            }
+            
+            if (fixtures[i][17].length > 1) {
+                // Team B, second column numbers
+                let line_y_b = 472-Math.floor(17*Math.ceil(fixtures[i][18].length /2)-6);
+                if (fixtures[i][18].length > 18) {
+                    // If 2 rows or less remaining, just draw the lines to the bottom of the player list.
+                    line_y_b = 274;
+                }
+                await WAVLfirstPage.drawLine({
+                    start: { x: 743, y: 478 },
+                    end: { x: 743, y: line_y_b },
+                    thickness: 0.5,
+                    color: rgb(0,0,0),
+                    opacity: 1
+                })
+                
+                await WAVLfirstPage.drawLine({
+                    start: { x: 723, y: 478 },
+                    end: { x: 723, y: line_y_b },
+                    thickness: 0.5,
+                    color: rgb(0,0,0),
+                    opacity: 1
+                })
+            }
+
+            // Venue 0
+            await WAVLfirstPage.drawText(fixtures[i][1], {
+                x: parseInt((310 - measureText(fixtures[i][1], 10)).toString()),
+                y: 575,
+                size: 10,
+                font: WAVLhelveticaFont
+            })
+            // Venue 1
+            await WAVLfirstPage.drawText(fixtures[i][2], {
+                x: parseInt((310 - measureText(fixtures[i][2], 10)).toString()),
+                y: 566,
+                size: 10,
+                font: WAVLhelveticaFont
+            })
+            // Venue 2
+            await WAVLfirstPage.drawText(fixtures[i][3], {
+                x: parseInt((310 - measureText(fixtures[i][3], 10)).toString()),
+                y: 557,
+                size: 10,
+                font: WAVLhelveticaFont
+            })
+
+            try {
+                // Court Number
+                await WAVLfirstPage.drawText(fixtures[i][5], {
+                    x: parseInt((400 - measureBold(fixtures[i][5], 13).toString()).toString()),
+                    y: 557,
+                    size: 13,
+                    font: WAVLhelveticaBold
+                })
+            } catch (e) {
+                console.log(e);
+            }
+            try {
+                var hour = " ";
+                if (fixtures[i][13].toString().toLowerCase().substring(0, 3) != "tbc" && fixtures[i][14].toString().toLowerCase().substring(0, 3) != "tbc") {
+                    if (parseInt(fixtures[i][13]).toString().length == 1) {
+                        hour = " " + parseInt(fixtures[i][13]).toString()
+                    } else {
+                        hour = parseInt(fixtures[i][13]).toString()
+                    }
+
+                    // Time (hour hh)
+                    await WAVLfirstPage.drawText(hour, {
+                        x: parseInt((492 - measureBold(hour, 13) - measureBold(hour, 13)).toString()),
+                        y: 557,
+                        size: 13,
+                        font: WAVLhelveticaBold
+                    })
+
+                    // Time (minute mm)
+                    await WAVLfirstPage.drawText(fixtures[i][14], {
+                        x: 500,
+                        y: 557,
+                        size: 13,
+                        font: WAVLhelveticaBold
+                    })
+                }
+            } catch (e) {
+                // catch - continue
+                console.log(e);
+            }
+
+            // Add a leading space to the day if required.
+            var dd = parseInt(fixtures[i][10]).toString();
+            if (dd.length == 1) {
+                dd = " " + parseInt(fixtures[i][10]).toString()
+            }
+
+            // Date (day dd)
+            await WAVLfirstPage.drawText(dd, {
+                x: parseInt((596 - measureBold(dd, 13) - measureBold(dd, 13)).toString()),
+                y: 557,
+                size: 13,
+                font: WAVLhelveticaBold
+            })
+
+            // Date (month mm)
+            await WAVLfirstPage.drawText(parseInt(fixtures[i][11]).toString(), {
+                x: parseInt((613 - measureBold(fixtures[i][11], 13)).toString()),
+                y: 557,
+                size: 13,
+                font: WAVLhelveticaBold
+            })
+
+            // Date (year yy)
+            await WAVLfirstPage.drawText(fixtures[i][12].slice(2, 4), {
+                x: 625,
+                y: 557,
+                size: 13,
+                font: WAVLhelveticaBold
+            })
+
+            // Division (short)
+            await WAVLfirstPage.drawText(fixtures[i][9][1], {
+                x: parseInt((773 - measureBold(fixtures[i][9][1], 13)).toString()),
+                y: 557.5,
+                size: 13,
+                font: WAVLhelveticaBold
+            })
+
+            // Duty team
+            await WAVLfirstPage.drawText(fixtures[i][8], {
+                x: parseInt((710 - measureText(fixtures[i][8], 14)).toString()),
+                y: 528,
+                size: 14,
+                font: WAVLhelveticaFont
+            })
+
+            // Team Names
+            if (fixtures[i][6].length > 18 || fixtures[i][7].length > 18) {
+                // Reduce text size if too long.
+                await WAVLfirstPage.drawText(fixtures[i][6], {
+                    x: parseInt((320 - measureText(fixtures[i][6], 10)).toString()),
+                    y: 527,
+                    size: 10,
+                    font: WAVLhelveticaFont
+                })
+                await WAVLfirstPage.drawText(fixtures[i][7], {
+                    x: parseInt((460 - measureText(fixtures[i][7], 10)).toString()),
+                    y: 527,
+                    size: 10,
+                    font: WAVLhelveticaFont
+                })
+            } else {
+                WAVLpdfDoc.TextAlignment = 1;
+                await WAVLfirstPage.drawText(fixtures[i][6], {
+                    x: parseInt((320 - measureText(fixtures[i][6], 14)).toString()),
+                    y: 527,
+                    size: 14,
+                    font: WAVLhelveticaFont
+                })
+                await WAVLfirstPage.drawText(fixtures[i][7], {
+                    x: parseInt((460 - measureText(fixtures[i][7], 14)).toString()),
+                    y: 527,
+                    size: 14,
+                    font: WAVLhelveticaFont
+                })
+            }
+            var saved = await WAVLpdfDoc.saveAsBase64();
+        } else if (fixtures[i][9][0].includes("Division") || fixtures[i][9][0].includes("State")) {
             // If we need to use the scoresheet with more names
             if (fixtures[i][17].length > 18 || fixtures[i][18].length > 18){
                 if ((SL_FINALS_DATES.includes(fixtures[i][12]+"-"+fixtures[i][11]+"-"+fixtures[i][10]) && (fixtures[i][9][0] == "State League Men" || fixtures[i][9][0] == "State League Women")) || FINALS_DATES.includes(fixtures[i][12]+"-"+fixtures[i][11]+"-"+fixtures[i][10])){
@@ -676,7 +1149,7 @@ async function modifyPdf(fix, dates) {
                     })
                 }
 
-                if (fixtures[i][6].length > 24 || fixtures[i][7].length > 24) {
+                if (fixtures[i][6].length > 22 || fixtures[i][7].length > 22) {
                     // Team A Team List
                     await extraWAVLfirstPage.drawText(fixtures[i][6], {
                         x: 285,
@@ -1110,7 +1583,7 @@ async function modifyPdf(fix, dates) {
                         opacity: 1
                     })
                 }
-                if (fixtures[i][6].length > 24 || fixtures[i][7].length > 24) {
+                if (fixtures[i][6].length > 22 || fixtures[i][7].length > 22) {
                     // Team A Team List
                     await newWAVLfirstPage.drawText(fixtures[i][6], {
                         x: 285,
@@ -1146,11 +1619,17 @@ async function modifyPdf(fix, dates) {
                 }
 
                 // Team A Players
-                if (fixtures[i][17].length > 1) {
+                if (fixtures[i][17].length >= 3) {
                     for (var k = 0; k < fixtures[i][17].length; k++) {
                         if (k < Math.ceil(fixtures[i][17].length / 2)) {
                             // first name, first column
                             //console.log(fixtures[i][17][k][0].toUpperCase() + ": " + measureText(fixtures[i][17][k][0].toUpperCase(),6))
+                            console.log(k)
+                            console.log(i)
+                            console.log(fixtures[i])
+                            console.log(fixtures[i][17])
+                            //console.log(fixutres[i][17][k])
+                            console.log(fixtures[i][17][k][0])
                             if (measureText(fixtures[i][17][k][0][0].toUpperCase(), 6) >= 32) {
                                 await newWAVLfirstPage.drawText(fixtures[i][17][k][0][0].toUpperCase(), {
                                     x: 276.25,
@@ -1248,7 +1727,7 @@ async function modifyPdf(fix, dates) {
                 }
 
                 // Team B Players
-                if (fixtures[i][18].length > 1) {
+                if (fixtures[i][18].length >= 3) {
                     for (var k = 0; k < fixtures[i][18].length; k++) {
                         if (k < Math.ceil(fixtures[i][18].length / 2)) {
                             // first name, first column
@@ -1271,7 +1750,7 @@ async function modifyPdf(fix, dates) {
 
                             // surname, first column
                             //console.log(fixtures[i][18][k][1].toUpperCase() + ": " + measureText(fixtures[i][18][k][1].toUpperCase(),6))
-                            if (measureText(fixtures[i][18][k][1].toUpperCase(), 6) >= 32) {
+                            if (measureText(fixtures[i][18][k][0][1].toUpperCase(), 6) >= 32) {
                                 await newWAVLfirstPage.drawText(fixtures[i][18][k][0][1].toUpperCase(), {
                                     x: 439.5,
                                     y: 716-((15.75*k+7.0)),
@@ -1652,7 +2131,7 @@ async function modifyPdf(fix, dates) {
         }
 
         //const ExcelJS = require('exceljs');
-        var excel_url = "https://volleyballwa.github.io/static/Ref_Template.xlsx";
+        var excel_url = "https://og1764.github.io/static/Ref_Template.xlsx";
         const default_bytes = await fetch(excel_url).then(res => res.arrayBuffer());
         const workbook = new ExcelJS.Workbook();
         //const excelReader = new FileReader();
@@ -1832,6 +2311,22 @@ async function modifyPdf(fix, dates) {
                 console.log(error.message);
             });
         })
+
+        /*
+        try {
+            // Download CSV
+            let csvContent = "data:text/csv;charset=utf-8," + csv.map(e => e.join(",")).join("\n");
+            var encodedUri = encodeURI(csvContent);
+            var link = document.createElement("a");
+            link.setAttribute("href", encodedUri);
+            let filename = "Runsheet" + dates + ".csv";
+            link.setAttribute("download", filename);
+            document.body.appendChild(link); // Required for File Download
+
+            link.click();
+        } catch (e) {
+            console.log(e)
+        }*/
     }
     return await total;
 }
@@ -1853,6 +2348,30 @@ async function mergePDFDocuments(documents) {
     }
     var saved = await mergedPdf.save();
     return await saved;
+}
+
+/**
+ * NOT USED
+ * 
+ * Get a div from an ID
+ * @param {*} id 
+ * @returns 
+ */
+function div_from_id(id) {
+    console.log("div_from_id");
+    let wavl_keys = Object.keys(__CONFIG__.wavl);
+    let jl_keys = Object.keys(__CONFIG__.jl);
+    for (var i = 0; i < wavl_keys.length; i++) {
+        if (__CONFIG__.wavl[wavl_keys[i]].id == id) {
+            return [__CONFIG__.wavl[wavl_keys[i]].long, __CONFIG__.wavl[wavl_keys[i]].short, __CONFIG__.wavl[wavl_keys[i]].id]
+        }
+    }
+    for (var i = 0; i < __CONFIG__.jl.length; i++) {
+        if (__CONFIG__.jl[jl_keys[i]].id == id) {
+            return [__CONFIG__.jl[jl_keys[i]].long, __CONFIG__.jl[jl_keys[i]].short, __CONFIG__.jl[jl_keys[i]].id]
+        }
+    }
+    return false
 }
 
 /**
@@ -1893,7 +2412,7 @@ function add_aliases(venues) {
  * @param {*} all_html 
  * @returns Fixture[]
  */
-function html_to_fixture(venues, leagues, date, all_html) {
+function html_to_fixture(venues, leagues, in_date, all_html) {
     console.log("html_to_fixture");
     let fixtures_list = [];
     let alerted = [];
@@ -1902,10 +2421,169 @@ function html_to_fixture(venues, leagues, date, all_html) {
     let venue_usage = temporary[0];
     let all_venues = add_aliases(Object.keys(__CONFIG__.venues));
     const NamesArr = leagues.flat();
-
+    console.log(all_html);
+    let start_date = in_date[0];
+    let end_date = in_date[1];
     for (let x = 0; x < all_html.length; x++) {
         let parser = new DOMParser();
         let htmlDoc = parser.parseFromString(all_html[x].request.responseText, 'text/html');
+        
+        // ----------------------------------
+        
+        //let all_tables = document.getElementsByTagName("table")
+
+        // NOTE -- CHANGE document TO htmlDoc
+
+        let all_tables = htmlDoc.getElementsByClassName("division-schedule")
+        let numFix = all_tables.length;
+        //htmlDoc.getElements
+
+        //console.log(all_tables)
+        console.log(numFix)
+        let month_lookup = {
+            "January":"01",
+            "Febuary":"02",
+            "March":"03",
+            "April":"04",
+            "May":"05",
+            "June":"06",
+            "July":"07",
+            "August":"08",
+            "September":"09",
+            "October":"10",
+            "November":"11",
+            "December":"12"
+        }
+
+        let venue_lookup = {}
+
+        let tmp = htmlDoc.getElementsByClassName("division-schedule-venue")[0]
+        let rows = tmp.getElementsByTagName("td")
+
+        for (let i = 0; i < rows.length; i = i + 1) {
+            let key = rows[i].innerText.split(" - ")[0].trim()
+            let value = rows[i].innerText.split(" - ")[1].trim()
+            venue_lookup[key] = value
+        }
+
+        for (let i = 0; i < numFix; i = i + 1) {
+            let date = all_tables[i].getElementsByTagName("h3")//.textContent
+            //console.log(date[0].innerText)
+            let actual_date = date[0].innerText
+            
+            let yyyy = actual_date.slice(-4)
+            let dd = actual_date.split(",")[1].slice(-2).replace(" ","0")
+            let raw_month = actual_date.split(",")[1].slice(0,-2).trim()
+            let month = month_lookup[raw_month]
+            //console.log(yyyy)
+            //console.log(dd)
+            //console.log(month)
+            let test_date = yyyy+"-"+month+"-"+dd;
+            console.log(test_date)
+
+            if (test_date >= start_date & test_date < end_date) { // if date is correct
+                let all_games = all_tables[i].getElementsByClassName("game")
+                for (let j = 0; j < all_games.length; j++){
+                    let current = all_games[j]
+                    let all_curr_game = current.getElementsByTagName("td")
+                    let time = all_curr_game[0].innerText.trim()
+                    let ven = all_curr_game[1].innerText.trim()
+                    let _court = all_curr_game[2].innerText.trim()
+                    let div = all_curr_game[3].innerText.split(" (")[0].trim()
+                    let _team_b = all_curr_game[4].innerText.trim()
+                    let _team_a = all_curr_game[5].innerText.trim()
+                    let _duty = all_curr_game[6].innerText.trim()
+                    let time_hr = time.split(":")[0].trim()
+                    let time_min = time.split(":")[1].split(" ")[0].trim()
+                    let time_am_pm = time.split(":")[1].split(" ")[1].trim()
+                    if (time_am_pm == "PM" & time_hr != "12") {
+                        time_hr = parseInt(time_hr) + 12
+                        time_hr = time_hr.toString().trim()
+                    }
+                    console.log(time)
+                    console.log(venue_lookup)
+                    console.log(ven)
+                    console.log(_court)
+                    console.log(div)
+                    console.log(_team_a)
+                    console.log(_team_b)
+                    console.log(_duty)
+                    console.log(time_hr)
+                    console.log(time_min)
+                    
+                    let _date_dd = dd.padStart(2, "0");
+                    let _date_mm = month.padStart(2, "0");
+                    let _date_yyyy = yyyy;
+                    
+                    
+                    let _time_hr = " ";
+                    let _time_min = " ";
+                    
+                    try {
+                        _time_hr = time_hr.padStart(2, "0");
+                        _time_min = time_min.padStart(2, "0");
+                    } catch (e) {
+                        console.log(e);
+                        _time_hr = " ";
+                        _time_min = " ";
+                    }
+                    
+                    let zero_venue_split = venue_lookup[ven]
+                    
+                    let venue_realname = alias_layer[zero_venue_split];
+
+                    const _venue_0 = __CONFIG__.venues[venue_realname].top;
+                    const _venue_1 = __CONFIG__.venues[venue_realname].mid;
+                    const _venue_2 = __CONFIG__.venues[venue_realname].bot;
+                    console.log(div)
+                    if (div.includes("Division") || div.includes("State")) {
+                        _division = [
+                            __CONFIG__.wavl[div].long,
+                            __CONFIG__.wavl[div].short,
+                            __CONFIG__.wavl[div].id
+                        ];
+                    } else {
+                        _division = [
+                            __CONFIG__.jl[div].long,
+                            __CONFIG__.jl[div].short,
+                            __CONFIG__.jl[div].id
+                        ];
+                    }
+
+                    let _venue_full = __CONFIG__.venues[venue_realname].name;
+                    let _sorting = _date_yyyy + " " + _date_mm + " " + _date_dd + " " + _venue_full + " " + _court + " " + _time_hr
+                    let _time_sorting = _date_yyyy + " " + _date_mm + " " + _date_dd + " " + _venue_full + " " + _time_hr + " " + _court;
+
+                    fixtures_list.push([zero_venue_split, _venue_0, _venue_1, _venue_2, _venue_full, _court,
+                                        _team_a, _team_b, _duty, _division, _date_dd, _date_mm, _date_yyyy, _time_hr, _time_min,
+                                        _sorting, _time_sorting, [],
+                                        []
+                                        ])
+                    }
+                    
+            }
+        }
+
+/*
+ for (let y = 0; y < numFix; y = y + 3) {
+   let meta = y + 1;
+   let data = y + 2;
+
+   let meta_table = all_tables[0].getElementsByTagName("table")[0];
+   let data_table = all_tables[1];
+
+   if (numFix > 2) {
+     meta_table = all_tables[meta];
+     data_table = all_tables[data];
+   }
+
+   let dt = meta_table.rows.item(1).cells.item(0).innerText;
+   let match_division = meta_table.rows.item(1).cells.item(2).innerText;
+   }
+
+                
+        // ----------------------------------
+        
         let all_tables = htmlDoc.getElementsByTagName("table")
         let numFix = all_tables.length;
 		
@@ -1966,7 +2644,7 @@ function html_to_fixture(venues, leagues, date, all_html) {
                                     _court = parseInt(venue_split[0].slice(-2).trim()).toString();
                                 } else {
                                     _court = cells.item(1).innerText.split("Ct")[1].trim();
-                                }*/
+                                }
                                 _court = cells.item(1).innerText.split(/^[^0-9]+/)[1].trim()
                             } catch (e) {
                                 _court = "";
@@ -1989,8 +2667,8 @@ function html_to_fixture(venues, leagues, date, all_html) {
                                 } catch (e) {
                                     console.log(e);
 				    console.log(_team_a);
-				    console.log(_team_b);
-				    console.log("~~~");
+ 				    console.log(_team_b);
+ 				    console.log("~~~");
                                     _duty = " ";
                                 }
                             }
@@ -2056,8 +2734,8 @@ function html_to_fixture(venues, leagues, date, all_html) {
                                     console.log("BYE: " + zero_venue_split);
                                 } else {
                                     console.log("UNUSED VENUE\n***")
-				                    console.log(venue)
-				                    console.log(venue_split)
+				    console.log(venue)
+				    console.log(venue_split)
                                     console.log(zero_venue_split)
                                     console.log("***")
                                 }
@@ -2081,8 +2759,9 @@ function html_to_fixture(venues, leagues, date, all_html) {
             } catch (e) {
                 console.log(e)
             }
-        }
+        }*/
     }
+    console.log(fixtures_list);
     return fixtures_list
 }
 

@@ -14,7 +14,7 @@ const __CONFIG__ = {
             "top": "",
             "mid": "Aquinas",
             "bot": "College",
-            "alias": ["Aquinas College", "Aquinas Col."]
+            "alias": ["Aquinas College", "Aquinas Col.", "Aquin"]
         },
         "Ballajura": {
             "name": "Ballajura",
@@ -35,7 +35,7 @@ const __CONFIG__ = {
             "top": "",
             "mid": "",
             "bot": "Cockburn",
-            "alias": ["Cockburn ARC"]
+            "alias": ["Cockburn ARC", "CARC"]
         },
         "Curtin Stadium": {
             "name": "Curtin Stadium",
@@ -56,7 +56,7 @@ const __CONFIG__ = {
             "top": "Geographe",
             "mid": "Leisure",
             "bot": "Centre",
-            "alias": ["Geographe", "Geographe Leisure", "Geographe Lei. Centr", "Geographe Lei. Cntr", "Geographe L. Ctr", "Geographe Lei."]
+            "alias": ["Geographe", "Geographe Leisure", "Geographe Lei. Centr", "Geographe Lei. Cntr", "Geographe L. Ctr", "Geographe Lei.", "GEO"]
         },
         "Gold Netball Centre": {
             "name": "Gold Netball Centre",
@@ -84,7 +84,7 @@ const __CONFIG__ = {
             "top": "Halls Head",
             "mid": "Recreation",
             "bot": "Centre",
-            "alias": ["Halls Head Rec Centr", "Halls Head Rec"]
+            "alias": ["Halls Head Rec Centr", "Halls Head Rec", "HALLS"]
         },
         "Hartfield Park": {
             "name": "Hartfield Park",
@@ -98,7 +98,14 @@ const __CONFIG__ = {
             "top": "",
             "mid": "HBF",
             "bot": "Stadium",
-            "alias": ["HBF Stad. Claremont", "HBF", "HBF Stadium", "HBF Stad.", "HBF Sta. Claremont"]
+            "alias": ["HBF Stad. Claremont", "HBF", "HBF Stadium", "HBF Stad.", "HBF Sta. Claremont", "HBF Stadium Claremont"]
+        },
+        "Herb Graham Leisure Centre": {
+            "name": "Herb Graham Leisure Centre",
+            "top": "Herb Graham",
+            "mid": "Leisure",
+            "bot": "Centre",
+            "alias": ["Herb Graham", "HERB"]
         },
         "John Wollaston": {
             "name": "John Wollaston",
@@ -112,7 +119,7 @@ const __CONFIG__ = {
             "top": "",
             "mid": "",
             "bot": "Kingsway",
-            "alias": ["Kingsway Indoor Stad", "Kingsway Indoor"]
+            "alias": ["Kingsway Indoor Stad", "Kingsway Indoor", "KING", "Kingsway Stadium"]
         },
         "Leschanault Leisure": {
             "name": "Leschanault Leisure",
@@ -126,7 +133,7 @@ const __CONFIG__ = {
             "top": "",
             "mid": "",
             "bot": "Loftus",
-            "alias": []
+            "alias": ["Loft", "Loftus Recreation Centre"]
         },
         "Lords": {
             "name": "Lords",
@@ -140,7 +147,7 @@ const __CONFIG__ = {
             "top": "",
             "mid": "Mandurah",
             "bot": "ARC",
-            "alias": []
+            "alias": ["MARC"]
         },
         "MBC": {
             "name": "MBC",
@@ -154,7 +161,7 @@ const __CONFIG__ = {
             "top": "",
             "mid": "Melville",
             "bot": "LeisureFit",
-            "alias": ["Melville Leisure"]
+            "alias": ["Melville Leisure", "MLF"]
         },
         "Methodist Ladies College": {
             "name": "Methodist Ladies College",
@@ -189,7 +196,7 @@ const __CONFIG__ = {
             "top": "",
             "mid": "",
             "bot": "Rossmoyne",
-            "alias": ["Rossmoyne SHS"]
+            "alias": ["Rossmoyne SHS", "ROSSY"]
         },
         "Santa Maria": {
             "name": "Santa Maria",
@@ -201,9 +208,9 @@ const __CONFIG__ = {
         "Southern River": {
             "name": "Southern River",
             "top": "",
-            "mid": "Santa",
-            "bot": "Maria",
-            "alias": ["Southern River College", "Southern River Colle", "Southern River Col."]
+            "mid": "Southern",
+            "bot": "River",
+            "alias": ["Southern River College", "Southern River Colle", "Southern River Col.", "SRC"]
         },
         "St Mary's": {
             "name": "St Mary's",
@@ -224,14 +231,14 @@ const __CONFIG__ = {
             "top": "",
             "mid": "",
             "bot": "Trinity",
-            "alias": ["Trinity", "Trinity Col."]
+            "alias": ["Trinity", "Trinity Col.", "TRIN"]
         },
         "UWA Recreation Centre": {
             "name": "UWA Recreation Centre",
             "top": "UWA",
             "mid": "Recreation",
             "bot": "Centre",
-            "alias": ["UWA", "UWA Rec. Centre", "UWA Rec Centre"]
+            "alias": ["UWA", "UWA Rec. Centre", "UWA Rec Centre", "UWA Sport"]
         },
         "UWA Sport Science": {
             "name": "UWA Sport Science",
@@ -252,7 +259,7 @@ const __CONFIG__ = {
             "top": "",
             "mid": "",
             "bot": "Warwick",
-            "alias": ["Warwick Stadium", "Warwick Stad."]
+            "alias": ["Warwick Stadium", "Warwick Stad.", "WARW"]
         },
         "TBC": {
             "name": "TBC",
@@ -280,14 +287,14 @@ const __CONFIG__ = {
             "long": "State League Men",
             "short": "SL Men"
         },
-        "State League Reserve Women": {
+        "State League Reserves Women": {
             "id": 135,
-            "long": "State League Reserve Women",
+            "long": "State League Reserves Women",
             "short": "SLR Women"
         },
-        "State League Reserve Men": {
+        "State League Reserves Men": {
             "id": 133,
-            "long": "State League Reserve Men",
+            "long": "State League Reserves Men",
             "short": "SLR Men"
         },
         "Division 1 Women": {
@@ -299,6 +306,16 @@ const __CONFIG__ = {
             "id": 156,
             "long": "Division 1 Men",
             "short": "Div 1 M"
+        },
+        "Division 1 Reserves Women": {
+            "id": 157,
+            "long": "Division 1 Reserves Women",
+            "short": "Div 1R W"
+        },
+        "Division 1 Reserves Men": {
+            "id": 156,
+            "long": "Division 1 Reserves Men",
+            "short": "Div 1R M"
         },
         "Division 2 Women": {
             "id": 159,
@@ -434,7 +451,6 @@ const __CONFIG__ = {
         }
     }
 }
-
 const __PRESIDENTS__ = {
     "Apex": "Eugene Lee",
     "Balcatta": "Ari Zuvela",
