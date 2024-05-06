@@ -65,6 +65,13 @@ const __CONFIG__ = {
             "bot": "Centre",
             "alias": ["Gold Netball"]
         },
+        "Guildford Grammar School": {
+            "name": "Guildford Grammar School",
+            "top": "",
+            "mid": "Guildford",
+            "bot": "Grammar",
+            "alias": ["GGS", "Guildford", "Guildford Grammar", "Guildford Grammar School"]
+        },
         "Greenwood College": {
             "name": "Greenwood College",
             "top": "",
@@ -112,7 +119,7 @@ const __CONFIG__ = {
             "top": "",
             "mid": "John",
             "bot": "Wollaston",
-            "alias": ["John Wollaston ACS C", "John Wollaston ACS"]
+            "alias": ["John Wollaston ACS C", "John Wollaston ACS", "JOHN"]
         },
         "Kingsway": {
             "name": "Kingsway",
@@ -141,6 +148,13 @@ const __CONFIG__ = {
             "mid": "",
             "bot": "Lords",
             "alias": []
+        },
+        "Lumen Christi": {
+            "name": "Lumen Christi",
+            "top": "Lumen",
+            "mid": "Christi",
+            "bot": "College",
+            "alias": ["Lumen Christi College", "Lumen Christi", "LUMEN", "Lumen"]
         },
         "Mandurah ARC": {
             "name": "Mandurah ARC",
@@ -212,6 +226,13 @@ const __CONFIG__ = {
             "bot": "River",
             "alias": ["Southern River College", "Southern River Colle", "Southern River Col.", "SRC"]
         },
+        "Swan Active Midland": {
+            "name": "Swan Active Midland",
+            "top": "Swan",
+            "mid": "Active",
+            "bot": "Midland",
+            "alias": ["Swan Active Midland", "Swan Active", "SAM", "Active Midland"]
+        },
         "St Mary's": {
             "name": "St Mary's",
             "top": "",
@@ -224,7 +245,7 @@ const __CONFIG__ = {
             "top": "",
             "mid": "",
             "bot": "The Rise",
-            "alias": []
+            "alias": ["RISE"]
         },
         "Trinity College": {
             "name": "Trinity College",
@@ -369,40 +390,50 @@ const __CONFIG__ = {
         }
     },
     "jl": {
-        "7/8 Female North": {
+        "7 Female": {
             "id": 148,
-            "long": "7/8 Female North",
-            "short": "7/8 F N"
+            "long": "7 Female",
+            "short": "7 F"
         },
-        "7/8 Female South Pool 1": {
-            "id": 149,
-            "long": "7/8 Female South Pool 1",
-            "short": "7/8 F S 1"
-        },
-        "7/8 Female South Pool 2": {
-            "id": 150,
-            "long": "7/8 Female South Pool 2",
-            "short": "7/8 F S 2"
-        },
-        "7/8 Male North": {
+        "7 Male": {
             "id": 146,
-            "long": "7/8 Male North",
-            "short": "7/8 M N"
+            "long": "7 Male",
+            "short": "7 M"
         },
-        "7/8 Male South": {
+        "8 Female North": {
+            "id": 149,
+            "long": "8 Female North",
+            "short": "8 F N"
+        },
+        "8 Female South": {
+            "id": 150,
+            "long": "8 Female South",
+            "short": "8 F S"
+        },
+        "8 Male": {
             "id": 147,
-            "long": "7/8 Male South",
-            "short": "7/8 M S"
+            "long": "8 Male",
+            "short": "8 M"
         },
-        "9 Female": {
+        "9 Female North": {
             "id": 139,
-            "long": "9 Female",
-            "short": "9 F"
+            "long": "9 Female North",
+            "short": "9 F N"
         },
-        "9 Male": {
+        "9 Female South": {
+            "id": 1329,
+            "long": "9 Female South",
+            "short": "9 F S"
+        },
+        "9 Male South": {
             "id": 138,
-            "long": "9 Male",
-            "short": "9 M"
+            "long": "9 Male South",
+            "short": "9 M S"
+        },
+        "9/10 Male North": {
+            "id": 140,
+            "long": "9/10 Male North",
+            "short": "9/10 M N"
         },
         "10 Female North": {
             "id": 151,
@@ -419,11 +450,7 @@ const __CONFIG__ = {
             "long": "10 Female South Pool 2",
             "short": "10 F S 2"
         },*/
-        "10 Male North": {
-            "id": 140,
-            "long": "10 Male North",
-            "short": "10 M N"
-        },
+        
         "10 Male South": {
             "id": 141,
             "long": "10 Male South",
@@ -451,6 +478,7 @@ const __CONFIG__ = {
         }
     }
 }
+
 const __PRESIDENTS__ = {
     "Apex": "Eugene Lee",
     "Balcatta": "Ari Zuvela",
@@ -458,6 +486,7 @@ const __PRESIDENTS__ = {
     "Bunbury": "Tony Thornhill",
     "Busselton": "David Boyle",
     "Chequers": "Dylan Wood",
+    "Chequers Blue": "Dylan Wood",
     "Chequers White": "Dylan Wood",
     "Chequers Yellow": "Dylan Wood",
     "ECU": "Dylan Wood",

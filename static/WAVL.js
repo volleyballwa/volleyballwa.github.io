@@ -504,8 +504,10 @@ function pdf_init(venues, wavl, wavjl, dates) {
         leagues.push([__CONFIG__.jl[wavjl[i]].long, __CONFIG__.jl[wavjl[i]].short, __CONFIG__.jl[wavjl[i]].id])
     }
 
-    var indiv = get_single_fixture(dates[0], dates[1]);
-    fixtures.push(indiv);
+    var indiv_wavl = get_single_fixture(dates[0], dates[1], "WAVL");
+    fixtures.push(indiv_wavl);
+    var indiv_wavjl = get_single_fixture(dates[0], dates[1], "WAVjL");
+    fixtures.push(indiv_wavjl);
 
     Promise.all(fixtures).then(fix_val => {
         var team_list = []
@@ -642,7 +644,7 @@ function pdf_init(venues, wavl, wavjl, dates) {
  * @param {String} end_date     Second date in range
  * @returns 
  */
-async function get_single_fixture(start_date, end_date) {
+async function get_single_fixture(start_date, end_date, league) {
     console.log(start_date);
     console.log(end_date);
     axios;
@@ -650,9 +652,17 @@ async function get_single_fixture(start_date, end_date) {
     //var url = head + start_date.toString() + "&end_date=" + end_date.toString();
     //console.log("get_single_fixture: " + url);
     //return await axios.get(url);
-    const head = "https://cors-anywhere-og-v5kf.onrender.com/volleyball.exposureevents.com/220866/wavl/documents/schedule?layout=datetime"
-    console.log("get_single_fixture -" + head)
-    return await axios.get(head);
+    if (league == "WAVL") {
+        const head = "https://cors-anywhere-og-v5kf.onrender.com/volleyball.exposureevents.com/220866/wavl/documents/schedule?layout=datetime"
+        console.log("get_single_fixture -" + head)
+        return await axios.get(head);
+    } else if (league == "WAVjL") {
+        const head = "https://cors-anywhere-og-v5kf.onrender.com/volleyball.exposureevents.com/220963/wavjl/documents/schedule?layout=datetime"
+        console.log("get_single_fixture -" + head)
+        return await axios.get(head);
+    }
+    //console.log("get_single_fixture -" + head)
+    //return await axios.get(head);
 
 }
 
@@ -2543,6 +2553,8 @@ function html_to_fixture(venues, leagues, in_date, all_html) {
                             __CONFIG__.wavl[div].id
                         ];
                     } else {
+                        div = div.replace("Year ", "")
+                        console.log(div);
                         _division = [
                             __CONFIG__.jl[div].long,
                             __CONFIG__.jl[div].short,
