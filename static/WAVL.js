@@ -2541,7 +2541,12 @@ function html_to_fixture(venues, leagues, in_date, all_html) {
                     let zero_venue_split = venue_lookup[ven]
                     
                     let venue_realname = alias_layer[zero_venue_split];
-
+                    console.log(venues)
+                    console.log(leagues)
+                    console.log(alias_layer)
+                    console.log(ven)
+                    console.log(zero_venue_split)
+                    console.log(venue_realname)
                     const _venue_0 = __CONFIG__.venues[venue_realname].top;
                     const _venue_1 = __CONFIG__.venues[venue_realname].mid;
                     const _venue_2 = __CONFIG__.venues[venue_realname].bot;

@@ -240,6 +240,13 @@ const __CONFIG__ = {
             "bot": "St Mary's",
             "alias": []
         },
+        "St James' Anglican School": {
+            "name": "St James' Anglican School",
+            "top": "St James'",
+            "mid": "Anglican",
+            "bot": "School",
+            "alias": ["SJAS", "St James", "St James' Anglican School"]
+        },
         "The Rise": {
             "name": "The Rise",
             "top": "",
