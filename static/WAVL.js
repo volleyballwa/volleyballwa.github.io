@@ -511,7 +511,6 @@ function pdf_init(venues, wavl, wavjl, dates) {
 
     Promise.all(fixtures).then(fix_val => {
         var team_list = []
-
         var upd_fixtures = html_to_fixture(venues, leagues, dates, fix_val);
         var player_List = getPlayerList();
         Promise.all([player_List]).then(players_list => {
@@ -2539,44 +2538,57 @@ function html_to_fixture(venues, leagues, in_date, all_html) {
                     }
                     
                     let zero_venue_split = venue_lookup[ven]
-                    
-                    let venue_realname = alias_layer[zero_venue_split];
-                    console.log(venues)
-                    console.log(leagues)
-                    console.log(alias_layer)
-                    console.log(ven)
-                    console.log(zero_venue_split)
-                    console.log(venue_realname)
-                    const _venue_0 = __CONFIG__.venues[venue_realname].top;
-                    const _venue_1 = __CONFIG__.venues[venue_realname].mid;
-                    const _venue_2 = __CONFIG__.venues[venue_realname].bot;
-                    console.log(div)
-                    if (div.includes("Division") || div.includes("State")) {
-                        _division = [
-                            __CONFIG__.wavl[div].long,
-                            __CONFIG__.wavl[div].short,
-                            __CONFIG__.wavl[div].id
-                        ];
-                    } else {
-                        div = div.replace("Year ", "")
-                        console.log(div);
-                        _division = [
-                            __CONFIG__.jl[div].long,
-                            __CONFIG__.jl[div].short,
-                            __CONFIG__.jl[div].id
-                        ];
-                    }
+                    if (venue_usage.includes(zero_venue_split)) {
+                        console.log(venue_lookup)
+                        let venue_realname = alias_layer[zero_venue_split];
+                        console.log("*******************")
+                        console.log(venue_realname)
+                        console.log("*******************")
+                        try {
+                            console.log(venues)
+                            console.log(leagues)
+                            console.log(alias_layer)
+                            console.log(ven)
+                            console.log(zero_venue_split)
+                            console.log(venue_realname)
+                            const _venue_0 = __CONFIG__.venues[venue_realname].top;
+                            const _venue_1 = __CONFIG__.venues[venue_realname].mid;
+                            const _venue_2 = __CONFIG__.venues[venue_realname].bot;
+                            console.log(div)
+                            if (div.includes("Division") || div.includes("State")) {
+                                _division = [
+                                    __CONFIG__.wavl[div].long,
+                                    __CONFIG__.wavl[div].short,
+                                    __CONFIG__.wavl[div].id
+                                ];
+                            } else {
+                                div = div.replace("Year ", "")
+                                console.log(div);
+                                _division = [
+                                    __CONFIG__.jl[div].long,
+                                    __CONFIG__.jl[div].short,
+                                    __CONFIG__.jl[div].id
+                                ];
+                            }
 
-                    let _venue_full = __CONFIG__.venues[venue_realname].name;
-                    let _sorting = _date_yyyy + " " + _date_mm + " " + _date_dd + " " + _venue_full + " " + _court + " " + _time_hr
-                    let _time_sorting = _date_yyyy + " " + _date_mm + " " + _date_dd + " " + _venue_full + " " + _time_hr + " " + _court;
+                            let _venue_full = __CONFIG__.venues[venue_realname].name;
+                            let _sorting = _date_yyyy + " " + _date_mm + " " + _date_dd + " " + _venue_full + " " + _court + " " + _time_hr
+                            let _time_sorting = _date_yyyy + " " + _date_mm + " " + _date_dd + " " + _venue_full + " " + _time_hr + " " + _court;
 
-                    fixtures_list.push([zero_venue_split, _venue_0, _venue_1, _venue_2, _venue_full, _court,
-                                        _team_a, _team_b, _duty, _division, _date_dd, _date_mm, _date_yyyy, _time_hr, _time_min,
-                                        _sorting, _time_sorting, [],
-                                        []
-                                        ])
-                    }
+                            fixtures_list.push([zero_venue_split, _venue_0, _venue_1, _venue_2, _venue_full, _court,
+                                                _team_a, _team_b, _duty, _division, _date_dd, _date_mm, _date_yyyy, _time_hr, _time_min,
+                                                _sorting, _time_sorting, [],
+                                                []
+                                                ])
+                            } catch {
+                                window.alert("Missing Venue - " + venue_realname)
+                                console.log("Missing Venue - " + venue_realname)
+                            }
+                        } else {
+                            window.alert("Missing Venue - " + venue_realname)
+                            onsole.log("Missing Venue - " + venue_realname)
+                        }
+                    } 
                     
             }
         }

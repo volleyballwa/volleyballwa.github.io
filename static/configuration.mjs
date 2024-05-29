@@ -226,6 +226,13 @@ const __CONFIG__ = {
             "bot": "River",
             "alias": ["Southern River College", "Southern River Colle", "Southern River Col.", "SRC"]
         },
+        "South West Sports Centre": {
+            "name": "South West Sports Centre",
+            "top": "",
+            "mid": "South West",
+            "bot": "Sports Centre",
+            "alias": ["SW Sports", "SWSC"]
+        },
         "Swan Active Midland": {
             "name": "Swan Active Midland",
             "top": "Swan",
