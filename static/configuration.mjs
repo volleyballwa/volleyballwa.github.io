@@ -497,7 +497,7 @@ const __PRESIDENTS__ = {
     "Apex": "Eugene Lee",
     "Balcatta": "Ari Zuvela",
     "Baldivis": "Denzil Fernandes",
-    "Bunbury": "Tony Thornhill",
+    "Bunbury": "Brad Barclay",
     "Busselton": "David Boyle",
     "Chequers": "Dylan Wood",
     "Chequers Blue": "Dylan Wood",
