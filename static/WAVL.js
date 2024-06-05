@@ -2581,12 +2581,12 @@ function html_to_fixture(venues, leagues, in_date, all_html) {
                                                 []
                                                 ])
                             } catch {
-                                window.alert("Missing Venue - " + venue_realname)
-                                console.log("Missing Venue - " + venue_realname)
+                                window.alert("Missing Venue - " + zero_venue_split)
+                                console.log("Missing Venue - " + zero_venue_split)
                             }
                         } else {
-                            window.alert("Missing Venue - " + venue_realname)
-                            onsole.log("Missing Venue - " + venue_realname)
+                            window.alert("Missing Venue - " + zero_venue_split)
+                            onsole.log("Missing Venue - " + zero_venue_split)
                         }
                     } 
                     

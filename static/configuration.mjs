@@ -9,6 +9,13 @@ const SEASON_ID = "27";
 
 const __CONFIG__ = {
     "venues": {
+        "Albany Leisure Centre": {
+            "name": "Albany Leisure Centre",
+            "top": "Albany",
+            "mid": "Leisure",
+            "bot": "Centre",
+            "alias": ["ALAC", "Albany Leisure Centre", "Albany Leisure & Aquatic Centre", "Albany Leisure and Aquatic Centre"]
+        },
         "Aquinas": {
             "name": "Aquinas",
             "top": "",
@@ -497,7 +504,7 @@ const __PRESIDENTS__ = {
     "Apex": "Eugene Lee",
     "Balcatta": "Ari Zuvela",
     "Baldivis": "Denzil Fernandes",
-    "Bunbury": "Tony Thornhill",
+    "Bunbury": "Brad Barclay",
     "Busselton": "David Boyle",
     "Chequers": "Dylan Wood",
     "Chequers Blue": "Dylan Wood",
