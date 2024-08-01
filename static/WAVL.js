@@ -2580,7 +2580,8 @@ function html_to_fixture(venues, leagues, in_date, all_html) {
                                                 _sorting, _time_sorting, [],
                                                 []
                                                 ])
-                            } catch {
+                            } catch (e) {
+                                console.log(e)
                                 window.alert("Missing Venue - " + zero_venue_split)
                                 console.log("Missing Venue - " + zero_venue_split)
                             }
