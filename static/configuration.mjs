@@ -438,6 +438,11 @@ const __CONFIG__ = {
             "long": "8 Female South",
             "short": "8 F S"
         },
+        "8 Female": {
+            "id": 181,
+            "long": "8 Female",
+            "short": "8 F"
+        },
         "8 Male": {
             "id": 147,
             "long": "8 Male",
@@ -453,15 +458,30 @@ const __CONFIG__ = {
             "long": "9 Female South",
             "short": "9 F S"
         },
+        "9 Female": {
+            "id": 1329,
+            "long": "9 Female",
+            "short": "9 F"
+        },
         "9 Male South": {
             "id": 138,
             "long": "9 Male South",
             "short": "9 M S"
         },
+        "9 Male": {
+            "id": 138,
+            "long": "9 Male",
+            "short": "9 M"
+        },
         "9/10 Male North": {
             "id": 140,
             "long": "9/10 Male North",
             "short": "9/10 M N"
+        },
+        "9/10 Male": {
+            "id": 140,
+            "long": "9/10 Male",
+            "short": "9/10 M"
         },
         "10 Female North": {
             "id": 151,
@@ -472,6 +492,11 @@ const __CONFIG__ = {
             "id": 152,
             "long": "10 Female South",
             "short": "10 F S"
+        },
+        "10 Female": {
+            "id": 152,
+            "long": "10 Female",
+            "short": "10 F"
         },
         /*"10 Female South Pool 2": {
             "id": 153,
@@ -484,6 +509,11 @@ const __CONFIG__ = {
             "long": "10 Male South",
             "short": "10 M S"
         },
+        "10 Male": {
+            "id": 141,
+            "long": "10 Male",
+            "short": "10 M"
+        },
         "11/12 Female North": {
             "id": 144,
             "long": "11/12 Female North",
@@ -494,6 +524,11 @@ const __CONFIG__ = {
             "long": "11/12 Female South",
             "short": "11/12 F S"
         },
+        "11/12 Female": {
+            "id": 144,
+            "long": "11/12 Female",
+            "short": "11/12 F"
+        },
         "11/12 Male North": {
             "id": 142,
             "long": "11/12 Male North",
@@ -503,6 +538,11 @@ const __CONFIG__ = {
             "id": 143,
             "long": "11/12 Male South",
             "short": "11/12 M S"
+        },
+        "11/12 Male": {
+            "id": 143,
+            "long": "11/12 Male",
+            "short": "11/12 M"
         }
     }
 }
