@@ -459,7 +459,7 @@ const __CONFIG__ = {
             "short": "9 F S"
         },
         "9 Female": {
-            "id": 1329,
+            "id": 1,
             "long": "9 Female",
             "short": "9 F"
         },
@@ -469,7 +469,7 @@ const __CONFIG__ = {
             "short": "9 M S"
         },
         "9 Male": {
-            "id": 138,
+            "id": 2,
             "long": "9 Male",
             "short": "9 M"
         },
@@ -479,7 +479,7 @@ const __CONFIG__ = {
             "short": "9/10 M N"
         },
         "9/10 Male": {
-            "id": 140,
+            "id": 3,
             "long": "9/10 Male",
             "short": "9/10 M"
         },
@@ -494,7 +494,7 @@ const __CONFIG__ = {
             "short": "10 F S"
         },
         "10 Female": {
-            "id": 152,
+            "id": 4,
             "long": "10 Female",
             "short": "10 F"
         },
@@ -510,7 +510,7 @@ const __CONFIG__ = {
             "short": "10 M S"
         },
         "10 Male": {
-            "id": 141,
+            "id": 5,
             "long": "10 Male",
             "short": "10 M"
         },
@@ -525,7 +525,7 @@ const __CONFIG__ = {
             "short": "11/12 F S"
         },
         "11/12 Female": {
-            "id": 144,
+            "id": 6,
             "long": "11/12 Female",
             "short": "11/12 F"
         },
@@ -540,7 +540,7 @@ const __CONFIG__ = {
             "short": "11/12 M S"
         },
         "11/12 Male": {
-            "id": 143,
+            "id": 7,
             "long": "11/12 Male",
             "short": "11/12 M"
         }
