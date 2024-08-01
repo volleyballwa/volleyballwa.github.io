@@ -2538,6 +2538,10 @@ function html_to_fixture(venues, leagues, in_date, all_html) {
                     }
                     
                     let zero_venue_split = venue_lookup[ven]
+                    console.log("**")
+                    console.log(zero_venue_split)
+                    console.log(venue_usage)
+                    console.log("**")
                     if (venue_usage.includes(zero_venue_split)) {
                         console.log(venue_lookup)
                         let venue_realname = alias_layer[zero_venue_split];
