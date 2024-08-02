@@ -29,13 +29,13 @@ function deselect_all_venue(checked = false) {
  * Sets all WAVL teams to be selected.
  * @param {*} checked 
  */
-function select_all_wavl(checked = true) {
-    console.log("select_all_wavl");
-    const cbs = document.querySelectorAll('input[name="WAVL_teams"]');
+function select_all_events(checked = true) {
+    console.log("select_all_events");
+    const cbs = document.querySelectorAll('input[name="EVENTS_teams"]');
     cbs.forEach((cb) => {
         cb.checked = checked;
     });
-    document.getElementById("Checkbox33").setAttribute("onClick", "javascript: deselect_all_wavl();");
+    document.getElementById("Checkbox33").setAttribute("onClick", "javascript: deselect_all_events();");
 
 }
 
@@ -43,13 +43,13 @@ function select_all_wavl(checked = true) {
  * Sets all WAVL teams to be deselected.
  * @param {*} checked 
  */
-function deselect_all_wavl(checked = false) {
-    console.log("deselect_all_wavl");
-    const cbs = document.querySelectorAll('input[name="WAVL_teams"]');
+function deselect_all_events(checked = false) {
+    console.log("deselect_all_events");
+    const cbs = document.querySelectorAll('input[name="EVENTS_teams"]');
     cbs.forEach((cb) => {
         cb.checked = checked;
     });
-    document.getElementById("Checkbox33").setAttribute("onClick", "javascript: select_all_wavl();");
+    document.getElementById("Checkbox33").setAttribute("onClick", "javascript: select_all_events();");
 }
 
 /**
@@ -191,6 +191,8 @@ function WAVL_ONLINE() {
 
     let dates = getDates()
     
+    let events = [__CONFIG__.events["2024 WAVL Season"], __CONFIG__.events["2024 WAVjL Season"], __CONFIG__.events["2024 VWA Schools Cup"]]
+
     // If a CSV file has been uploaded, do that.
     if (document.getElementById("csvUpload").value != "") {
         let uploaded_fixtures = [];
@@ -222,7 +224,7 @@ function WAVL_ONLINE() {
             }).catch(error => catch_error(error))
         };
     } else {
-        pdf_init(venues, wavl, wavjl, dates);
+        pdf_init(venues, wavl, wavjl, dates, events);
     }
     
 }
@@ -262,86 +264,110 @@ function getDates(){
  * Axios request to get csv of all players.
  * @returns CSV
  */
-async function getPlayerList() {
+async function getPlayerList(event) {
     axios;
+    const head = event.players_url
+    console.log("get_event_player_list -" + head)
+    return await axios.get(head);
+    
     //const head = "https://cors-anywhere-og-v5kf.onrender.com/volleyball.exposureevents.com/220866/wavl/documents/players"
-    const head = "https://volleyball.exposureevents.com/220866/wavl/documents/players"
+    ///const head = "https://volleyball.exposureevents.com/220866/wavl/documents/players"
     /*const head = 'https://cors-anywhere-og-v5kf.onrender.com/vwa.bracketpal.com/leaders/season/';
     var url = head + SEASON_ID + "?csv=1";
     console.log("get_player_list: " + url);*/
-    console.log("get_player_list: " + head)
+    ///console.log("get_player_list: " + head)
     /*var headers = {
         "Referer": "https://volleyball.exposureevents.com/220866/wavl/documents",
         "Sec-Fetch-Mode": "navigate",
         "Host": "volleyball.exposureevents.com",
         "Sec-Fetch-Dest": "document"
     }*/
-    return await axios.get(head);
+    ///return await axios.get(head);
+    
 }
 
 function parsePlayerList(players_list, upd_fixtures) {
-    let parser = new DOMParser();
-    let htmlDoc = parser.parseFromString(players_list[0].request.responseText, 'text/html');
-
-    let all_tables = htmlDoc.getElementsByClassName("team")
-    let numFix = all_tables.length;
-
-    let all_team_lists = {}
-
-    for (let i = 0; i < numFix; i = i + 1) {
-        let division = all_tables[i].getElementsByTagName("h3")[0].textContent
-        let all_divs = all_tables[i].getElementsByClassName("roster")
-        for (let k = 0; k < all_divs.length; k++) {
-            let all_rows = all_divs[k].getElementsByTagName("tr")
-            for (let j = 1; j < all_rows.length; j = j + 1) {
-                let all_td = all_rows[j].getElementsByTagName("td")
-                console.log(all_td)
-                console.log(all_td[1])
-                let player_name = all_td[1].innerText
-                player_name = player_name.replace("\uFFFD","")
-                let team_name = all_td[2].innerText
-                if (!(Object.keys(all_team_lists).includes(team_name))) {
-                    all_team_lists[team_name] = [[split_name(player_name.trim()),5]]
-                } else {
-                    all_team_lists[team_name].push([split_name(player_name.trim()),5])
-                }
-            }
+    let successful_player_lists = [];
+    let missed_urls = []
+    for (let i = 0; i < players_list.length; i++) {
+        if (players_list[i].status == "fulfilled") {
+            // Do Nothing For now
+            console.log(players_list[i].value)
+            successful_player_lists.push(players_list[i].value)
+        } else {
+            let faulty_url = players_list[i].reason.response.request.responseURL
+            console.log(faulty_url)
+            let ev_name = getEventNameFromURL(faulty_url, "player")
+            window.alert("Unable to retreive player list for:\r\n  " + ev_name + "\r\nContinuing for this event without player names.")
+            missed_urls.push(faulty_url)
         }
     }
 
-    console.log(all_team_lists)
+    for (let j = 0; j < successful_player_lists.length; j++) {
+        let parser = new DOMParser();
+        let htmlDoc = parser.parseFromString(successful_player_lists[j].request.responseText, 'text/html');
 
-    for (i = 0; i < upd_fixtures.length; i++) {
-        let fixture_date = upd_fixtures[i][12]+"-"+upd_fixtures[i][11]+"-"+upd_fixtures[i][10]
-        let fixture_division = upd_fixtures[i][9]
-        let team_a = upd_fixtures[i][6].toUpperCase()//.split(" ")[0];
-        let team_b = upd_fixtures[i][7].toUpperCase()//.split(" ")[0];
-        console.log(team_a)
-        console.log(team_b)
-        upd_fixtures[i][17] = [["",""]];
-        upd_fixtures[i][18] = [["",""]];
+        let all_tables = htmlDoc.getElementsByClassName("team")
+        let numFix = all_tables.length;
 
-        /*if (SL_FINALS_DATES.includes(fixture_date) && (fixture_division[0] == "State League Men" || fixture_division[0] == "State League Women")){
-            if (Object.keys(all_team_lists).includes(team_a)) {
-                team_a_list = [];
-                for (j = 0; j < all_team_lists[team_a].length; j++) {
-                    if (all_team_lists[team_a][j][1] >= 5) {team_a_list.push(all_team_lists[team_a][j])}
+        let all_team_lists = {}
+
+        for (let i = 0; i < numFix; i = i + 1) {
+            let division = all_tables[i].getElementsByTagName("h3")[0].textContent
+            let all_divs = all_tables[i].getElementsByClassName("roster")
+            for (let k = 0; k < all_divs.length; k++) {
+                let all_rows = all_divs[k].getElementsByTagName("tr")
+                for (let j = 1; j < all_rows.length; j = j + 1) {
+                    let all_td = all_rows[j].getElementsByTagName("td")
+                    console.log(all_td)
+                    console.log(all_td[1])
+                    let player_name = all_td[1].innerText
+                    player_name = player_name.replace("\uFFFD","")
+                    let team_name = all_td[2].innerText
+                    if (!(Object.keys(all_team_lists).includes(team_name))) {
+                        all_team_lists[team_name] = [[split_name(player_name.trim()),5]]
+                    } else {
+                        all_team_lists[team_name].push([split_name(player_name.trim()),5])
+                    }
                 }
-                upd_fixtures[i][17] = team_a_list;
             }
-            if (Object.keys(dict).includes(team_b)) {
-                team_b_list = [];
-                for (j = 0; j < dict[team_b].length; j++) {
-                    if (dict[team_b][j][1] >= 5) {team_b_list.push(dict[team_b][j])}
+        }
+
+        console.log(all_team_lists)
+        console.log(upd_fixtures)
+        console.log("HELP ME")
+        for (i = 0; i < upd_fixtures.length; i++) {
+            let fixture_date = upd_fixtures[i][12]+"-"+upd_fixtures[i][11]+"-"+upd_fixtures[i][10]
+            let fixture_division = upd_fixtures[i][9]
+            let team_a = upd_fixtures[i][6].toUpperCase()//.split(" ")[0];
+            let team_b = upd_fixtures[i][7].toUpperCase()//.split(" ")[0];
+            console.log(team_a)
+            console.log(team_b)
+            upd_fixtures[i][17] = [["",""]];
+            upd_fixtures[i][18] = [["",""]];
+
+            /*if (SL_FINALS_DATES.includes(fixture_date) && (fixture_division[0] == "State League Men" || fixture_division[0] == "State League Women")){
+                if (Object.keys(all_team_lists).includes(team_a)) {
+                    team_a_list = [];
+                    for (j = 0; j < all_team_lists[team_a].length; j++) {
+                        if (all_team_lists[team_a][j][1] >= 5) {team_a_list.push(all_team_lists[team_a][j])}
+                    }
+                    upd_fixtures[i][17] = team_a_list;
                 }
-                upd_fixtures[i][18] = team_b_list;
-            }
-        } else {
-            if (Object.keys(dict).includes(team_a)) {upd_fixtures[i][17] = dict[team_a];}
-            if (Object.keys(dict).includes(team_b)) {upd_fixtures[i][18] = dict[team_b];}
-        }*/
-        if (Object.keys(all_team_lists).includes(team_a)) {upd_fixtures[i][17] = all_team_lists[team_a];}
-        if (Object.keys(all_team_lists).includes(team_b)) {upd_fixtures[i][18] = all_team_lists[team_b];}
+                if (Object.keys(dict).includes(team_b)) {
+                    team_b_list = [];
+                    for (j = 0; j < dict[team_b].length; j++) {
+                        if (dict[team_b][j][1] >= 5) {team_b_list.push(dict[team_b][j])}
+                    }
+                    upd_fixtures[i][18] = team_b_list;
+                }
+            } else {
+                if (Object.keys(dict).includes(team_a)) {upd_fixtures[i][17] = dict[team_a];}
+                if (Object.keys(dict).includes(team_b)) {upd_fixtures[i][18] = dict[team_b];}
+            }*/
+            if (Object.keys(all_team_lists).includes(team_a)) {upd_fixtures[i][17] = all_team_lists[team_a];}
+            if (Object.keys(all_team_lists).includes(team_b)) {upd_fixtures[i][18] = all_team_lists[team_b];}
+        }
     }
     return upd_fixtures;
 
@@ -491,11 +517,12 @@ function parsePlayerList_old(players_list, upd_fixtures) {
  * @param {String[]}    wavjl       Array of selected WAVjL divisions
  * @param {String[]}    dates       Array of yy-mm-dd strings indicating start, end, and selected dates.
  */
-function pdf_init(venues, wavl, wavjl, dates) {
+function pdf_init(venues, wavl, wavjl, dates, events_) {
     console.log("pdf_init");
     // Get config data from selected teams, and add to an array
     var leagues = [];
     var fixtures = [];
+    /*
     console.log(wavjl);
     for (var i = 0; i < wavl.length; i++) {
         leagues.push([__CONFIG__.wavl[wavl[i]].long, __CONFIG__.wavl[wavl[i]].short, __CONFIG__.wavl[wavl[i]].id])
@@ -503,17 +530,30 @@ function pdf_init(venues, wavl, wavjl, dates) {
     for (var i = 0; i < wavjl.length; i++) {
         leagues.push([__CONFIG__.jl[wavjl[i]].long, __CONFIG__.jl[wavjl[i]].short, __CONFIG__.jl[wavjl[i]].id])
     }
-
-    var indiv_wavl = get_single_fixture(dates[0], dates[1], "WAVL");
-    fixtures.push(indiv_wavl);
-    var indiv_wavjl = get_single_fixture(dates[0], dates[1], "WAVjL");
-    fixtures.push(indiv_wavjl);
-
-    Promise.all(fixtures).then(fix_val => {
+    */
+    for (var i = 0; i < events_.length; i++) {
+        console.log(events_)
+        console.log(__CONFIG__.events[events_[i].name])
+        var indiv_event = get_single_fixture(__CONFIG__.events[events_[i].name])
+        fixtures.push(indiv_event)
+    }
+    //var indiv_wavl = get_single_fixture(dates[0], dates[1], "WAVL");
+    //fixtures.push(indiv_wavl);
+    //var indiv_wavjl = get_single_fixture(dates[0], dates[1], "WAVjL");
+    //fixtures.push(indiv_wavjl);
+    console.log(0)
+    console.log(fixtures)
+    Promise.allSettled(fixtures).then(fix_val => {
         var team_list = []
+        var player_lists = []
         var upd_fixtures = html_to_fixture(venues, leagues, dates, fix_val);
-        var player_List = getPlayerList();
-        Promise.all([player_List]).then(players_list => {
+        for (var i = 0; i < events_.length; i++) {
+            var player_List = getPlayerList(__CONFIG__.events[events_[i].name]);
+            player_lists.push(player_List)
+        }
+        console.log(1)
+        Promise.allSettled(player_lists).then(players_list => {
+            console.log(players_list)
             let finalised_fixtures = parsePlayerList(players_list, upd_fixtures);
             modifyPdf(finalised_fixtures, dates[2]).then(value => {
                 Promise.all(value).then(value_3 => {
@@ -606,8 +646,12 @@ function pdf_init(venues, wavl, wavjl, dates) {
                 var team_list = []
 
                 var upd_fixtures = html_to_fixture(venues, leagues, dates, fix_val);
-                var player_List = getPlayerList();
-                Promise.all([player_List]).then(players_list => {
+                var player_lists = []
+                for (var i = 0; i < events_.length; i++) {
+                    var player_List = getPlayerList(__CONFIG__.events[events_[i]]);
+                    player_lists.push(player_List)
+                }
+                Promise.all(player_lists).then(players_list => {
                     let finalised_fixtures = parsePlayerList(players_list, upd_fixtures);
                     modifyPdf(finalised_fixtures, dates[2]).then(value => {
                         Promise.all(value).then(value_3 => {
@@ -630,7 +674,7 @@ function pdf_init(venues, wavl, wavjl, dates) {
             }).catch(error => catch_error(error))
         } else if (e.response.status == 410) {
             // If this error occurs, then you need to go to the athletes page to manually load it.
-            catch_error(error);
+            catch_error(e);
         } else {
             catch_error(error);
         }
@@ -643,14 +687,21 @@ function pdf_init(venues, wavl, wavjl, dates) {
  * @param {String} end_date     Second date in range
  * @returns 
  */
-async function get_single_fixture(start_date, end_date, league) {
-    console.log(start_date);
-    console.log(end_date);
+//async function get_single_fixture(start_date, end_date, league) {
+async function get_single_fixture(event) {
+    //console.log(start_date);
+    //console.log(end_date);
     axios;
     //const head = 'https://cors-anywhere-og-v5kf.onrender.com/vwa.bracketpal.com/dailyform/range?start_date=';
     //var url = head + start_date.toString() + "&end_date=" + end_date.toString();
     //console.log("get_single_fixture: " + url);
     //return await axios.get(url);
+    console.log(event)
+    const head = event.fixture_url
+    console.log(head)
+    console.log("get_single_fixture -" + head)
+    return await axios.get(head);
+    /*
     if (league == "WAVL") {
         const head = "https://cors-anywhere-og-v5kf.onrender.com/volleyball.exposureevents.com/220866/wavl/documents/schedule?layout=datetime"
         console.log("get_single_fixture -" + head)
@@ -660,6 +711,7 @@ async function get_single_fixture(start_date, end_date, league) {
         console.log("get_single_fixture -" + head)
         return await axios.get(head);
     }
+    */
     //console.log("get_single_fixture -" + head)
     //return await axios.get(head);
 
@@ -773,8 +825,8 @@ function time_sorting(a, b) {
     }
 }
 
-// [zero_venue_split, _venue_0, _venue_1, _venue_2, _venue_full, _court, _team_a, _team_b, _duty, _division, _date_dd, _date_mm, _date_yyyy, _time_hr, _time_min, _sorting, _time_sorting, [_a_List], [b_List]]
-// [     0              1          2          3          4         5        6         7     8         9        10         11         12        13          14       15          16            17         18
+// [zero_venue_split, _venue_0, _venue_1, _venue_2, _venue_full, _court, _team_a, _team_b, _duty, _division, _date_dd, _date_mm, _date_yyyy, _time_hr, _time_min, _sorting, _time_sorting, [_a_List], [b_List]], eventName
+// [     0              1          2          3          4         5        6         7     8         9        10         11         12        13          14       15          16            17         18         19
 /**
  * Read values from the Fixtures and update a PDF.
  * @param {Fixture[]} fix 
@@ -817,6 +869,7 @@ async function modifyPdf(fix, dates) {
     }
 
     for (var i = 0; i < fixtures.length; i++) {
+        scoresheet_type = fixtures[i][19]
         // Load WAVL and Junior League scoresheets
         var WAVLurl = "https://volleyballwa.github.io/static/def.pdf";
         var JLurl = "https://volleyballwa.github.io/static/def_jl.pdf";
@@ -856,287 +909,8 @@ async function modifyPdf(fix, dates) {
 
         // If WAVL Game (Divisions or State League)
         // use OLD scoresheet for divisions (for now)
-        if ( false ) {  //fixtures[i][9][0][0] == "D" || fixtures[i][9][0][0] == "S") {
-
-            // Team A Team List
-            await WAVLfirstPage.drawText(fixtures[i][6], {
-                x: 471,
-                y: 498,
-                size: 12,
-                font: WAVLhelveticaFont
-            })
-
-            // Team A Players
-            for (var k = 0; k < fixtures[i][17].length; k++) {
-                if (k < Math.ceil(fixtures[i][17].length / 2)) {
-                    // first name, first column
-                    await WAVLfirstPage.drawText(fixtures[i][17][k][0].toUpperCase(), {
-                        x: 442,
-                        y: 472-Math.floor((17*k)),
-                        size: 6,
-                        font: WAVLhelveticaFont
-                    })
-
-                    // surname, first column
-                    await WAVLfirstPage.drawText(fixtures[i][17][k][1].toUpperCase(), {
-                        x: 442,
-                        y: 472-Math.floor((17*k+8.5)),
-                        size: 6,
-                        font: WAVLhelveticaFont
-                    })
-                } else {
-                    // first name, second column
-                    await WAVLfirstPage.drawText(fixtures[i][17][k][0].toUpperCase(), {
-                        x: 541,
-                        y: 472-Math.floor((17*(k-Math.ceil(fixtures[i][17].length / 2)))),
-                        size: 6,
-                        font: WAVLhelveticaFont
-                    })
-
-                    // surname, second column
-                    await WAVLfirstPage.drawText(fixtures[i][17][k][1].toUpperCase(), {
-                        x: 541,
-                        y: 472-Math.floor((17*(k-Math.ceil(fixtures[i][17].length / 2))+8.5)),
-                        size: 6,
-                        font: WAVLhelveticaFont
-                    })
-                }
-                
-            }
-
-            // Team A, Second column numbers
-            if (fixtures[i][17].length > 1) {
-                let line_y_a = 472-Math.floor(17*Math.ceil(fixtures[i][17].length /2)-6);
-                if (fixtures[i][17].length > 18) {
-                    line_y_a = 274;
-                }
-                await WAVLfirstPage.drawLine({
-                    start: { x: 539, y: 478 },
-                    end: { x: 539, y: line_y_a },
-                    thickness: 0.5,
-                    color: rgb(0,0,0),
-                    opacity: 1
-                })
-                
-                await WAVLfirstPage.drawLine({
-                    start: { x: 519, y: 478 },
-                    end: { x: 519, y: line_y_a },
-                    thickness: 0.5,
-                    color: rgb(0,0,0),
-                    opacity: 1
-                })
-            }
-
-            // Team B Team List
-            await WAVLfirstPage.drawText(fixtures[i][7], {
-                x: 672,
-                y: 498,
-                size: 12,
-                font: WAVLhelveticaFont
-            })
-
-            // Team B Players
-            for (var k = 0; k < fixtures[i][18].length; k++) {
-                if (k < Math.ceil(fixtures[i][18].length / 2)) {
-                    // first name, first column
-                    await WAVLfirstPage.drawText(fixtures[i][18][k][0].toUpperCase(), {
-                        x: 645,
-                        y: 472-Math.floor((17*k)),
-                        size: 6,
-                        font: WAVLhelveticaFont
-                    })
-
-                    // surname, first column
-                    await WAVLfirstPage.drawText(fixtures[i][18][k][1].toUpperCase(), {
-                        x: 645,
-                        y: 472-Math.floor((17*k+8.5)),
-                        size: 6,
-                        font: WAVLhelveticaFont
-                    })
-                } else {
-                    // first name, second column
-                    await WAVLfirstPage.drawText(fixtures[i][18][k][0].toUpperCase(), {
-                        x: 745,
-                        y: 472-Math.floor((17*(k-Math.ceil(fixtures[i][18].length / 2)))),
-                        size: 6,
-                        font: WAVLhelveticaFont
-                    })
-
-                    // surname, second column
-                    await WAVLfirstPage.drawText(fixtures[i][18][k][1].toUpperCase(), {
-                        x: 745,
-                        y: 472-Math.floor((17*(k-Math.ceil(fixtures[i][18].length / 2))+8.5)),
-                        size: 6,
-                        font: WAVLhelveticaFont
-                    })
-                }
-            }
-            
-            if (fixtures[i][17].length > 1) {
-                // Team B, second column numbers
-                let line_y_b = 472-Math.floor(17*Math.ceil(fixtures[i][18].length /2)-6);
-                if (fixtures[i][18].length > 18) {
-                    // If 2 rows or less remaining, just draw the lines to the bottom of the player list.
-                    line_y_b = 274;
-                }
-                await WAVLfirstPage.drawLine({
-                    start: { x: 743, y: 478 },
-                    end: { x: 743, y: line_y_b },
-                    thickness: 0.5,
-                    color: rgb(0,0,0),
-                    opacity: 1
-                })
-                
-                await WAVLfirstPage.drawLine({
-                    start: { x: 723, y: 478 },
-                    end: { x: 723, y: line_y_b },
-                    thickness: 0.5,
-                    color: rgb(0,0,0),
-                    opacity: 1
-                })
-            }
-
-            // Venue 0
-            await WAVLfirstPage.drawText(fixtures[i][1], {
-                x: parseInt((310 - measureText(fixtures[i][1], 10)).toString()),
-                y: 575,
-                size: 10,
-                font: WAVLhelveticaFont
-            })
-            // Venue 1
-            await WAVLfirstPage.drawText(fixtures[i][2], {
-                x: parseInt((310 - measureText(fixtures[i][2], 10)).toString()),
-                y: 566,
-                size: 10,
-                font: WAVLhelveticaFont
-            })
-            // Venue 2
-            await WAVLfirstPage.drawText(fixtures[i][3], {
-                x: parseInt((310 - measureText(fixtures[i][3], 10)).toString()),
-                y: 557,
-                size: 10,
-                font: WAVLhelveticaFont
-            })
-
-            try {
-                // Court Number
-                await WAVLfirstPage.drawText(fixtures[i][5], {
-                    x: parseInt((400 - measureBold(fixtures[i][5], 13).toString()).toString()),
-                    y: 557,
-                    size: 13,
-                    font: WAVLhelveticaBold
-                })
-            } catch (e) {
-                console.log(e);
-            }
-            try {
-                var hour = " ";
-                if (fixtures[i][13].toString().toLowerCase().substring(0, 3) != "tbc" && fixtures[i][14].toString().toLowerCase().substring(0, 3) != "tbc") {
-                    if (parseInt(fixtures[i][13]).toString().length == 1) {
-                        hour = " " + parseInt(fixtures[i][13]).toString()
-                    } else {
-                        hour = parseInt(fixtures[i][13]).toString()
-                    }
-
-                    // Time (hour hh)
-                    await WAVLfirstPage.drawText(hour, {
-                        x: parseInt((492 - measureBold(hour, 13) - measureBold(hour, 13)).toString()),
-                        y: 557,
-                        size: 13,
-                        font: WAVLhelveticaBold
-                    })
-
-                    // Time (minute mm)
-                    await WAVLfirstPage.drawText(fixtures[i][14], {
-                        x: 500,
-                        y: 557,
-                        size: 13,
-                        font: WAVLhelveticaBold
-                    })
-                }
-            } catch (e) {
-                // catch - continue
-                console.log(e);
-            }
-
-            // Add a leading space to the day if required.
-            var dd = parseInt(fixtures[i][10]).toString();
-            if (dd.length == 1) {
-                dd = " " + parseInt(fixtures[i][10]).toString()
-            }
-
-            // Date (day dd)
-            await WAVLfirstPage.drawText(dd, {
-                x: parseInt((596 - measureBold(dd, 13) - measureBold(dd, 13)).toString()),
-                y: 557,
-                size: 13,
-                font: WAVLhelveticaBold
-            })
-
-            // Date (month mm)
-            await WAVLfirstPage.drawText(parseInt(fixtures[i][11]).toString(), {
-                x: parseInt((613 - measureBold(fixtures[i][11], 13)).toString()),
-                y: 557,
-                size: 13,
-                font: WAVLhelveticaBold
-            })
-
-            // Date (year yy)
-            await WAVLfirstPage.drawText(fixtures[i][12].slice(2, 4), {
-                x: 625,
-                y: 557,
-                size: 13,
-                font: WAVLhelveticaBold
-            })
-
-            // Division (short)
-            await WAVLfirstPage.drawText(fixtures[i][9][1], {
-                x: parseInt((773 - measureBold(fixtures[i][9][1], 13)).toString()),
-                y: 557.5,
-                size: 13,
-                font: WAVLhelveticaBold
-            })
-
-            // Duty team
-            await WAVLfirstPage.drawText(fixtures[i][8], {
-                x: parseInt((710 - measureText(fixtures[i][8], 14)).toString()),
-                y: 528,
-                size: 14,
-                font: WAVLhelveticaFont
-            })
-
-            // Team Names
-            if (fixtures[i][6].length > 18 || fixtures[i][7].length > 18) {
-                // Reduce text size if too long.
-                await WAVLfirstPage.drawText(fixtures[i][6], {
-                    x: parseInt((320 - measureText(fixtures[i][6], 10)).toString()),
-                    y: 527,
-                    size: 10,
-                    font: WAVLhelveticaFont
-                })
-                await WAVLfirstPage.drawText(fixtures[i][7], {
-                    x: parseInt((460 - measureText(fixtures[i][7], 10)).toString()),
-                    y: 527,
-                    size: 10,
-                    font: WAVLhelveticaFont
-                })
-            } else {
-                WAVLpdfDoc.TextAlignment = 1;
-                await WAVLfirstPage.drawText(fixtures[i][6], {
-                    x: parseInt((320 - measureText(fixtures[i][6], 14)).toString()),
-                    y: 527,
-                    size: 14,
-                    font: WAVLhelveticaFont
-                })
-                await WAVLfirstPage.drawText(fixtures[i][7], {
-                    x: parseInt((460 - measureText(fixtures[i][7], 14)).toString()),
-                    y: 527,
-                    size: 14,
-                    font: WAVLhelveticaFont
-                })
-            }
-            var saved = await WAVLpdfDoc.saveAsBase64();
-        } else if (fixtures[i][9][0].includes("Division") || fixtures[i][9][0].includes("State")) {
+        //if (fixtures[i][9][0].includes("Division") || fixtures[i][9][0].includes("State")) {
+        if (scoresheet_type == "12-sub") {
             // If we need to use the scoresheet with more names
             if (fixtures[i][17].length > 18 || fixtures[i][18].length > 18){
                 if ((SL_FINALS_DATES.includes(fixtures[i][12]+"-"+fixtures[i][11]+"-"+fixtures[i][10]) && (fixtures[i][9][0] == "State League Men" || fixtures[i][9][0] == "State League Women")) || FINALS_DATES.includes(fixtures[i][12]+"-"+fixtures[i][11]+"-"+fixtures[i][10])){
@@ -2017,9 +1791,219 @@ async function modifyPdf(fix, dates) {
 
                 var saved = await newWAVLpdfDoc.saveAsBase64();
             }
-        } else {
+        } else if (scoresheet_type == "junior") {
             // Junior League
             
+            // Team A Players
+            if (fixtures[i][17].length >= 3) {
+                for (var k = 0; k < fixtures[i][17].length; k++) {
+                    if (k < Math.ceil(fixtures[i][17].length / 2)) {
+                        // first name, first column
+                        //console.log(fixtures[i][17][k][0].toUpperCase() + ": " + measureText(fixtures[i][17][k][0].toUpperCase(),6))
+                        console.log(k)
+                        console.log(i)
+                        console.log(fixtures[i])
+                        console.log(fixtures[i][17])
+                        //console.log(fixutres[i][17][k])
+                        console.log(fixtures[i][17][k][0])
+                        if (measureText(fixtures[i][17][k][0][0].toUpperCase(), 6) >= 32) {
+                            await JLfirstPage.drawText(fixtures[i][17][k][0][0].toUpperCase(), {
+                                x: 102.25,
+                                y: 445-((15.50*k)),
+                                size: 5,
+                                font: JLhelveticaFont
+                            })
+                        } else {
+                            await JLfirstPage.drawText(fixtures[i][17][k][0][0].toUpperCase(), {
+                                x: 102.25,
+                                y: 445-((15.50*k)),
+                                size: 6,
+                                font: JLhelveticaFont
+                            })
+                        }
+
+                        // surname, first column
+                        //console.log(fixtures[i][17][k][1].toUpperCase() + ": " + measureText(fixtures[i][17][k][1].toUpperCase(),6))
+                        console.log(fixtures[i][17][k][0][1])
+                        if (measureText(fixtures[i][17][k][0][1].toUpperCase(), 6) >= 32) {
+                            await JLfirstPage.drawText(fixtures[i][17][k][0][1].toUpperCase(), {
+                                x: 102.25,
+                                y: 445-((15.50*k+7.0)),
+                                size: 5,
+                                font: JLhelveticaFont
+                            })
+                        } else {
+                            await JLfirstPage.drawText(fixtures[i][17][k][0][1].toUpperCase(), {
+                                x: 102.25,
+                                y: 445-((15.50*k+7.0)),
+                                size: 6,
+                                font: JLhelveticaFont
+                            })
+                        }
+                    } else {
+                        // first name, second column
+                        //console.log(fixtures[i][17][k][0].toUpperCase() + ": " + measureText(fixtures[i][17][k][0].toUpperCase(),6))
+                        if (measureText(fixtures[i][17][k][0][0].toUpperCase(), 6) >= 32) {
+                            await JLfirstPage.drawText(fixtures[i][17][k][0][0].toUpperCase(), {
+                                x: 260,
+                                y: 445-((15.50*(k-Math.ceil(fixtures[i][17].length / 2)))),
+                                size: 5,
+                                font: JLhelveticaFont
+                            })
+                        } else {
+                            await JLfirstPage.drawText(fixtures[i][17][k][0][0].toUpperCase(), {
+                                x: 260,
+                                y: 445-((15.50*(k-Math.ceil(fixtures[i][17].length / 2)))),
+                                size: 6,
+                                font: JLhelveticaFont
+                            })
+                        }
+
+                        // surname, second column
+                        //console.log(fixtures[i][17][k][1].toUpperCase() + ": " + measureText(fixtures[i][17][k][1].toUpperCase(),6))
+                        if (measureText(fixtures[i][17][k][0][1].toUpperCase(), 6) >= 32){
+                            await JLfirstPage.drawText(fixtures[i][17][k][0][1].toUpperCase(), {
+                                x: 260,
+                                y: 445-((15.50*(k-Math.ceil(fixtures[i][17].length / 2))+7.0)),
+                                size: 5,
+                                font: JLhelveticaFont
+                            })
+                        } else {
+                            await JLfirstPage.drawText(fixtures[i][17][k][0][1].toUpperCase(), {
+                                x: 260,
+                                y: 445-((15.50*(k-Math.ceil(fixtures[i][17].length / 2))+7.0)),
+                                size: 6,
+                                font: JLhelveticaFont
+                            })
+                        }
+                    }
+                    
+                }
+                
+                // Team A, Second column numbers
+                if (fixtures[i][17].length > 1) {
+                    let line_y_a = 452 -(15.50*Math.ceil(fixtures[i][17].length /2));
+
+                    //console.log(line_y_a);
+                    await JLfirstPage.drawLine({
+                        start: { x: 230, y: 452 },
+                        end: { x: 230, y: line_y_a },
+                        thickness: 0.5,
+                        color: rgb(0,0,0),
+                        opacity: 1
+                    })
+                    
+                    await JLfirstPage.drawLine({
+                        start: { x: 255, y: 452 },
+                        end: { x: 255, y: line_y_a },
+                        thickness: 0.5,
+                        color: rgb(0,0,0),
+                        opacity: 1
+                    })
+                }
+            }
+
+            // Team B Players
+            if (fixtures[i][18].length >= 3) {
+                for (var k = 0; k < fixtures[i][18].length; k++) {
+                    if (k < Math.ceil(fixtures[i][18].length / 2)) {
+                        // first name, first column
+                        //console.log(fixtures[i][18][k][0].toUpperCase() + ": " + measureText(fixtures[i][18][k][0].toUpperCase(),6))
+                        if (measureText(fixtures[i][18][k][0][0].toUpperCase(), 6) >= 32) {
+                            await JLfirstPage.drawText(fixtures[i][18][k][0][0].toUpperCase(), {
+                                x: 525,
+                                y: 445-((15.50*k)),
+                                size: 5,
+                                font: JLhelveticaFont
+                            })
+                        } else {
+                            await JLfirstPage.drawText(fixtures[i][18][k][0][0].toUpperCase(), {
+                                x: 525,
+                                y: 445-((15.50*k)),
+                                size: 6,
+                                font: JLhelveticaFont
+                            })
+                        }
+
+                        // surname, first column
+                        //console.log(fixtures[i][18][k][1].toUpperCase() + ": " + measureText(fixtures[i][18][k][1].toUpperCase(),6))
+                        if (measureText(fixtures[i][18][k][0][1].toUpperCase(), 6) >= 32) {
+                            await JLfirstPage.drawText(fixtures[i][18][k][0][1].toUpperCase(), {
+                                x: 525,
+                                y: 445-((15.50*k+7.0)),
+                                size: 5,
+                                font: JLhelveticaFont
+                            })
+                        } else {
+                            await JLfirstPage.drawText(fixtures[i][18][k][0][1].toUpperCase(), {
+                                x: 525,
+                                y: 445-((15.50*k+7.0)),
+                                size: 6,
+                                font: JLhelveticaFont
+                            })
+                        }
+                    } else {
+                        // first name, second column
+                        //console.log(fixtures[i][18][k][0].toUpperCase() + ": " + measureText(fixtures[i][18][k][0].toUpperCase(),6))
+                        if (measureText(fixtures[i][18][k][0][0].toUpperCase(), 6) >= 32) {
+                            await JLfirstPage.drawText(fixtures[i][18][k][0][0].toUpperCase(), {
+                                x: 665,
+                                y: 445-((15.50*(k-Math.ceil(fixtures[i][18].length / 2)))),
+                                size: 5,
+                                font: JLhelveticaFont
+                            })
+                        } else {
+                            await JLfirstPage.drawText(fixtures[i][18][k][0][0].toUpperCase(), {
+                                x: 665,
+                                y: 445-((15.50*(k-Math.ceil(fixtures[i][18].length / 2)))),
+                                size: 6,
+                                font: JLhelveticaFont
+                            })
+                        }
+
+                        // surname, second column
+                        //console.log(fixtures[i][18][k][1].toUpperCase() + ": " + measureText(fixtures[i][18][k][1].toUpperCase(),6))
+                        if (measureText(fixtures[i][18][k][0][1].toUpperCase(), 6) >= 32) {
+                            await JLfirstPage.drawText(fixtures[i][18][k][0][1].toUpperCase(), {
+                                x: 665,
+                                y: 445-((15.50*(k-Math.ceil(fixtures[i][18].length / 2))+7.0)),
+                                size: 5,
+                                font: JLhelveticaFont
+                            })
+                        } else {
+                            await JLfirstPage.drawText(fixtures[i][18][k][0][1].toUpperCase(), {
+                                x: 665,
+                                y: 445-((15.50*(k-Math.ceil(fixtures[i][18].length / 2))+7.0)),
+                                size: 6,
+                                font: JLhelveticaFont
+                            })
+                        }
+                    }
+                }
+                
+                if (fixtures[i][18].length > 1) {
+                    // Team B, second column numbers
+                    let line_y_b = 452 -(15.50*Math.ceil(fixtures[i][18].length /2));
+                    //console.log(line_y_b);
+
+                    await JLfirstPage.drawLine({
+                        start: { x: 635, y: 452 },
+                        end: { x: 635, y: line_y_b },
+                        thickness: 0.5,
+                        color: rgb(0,0,0),
+                        opacity: 1
+                    })
+                    
+                    await JLfirstPage.drawLine({
+                        start: { x: 660, y: 452  },
+                        end: { x: 660, y: line_y_b },
+                        thickness: 0.5,
+                        color: rgb(0,0,0),
+                        opacity: 1
+                    })
+                }
+            }
+
             // Venue (full)
             await JLfirstPage.drawText(fixtures[i][4], {
                 x: parseInt((190 - measureText(fixtures[i][4], 13)).toString()),
@@ -2104,12 +2088,17 @@ async function modifyPdf(fix, dates) {
                 })
             }
             var saved = await JLpdfDoc.saveAsBase64();
+        } else {
+            window.alert("Invalid Scoresheet Type - " + scoresheet_type)
+            console.log("** ERROR **")
+            console.log(fixtures[i])
         }
         total[i] = saved;
     }
 
-    // If CSV is to be downloaded
-    if (document.getElementById("Checkbox99").checked) {
+    // If CSV is to be downloaded (it is no longer to be downloaded)
+    if (false) {
+    //if (document.getElementById("Checkbox99").checked) {
         var csv = [
             ["Date", "Venue", "Time", "Div", "Court", "Team A", "Team B", "Duty Team", "Time", "Sets", "Referee 1st", "Qualifications", "Referee 2nd", "Qualifications", "Assessor"]
         ];
@@ -2413,6 +2402,23 @@ function add_aliases(venues) {
     return [resultant, alias_layer];
 }
 
+
+function getEventNameFromURL(url, url_type) {
+    let all_event_keys = Object.keys(__CONFIG__.events)
+    for (let y = 0; y < all_event_keys.length; y++){
+        if (url_type == "fixture") {
+            if (__CONFIG__.events[all_event_keys[y]].fixture_url == url) {
+                return all_event_keys[y]
+            }
+        } else if (url_type == "player") {
+            if (__CONFIG__.events[all_event_keys[y]].players_url == url) {
+                return all_event_keys[y]
+            }
+        }
+        
+    }
+}
+
 /**
  * Parse HTML and return an array of Fixtures
  * @param {*} venues 
@@ -2421,7 +2427,24 @@ function add_aliases(venues) {
  * @param {*} all_html 
  * @returns Fixture[]
  */
-function html_to_fixture(venues, leagues, in_date, all_html) {
+function html_to_fixture(venues, leagues, in_date, all_html_prom) {
+
+    let all_html = [];
+    let missed_urls = []
+    for (let i = 0; i < all_html_prom.length; i++) {
+        if (all_html_prom[i].status == "fulfilled") {
+            // Do Nothing For now
+            //console.log(all_html[i].value)
+            all_html.push(all_html_prom[i].value)
+        } else {
+            let faulty_url = all_html_prom[i].reason.response.request.responseURL
+            console.log(faulty_url)
+            let ev_name = getEventNameFromURL(faulty_url, "fixture")
+            window.alert("Unable to retreive fixtures for:\r\n  " + ev_name + "\r\nSkipping this event.")
+            missed_urls.push(faulty_url)
+        }
+    }
+
     console.log("html_to_fixture");
     let fixtures_list = [];
     let alerted = [];
@@ -2436,7 +2459,9 @@ function html_to_fixture(venues, leagues, in_date, all_html) {
     for (let x = 0; x < all_html.length; x++) {
         let parser = new DOMParser();
         let htmlDoc = parser.parseFromString(all_html[x].request.responseText, 'text/html');
-        
+        console.log(all_html[x])
+        let htmlUrl = all_html[x].request.responseURL;
+        let event_Name = getEventNameFromURL(htmlUrl, "fixture");
         // ----------------------------------
         
         //let all_tables = document.getElementsByTagName("table")
@@ -2513,10 +2538,7 @@ function html_to_fixture(venues, leagues, in_date, all_html) {
                     console.log(venue_lookup)
                     console.log(ven)
                     console.log(_court)
-                    console.log("9999")
                     console.log(div)
-                    console.log(__CONFIG__.jl)
-                    console.log("9999")
                     console.log(_team_a)
                     console.log(_team_b)
                     console.log(_duty)
@@ -2541,10 +2563,6 @@ function html_to_fixture(venues, leagues, in_date, all_html) {
                     }
                     
                     let zero_venue_split = venue_lookup[ven]
-                    console.log("**")
-                    console.log(zero_venue_split)
-                    console.log(venue_usage)
-                    console.log("**")
                     if (venue_usage.includes(zero_venue_split)) {
                         console.log(venue_lookup)
                         let venue_realname = alias_layer[zero_venue_split];
@@ -2562,20 +2580,55 @@ function html_to_fixture(venues, leagues, in_date, all_html) {
                             const _venue_1 = __CONFIG__.venues[venue_realname].mid;
                             const _venue_2 = __CONFIG__.venues[venue_realname].bot;
                             console.log(div)
+                            div_long = div
+                            div_short = div.match(/\b[a-zA-Z]?\d*\/?/g).join('').replaceAll("  ", " ")
+                            console.log("*******************")
+                            console.log(div_long)
+                            console.log(div_short)
+                            console.log("*******************")
                             if (div.includes("Division") || div.includes("State")) {
-                                _division = [
+                                /*_division = [
                                     __CONFIG__.wavl[div].long,
                                     __CONFIG__.wavl[div].short,
                                     __CONFIG__.wavl[div].id
-                                ];
+                                ];*/
+                                _division = [
+                                    div,
+                                    div.match(/\b[a-zA-Z]?\d*\/?/g).join('').replaceAll("  ", " "),
+                                    1
+                                ]
                             } else {
                                 div = div.replace("Year ", "")
                                 console.log(div);
-                                _division = [
+                                /*_division = [
                                     __CONFIG__.jl[div].long,
                                     __CONFIG__.jl[div].short,
                                     __CONFIG__.jl[div].id
-                                ];
+                                ];*/
+                                _division = [
+                                    div,
+                                    div.match(/\b\s?[a-zA-Z]?\s?\d*\/?/g).join('').replaceAll("  ", " "),
+                                    1
+                                ]
+                            }
+                            
+                            let fixture_scoresheet_type = __CONFIG__.events[event_Name].scoresheet["default"]
+                            //console.log(__CONFIG__.events[event_Name].scoresheet.length)
+                            console.log(__CONFIG__.events[event_Name].scoresheet)
+                            // Determine what scoresheet to use
+                            if (Object.keys(__CONFIG__.events[event_Name].scoresheet).length > 1) {
+                                let scoresheet_keys = Object.keys(__CONFIG__.events[event_Name].scoresheet)
+                                console.log(scoresheet_keys)
+                                var index = scoresheet_keys.indexOf("default");
+                                if (index !== -1) {
+                                    scoresheet_keys.splice(index, 1);
+                                }
+                                console.log(scoresheet_keys)
+                                for (let z = 0; z < scoresheet_keys.length; z++) {
+                                    if (_division[0].toLowerCase().includes(scoresheet_keys[z].toLowerCase())) {
+                                        fixture_scoresheet_type = __CONFIG__.events[event_Name].scoresheet[scoresheet_keys[z]]
+                                    }
+                                }
                             }
 
                             let _venue_full = __CONFIG__.venues[venue_realname].name;
@@ -2585,7 +2638,7 @@ function html_to_fixture(venues, leagues, in_date, all_html) {
                             fixtures_list.push([zero_venue_split, _venue_0, _venue_1, _venue_2, _venue_full, _court,
                                                 _team_a, _team_b, _duty, _division, _date_dd, _date_mm, _date_yyyy, _time_hr, _time_min,
                                                 _sorting, _time_sorting, [],
-                                                []
+                                                [], fixture_scoresheet_type
                                                 ])
                             } catch (e) {
                                 console.log(e)
@@ -2600,203 +2653,6 @@ function html_to_fixture(venues, leagues, in_date, all_html) {
                     
             }
         }
-
-/*
- for (let y = 0; y < numFix; y = y + 3) {
-   let meta = y + 1;
-   let data = y + 2;
-
-   let meta_table = all_tables[0].getElementsByTagName("table")[0];
-   let data_table = all_tables[1];
-
-   if (numFix > 2) {
-     meta_table = all_tables[meta];
-     data_table = all_tables[data];
-   }
-
-   let dt = meta_table.rows.item(1).cells.item(0).innerText;
-   let match_division = meta_table.rows.item(1).cells.item(2).innerText;
-   }
-
-                
-        // ----------------------------------
-        
-        let all_tables = htmlDoc.getElementsByTagName("table")
-        let numFix = all_tables.length;
-		
-
-        for (let y = 0; y < numFix; y = y + 3) {
-            let meta = y + 1;
-            let data = y + 2;
-
-            let meta_table = all_tables[0].getElementsByTagName("table")[0];
-            let data_table = all_tables[1];
-
-            if (numFix > 2) {
-                meta_table = all_tables[meta];
-                data_table = all_tables[data];
-            }
-
-            let dt = meta_table.rows.item(1).cells.item(0).innerText;
-            let match_division = meta_table.rows.item(1).cells.item(2).innerText;
-
-            if (!(NamesArr.includes(match_division))) {
-                // If division is not selected, then break the for loop. No need to continue parsing data.
-                console.log(match_division);
-                console.log(NamesArr);
-                continue;
-            }
-
-            if ((!(dt === date)) && (!(document.getElementById("Checkbox99").checked))) {
-                // Ensure you aren't picking dates from the future
-                console.log("BREAK DUE TO DATE DIFFERENCE");
-                console.log(dt);
-                continue;
-            }
-
-            try {
-                let rowLength = data_table.rows.length;
-                for (let i = 1; i < rowLength; i++) {
-                    let cells = data_table.rows.item(i).cells;
-                    if (cells.length > 4) {
-                        let venue = cells.item(1).innerText;
-
-                        let venue_split = venue.split(/\d/);
-                        let zero_venue_split = venue_split[0].trim().replaceAll(" Ctr", "&");
-                        zero_venue_split = zero_venue_split.replaceAll(" Ct", "");
-                        zero_venue_split = zero_venue_split.replaceAll("&", " Ctr");
-                        if (Number.isInteger(parseInt(zero_venue_split.slice(-2).trim()))) {
-                            zero_venue_split = zero_venue_split.slice(0, -1).trim();
-                        }
-                        //console.log("*"+zero_venue_split+"*");
-                        //console.log(venue_usage);
-                        if (venue_usage.includes(zero_venue_split)) {
-                            let _court = "";
-                            let _duty = " ";
-                            let _time_hr = " ";
-                            let _time_min = " ";
-                            let _division = [];
-                            try {
-                                /*if (Number.isInteger(parseInt(venue_split[0].slice(-2).trim()))) {
-                                    _court = parseInt(venue_split[0].slice(-2).trim()).toString();
-                                } else {
-                                    _court = cells.item(1).innerText.split("Ct")[1].trim();
-                                }
-                                _court = cells.item(1).innerText.split(/^[^0-9]+/)[1].trim()
-                            } catch (e) {
-                                _court = "";
-                                console.log("Why");
-                                console.log(cells.item(2))
-                                console.log(cells.item(1))
-                                console.log(cells.item(0))
-                            }
-
-                            if (_court == null) {
-                                _court = "";
-                            }
-                            const _team_a = cells.item(2).innerText;
-                            const _team_b = cells.item(5).innerText;
-
-                            // Try Catch exists for junior league and home rounds.
-                            if (match_division[0] == "D" || match_division[0] == "S") {
-                                try {
-                                    _duty = cells.item(7).innerText.slice(5);
-                                } catch (e) {
-                                    console.log(e);
-				    console.log(_team_a);
- 				    console.log(_team_b);
- 				    console.log("~~~");
-                                    _duty = " ";
-                                }
-                            }
-
-                            // Update duty if using Previous Loser.
-                            if (FINALS_DATES.includes(dt) && _duty.length < 4) {
-                                _duty = "Previous Loser";
-                            }
-
-                            if (SL_FINALS_DATES.includes(dt) && _duty.length < 4 && match_division.includes("State") && !(match_division.includes("Reserve"))) {
-                                _duty = "Previous Loser";
-                            }
-
-                            if (match_division.includes("Division") || match_division.includes("State")) {
-                                _division = [
-                                    __CONFIG__.wavl[match_division].long,
-                                    __CONFIG__.wavl[match_division].short,
-                                    __CONFIG__.wavl[match_division].id
-                                ];
-                            } else {
-                                _division = [
-                                    __CONFIG__.jl[match_division].long,
-                                    __CONFIG__.jl[match_division].short,
-                                    __CONFIG__.jl[match_division].id
-                                ];
-                            }
-
-                            let _date = dt.split('-');
-                            let _date_dd = _date[2].padStart(2, "0");
-                            let _date_mm = _date[1].padStart(2, "0");
-                            let _date_yyyy = _date[0];
-
-                            // Check if time exists. Some home rounds (Busselton) don't put times on Bracketpal.
-                            try {
-                                let time = cells.item(0).innerText.split(":")
-                                _time_hr = time[0].padStart(2, "0");
-                                _time_min = time[1].padStart(2, "0");
-                            } catch (e) {
-                                console.log(e);
-                                _time_hr = " ";
-                                _time_min = " ";
-                            }
-
-                            let venue_realname = alias_layer[zero_venue_split];
-
-                            const _venue_0 = __CONFIG__.venues[venue_realname].top;
-                            const _venue_1 = __CONFIG__.venues[venue_realname].mid;
-                            const _venue_2 = __CONFIG__.venues[venue_realname].bot;
-
-                            let _venue_full = __CONFIG__.venues[venue_realname].name;
-                            let _sorting = _date_yyyy + " " + _date_mm + " " + _date_dd + " " + _venue_full + " " + _court + " " + _time_hr
-                            let _time_sorting = _date_yyyy + " " + _date_mm + " " + _date_dd + " " + _venue_full + " " + _time_hr + " " + _court;
-
-                            fixtures_list.push([zero_venue_split, _venue_0, _venue_1, _venue_2, _venue_full, _court,
-                                _team_a, _team_b, _duty, _division, _date_dd, _date_mm, _date_yyyy, _time_hr, _time_min,
-                                _sorting, _time_sorting, [],
-                                []
-                            ])
-                        } else {
-                            // Venue either not in list OR is a bye.
-                            try {
-                                if (Number.isInteger(parseInt(zero_venue_split.substring(0, 2).trim()))) {
-                                    console.log("BYE: " + zero_venue_split);
-                                } else {
-                                    console.log("UNUSED VENUE\n***")
-				    console.log(venue)
-				    console.log(venue_split)
-                                    console.log(zero_venue_split)
-                                    console.log("***")
-                                }
-                            } catch (e) {
-                                console.log("UNUSED VENUE\n***")
-                                console.log(zero_venue_split)
-                                console.log("***")
-                            }
-                        }
-
-                        if (!(all_venues[0].includes(zero_venue_split))) {
-                            if (!(alerted.includes(zero_venue_split))) {
-                                window.alert("Venue " + zero_venue_split + " not configured. Contact Oliver Guazzelli on 0466 185 411 to resolve.")
-                                alerted.push(zero_venue_split);
-                            }
-                        }
-                    } else {
-                        console.log("BYE: " + cells[1])
-                    }
-				}
-            } catch (e) {
-                console.log(e)
-            }
-        }*/
     }
     console.log(fixtures_list);
     return fixtures_list
@@ -2877,10 +2733,10 @@ function generate_Table() {
     console.log("generate_Table");
     var table = document.getElementById("Table1")
     var venue_keys = Object.keys(__CONFIG__.venues);
-    var wavl_keys = Object.keys(__CONFIG__.wavl)
-    var jl_keys = Object.keys(__CONFIG__.jl)
+    var events_keys = Object.keys(__CONFIG__.events)
+    //var jl_keys = Object.keys(__CONFIG__.jl)
 
-    for (var i = 0; i < Math.max(venue_keys.length, wavl_keys.length, jl_keys.length); i++) {
+    for (var i = 0; i < Math.max(venue_keys.length, events_keys.length/*, jl_keys.length*/); i++) {
         var row = table.insertRow(-1);
         var cell0 = row.insertCell(0);
         var cell1 = row.insertCell(1);
@@ -2889,9 +2745,9 @@ function generate_Table() {
         var cell4 = row.insertCell(4);
         var cell5 = row.insertCell(5);
         var cell6 = row.insertCell(6);
-        var cell7 = row.insertCell(7);
-        var cell8 = row.insertCell(8);
-        var cell9 = row.insertCell(9);
+        //var cell7 = row.insertCell(7);
+        //var cell8 = row.insertCell(8);
+        //var cell9 = row.insertCell(9);
 
         // venue
         cell0.classList.add("cell12");
@@ -2921,16 +2777,16 @@ function generate_Table() {
         cell3.innerHTML = '<p style="font-size:8px;line-height:9.5px;">&nbsp;</p>'
 
         try {
-            var wavl = __CONFIG__.wavl[wavl_keys[i]];
+            var events = __CONFIG__.events[events_keys[i]];
             cell4.classList.add("cell2")
-            cell4.innerHTML = '<div id="wavl_' + i.toString() + '" style="display:inline-block;width:16px;height:20px;z-index:58;">' +
-                '<input type="checkbox" id="checkwavl_' + i.toString() + '" name="WAVL_teams" value="on" checked="" style="display:inline-block;opacity:0;" title="' + wavl.long + '">' +
-                '<label for="checkwavl_' + i.toString() + '"></label>' +
+            cell4.innerHTML = '<div id="events_' + i.toString() + '" style="display:inline-block;width:16px;height:20px;z-index:58;">' +
+                '<input type="checkbox" id="checkevents_' + i.toString() + '" name="EVENTS_teams" value="on" checked="" style="display:inline-block;opacity:0;" title="' + events.name + '">' +
+                '<label for="checkevents_' + i.toString() + '"></label>' +
                 '</div>'
 
             cell5.classList.add("cell9")
             cell5.innerHTML = '<div id="wb_Text32">' +
-                '<span style="color:#000000;font-family:Arial;font-size:16px;">' + wavl.long + '</span>' +
+                '<span style="color:#000000;font-family:Arial;font-size:16px;">' + events.name + '</span>' +
                 '</div>'
         } catch (e) {
             cell4.classList.add("cell10")
@@ -2940,6 +2796,7 @@ function generate_Table() {
         }
 
         // Junior League Division
+        /*
         cell6.classList.add("cell1")
         cell6.innerHTML = '<p style="font-size:8px;line-height:9.5px;">&nbsp;</p>'
 
@@ -2962,6 +2819,7 @@ function generate_Table() {
             cell8.innerHTML = '<p style="font-size:8px;line-height:9.5px;">&nbsp;</p>'
 
         }
+        */
     }
     var fin_row = table.insertRow(-1);
     var fin_cell = fin_row.insertCell(0);
