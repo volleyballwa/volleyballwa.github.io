@@ -67,7 +67,7 @@
                         <input type="checkbox" id="Checkbox99" name="Download Runsheet?" value="on" style="display:inline-block;position:absolute;left:450px;top:170px;z-index:89;cursor:pointer" title="Download runsheet for selected date and divisions?">
                         <label for="Checkbox99"></label>
                         <div id="wb_Text99">
-                            <span style="color:#000000;font-family:Arial;font-size:15px;position:absolute;left:475px;top:170px;">Download Runsheet?</span>
+                            <span style="color:#000000;font-family:Arial;font-size:15px;position:absolute;left:475px;top:170px;">Include past 7 days of fixtures?</span>
                         </div>
                     </div>
                     <div id="fileUpload">
@@ -89,14 +89,14 @@
                             </td>
                             <td colspan="3" class="cell0">
                                 <div id="wb_Text3">
-                                    <span style="color:#000000;font-family:Arial;font-size:29px;">WAVL</span>
+                                    <span style="color:#000000;font-family:Arial;font-size:29px;">Events</span>
                                 </div>
                             </td>
-                            <td colspan="3" class="cell0">
+                            <!--<td colspan="3" class="cell0">
                                 <div id="wb_Text36">
                                     <span style="color:#000000;font-family:Arial;font-size:29px;">WAVjL</span>
                                 </div>
-                            </td>
+                            </td>-->
                         </tr>
                         <tr>
                         <td class="cell12"><p style="font-size:8px;line-height:9.5px;">&nbsp;</p></td>
@@ -110,14 +110,15 @@
                         </td>
                         <td class="cell1"><p style="font-size:8px;line-height:9.5px;">&nbsp;</p></td>
                         <td class="cell2"><div id="wb_Checkbox33" style="display:inline-block;width:16px;height:20px;z-index:5;">
-                        <input type="checkbox" id="Checkbox33" name="ALL_WAVL" value="on" checked="" style="display:inline-block;" title="Toggle All WAVL Teams" onclick="deselect_all_wavl()"><label for="Checkbox33"></label>
+                        <input type="checkbox" id="Checkbox33" name="ALL_EVENTS" value="on" checked="" style="display:inline-block;" title="Toggle All Events" onclick="deselect_all_events()"><label for="Checkbox33"></label>
                         </div>
                         </td>
                         <td class="cell3"><div id="wb_Text37">
-                        <span style="color:#000000;font-family:Arial;font-size:18px;"><strong>Toggle All WAVL Teams</strong></span>
+                        <span style="color:#000000;font-family:Arial;font-size:18px;"><strong>Toggle All Events</strong></span>
                         </div>
                         </td>
-                        <td class="cell1"><p style="font-size:8px;line-height:9.5px;">&nbsp;</p></td>
+                        
+                        <td class="cell1"><p style="font-size:8px;line-height:9.5px;">&nbsp;</p></td><!--
                         <td class="cell2"><div id="wb_Checkbox34" style="display:inline-block;width:16px;height:20px;z-index:7;">
                         <input type="checkbox" id="Checkbox34" name="ALL_WAVJL" value="on" checked="" style="display:inline-block;" title="Toggle All WAVjL Teams" onclick="deselect_all_wavjl()"><label for="Checkbox34"></label>
                         </div>
@@ -125,7 +126,7 @@
                         <td colspan="2" class="cell5"><div id="wb_Text40">
                         <span style="color:#000000;font-family:Arial;font-size:18px;"><strong>Toggle All WAVjL Teams</strong></span>
                         </div>
-                        </td>
+                        </td>-->
                         </tr>
                         <tr>
                         <td class="cell6"><p style="font-size:8px;line-height:9.5px;">&nbsp;</p></td>
@@ -135,9 +136,9 @@
                         <td class="cell7"><p style="font-size:8px;line-height:9.5px;">&nbsp;</p></td>
                         <td class="cell8"><p style="font-size:8px;line-height:9.5px;">&nbsp;</p></td>
                         <td class="cell1"><p style="font-size:8px;line-height:9.5px;">&nbsp;</p></td>
-                        <td class="cell7"><p style="font-size:8px;line-height:9.5px;">&nbsp;</p></td>
+                        <!--<td class="cell7"><p style="font-size:8px;line-height:9.5px;">&nbsp;</p></td>
                         <td class="cell8"><p style="font-size:8px;line-height:9.5px;">&nbsp;</p></td>
-                        <td class="cell12"><p style="font-size:8px;line-height:9.5px;">&nbsp;</p></td>
+                        <td class="cell12"><p style="font-size:8px;line-height:9.5px;">&nbsp;</p></td>-->
                         </tr>
                     </table>
                 </form>
