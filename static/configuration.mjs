@@ -35,7 +35,7 @@ const __CONFIG__ = {
             "top": "",
             "mid": "",
             "bot": "Bendat",
-            "alias": []
+            "alias": ["Bendat Basketball Centre", "BEND"]
         },
         "Cockburn": {
             "name": "Cockburn",
@@ -113,6 +113,13 @@ const __CONFIG__ = {
             "mid": "HBF",
             "bot": "Stadium",
             "alias": ["HBF Stad. Claremont", "HBF", "HBF Stadium", "HBF Stad.", "HBF Sta. Claremont", "HBF Stadium Claremont"]
+        },
+        "HBF Arena Joondalup": {
+            "name": "HBF Arena Joondalup",
+            "top": "",
+            "mid": "HBF",
+            "bot": "Arena",
+            "alias": ["HBF Arena", "HBF Joondalup", "JOON"]
         },
         "Herb Graham Leisure Centre": {
             "name": "Herb Graham Leisure Centre",
@@ -325,7 +332,7 @@ const __CONFIG__ = {
             "alias": []
         }
     },
-    "wavl": {
+    "wavl__": {
         "State League Women": { // Updated
             "id": 134,
             "long": "State League Women",
@@ -417,7 +424,7 @@ const __CONFIG__ = {
             "short": "Div 8 M"
         }
     },
-    "jl": {
+    "jl__": {
         "7 Female": {
             "id": 148,
             "long": "7 Female",
@@ -544,44 +551,70 @@ const __CONFIG__ = {
             "long": "11/12 Male",
             "short": "11/12 M"
         }
+    },
+    "events":{
+        "2024 WAVL Season": {
+            "name": "2024 WAVL Season",
+            "fixture_url": "https://cors-anywhere-og-v5kf.onrender.com/volleyball.exposureevents.com/220866/wavl/documents/schedule?layout=datetime",
+            "players_url": "https://volleyball.exposureevents.com/220866/wavl/documents/players",
+            "printPlayers": "true",
+            "scoresheet": {
+                "default": "12-sub"
+            }
+        },
+        "2024 WAVjL Season": {
+            "name": "2024 WAVjL Season",
+            "fixture_url": "https://cors-anywhere-og-v5kf.onrender.com/volleyball.exposureevents.com/220963/wavjl/documents/schedule?layout=datetime",
+            "players_url": "https://volleyball.exposureevents.com/220963/wavjl/documents/players",
+            "printPlayers": "false",
+            "scoresheet": {
+                "default": "junior"
+            }
+        },
+        "2024 VWA Schools Cup": {
+            "name": "2024 VWA Schools Cup",
+            "fixture_url": "https://cors-anywhere-og-v5kf.onrender.com/volleyball.exposureevents.com/227017/wa-schools-cup/documents/schedule?layout=datetime",
+            //"fixture_url": "https://volleyball.exposureevents.com/227017/wa-schools-cup/documents/schedule?layout=datetime",
+            "players_url": "https://volleyball.exposureevents.com/227017/wa-schools-cup/documents/players",
+            "printPlayers": "true",
+            "scoresheet": {
+                "honours": "12-sub",
+                "default": "junior"
+            }
+        }
     }
 }
 
 const __PRESIDENTS__ = {
     "Apex": "Eugene Lee",
-    "Balcatta": "Ari Zuvela",
-    "Baldivis": "Denzil Fernandes",
-    "Bunbury": "Brad Barclay",
+    "Balcatta": "Layne van Smaalen",
     "Busselton": "David Boyle",
     "Chequers": "Dylan Wood",
-    "Chequers Blue": "Dylan Wood",
     "Chequers White": "Dylan Wood",
     "Chequers Yellow": "Dylan Wood",
     "ECU": "Dylan Wood",
-    "Fremantle": "Matthew Andrews",
+    "Fremantle": "Kevin Gravestock",
     "Mandurah": "Charlie Grigio",
     "Murdoch": "Justine Ross",
-    "Murdoch University": "Justine Ross",
     "Murdoch Loki": "Justine Ross",
     "Murdoch Sylvie": "Justine Ross",
     "Murdoch Thor": "Justine Ross",
     "Murdoch Valkyrie": "Justine Ross",
-    "Murdoch Knights": "Michael Tran",
-    "Northern Stars": "Chapmann Chan",
-    "Northern Stars Black": "Chapmann Chan",
-    "Northern Stars Blue": "Chapmann Chan",
-    "Northern Stars White": "Chapmann Chan",
+    "Northern Stars": "Peter Woodthorpe",
+    "Northern Stars Black": "Peter Woodthorpe",
+    "Northern Stars Blue": "Peter Woodthorpe",
+    "Northern Stars White": "Peter Woodthorpe",
     "Northshore": "Jo-Han Bay",
     "Northshore Rockets": "Jo-Han Bay",
     "Perth Scorpions": "Shaun Barnett",
     "Reds": "Anthony Meo",
     "Reds Junior": "Logan Vanderweide",
-    "Rossmoyne": "Matthew Waddington",
+    "Rossmoyne": "Matt Waddington",
     "Southern Cross": "Codi Versteeg / Remi Cousin",
     "Southern Cross Masters": "Toma Stanca",
-    "UWA": "Nick Bew",
-    // "United": "Tani Bernados",
-    "VIRSA": "Paramdeep Gill"
+    "UWA": "Kieren Underwood",
+    "United": "Tani Bernados",
+    "VIRSA": "Harpreet Dhillon"
 }
 
 const __TEAMS__ = {
@@ -594,16 +627,16 @@ const __TEAMS__ = {
     '7 ECU': ['7', 'ECU', '1298', 'State League Men', 'Dylan Wood'],
 
     // Updated
-    '11 UWA': ['11', 'UWA', '1299', 'State League Reserve Men', ' '],
-    '12 Northern Stars': ['12', 'Northern Stars', '1300', 'State League Reserve Men', ' '],
-    '13 Southern Cross': ['13', 'Southern Cross', '1301', 'State League Reserve Men', ' '],
-    '14 Reds': ['14', 'Reds', '1302', 'State League Reserve Men', ' '],
-    '15 Balcatta': ['15', 'Balcatta', '1303', 'State League Reserve Men', ' '],
-    '16 Rossmoyne': ['16', 'Rossmoyne', '1304', 'State League Reserve Men', 'Layne van Smaalen'],
-    '17 ECU': ['17', 'ECU', '1305', 'State League Reserve Men', ' '],
-    '18 Busselton': ['18', 'Busselton', '1306', 'State League Reserve Men', ' '],
-    '19 Fremantle': ['19', 'Fremantle', '1307', 'State League Reserve Men', ' '],
-    '26 Apex': ['26', 'Apex', '1308', 'State League Reserve Men', 'Peter Woodthorpe'],
+    '11 UWA': ['11', 'UWA', '1299', 'State League Reserves Men', ' '],
+    '12 Northern Stars': ['12', 'Northern Stars', '1300', 'State League Reserves Men', ' '],
+    '13 Southern Cross': ['13', 'Southern Cross', '1301', 'State League Reserves Men', ' '],
+    '14 Reds': ['14', 'Reds', '1302', 'State League Reserves Men', ' '],
+    '15 Balcatta': ['15', 'Balcatta', '1303', 'State League Reserves Men', ' '],
+    '16 Rossmoyne': ['16', 'Rossmoyne', '1304', 'State League Reserves Men', 'Layne van Smaalen'],
+    '17 ECU': ['17', 'ECU', '1305', 'State League Reserves Men', ' '],
+    '18 Busselton': ['18', 'Busselton', '1306', 'State League Reserves Men', ' '],
+    '19 Fremantle': ['19', 'Fremantle', '1307', 'State League Reserves Men', ' '],
+    '26 Apex': ['26', 'Apex', '1308', 'State League Reserves Men', 'Peter Woodthorpe'],
 
     // Not Updated
     '21 Fremantle': ['21', 'Fremantle', '1033', 'Division 1 Men'],
@@ -659,16 +692,16 @@ const __TEAMS__ = {
     '107 ECU': ['107', 'ECU', '1314', 'State League Women', ' '],
 
     // Updated
-    '111 UWA': ['111', 'UWA', '1315', 'State League Reserve Women', ' '],
-    '113 Southern Cross': ['113', 'Southern Cross', '1317', 'State League Reserve Women', ' '],
-    '114 Reds': ['114', 'Reds', '1318', 'State League Reserve Women', ' '],
-    '115 Balcatta': ['115', 'Balcatta', '1319', 'State League Reserve Women', ' '],
-    '116 Rossmoyne': ['116', 'Rossmoyne', '1320', 'State League Reserve Women', ' '],
-    '117 ECU': ['117', 'ECU', '1321', 'State League Reserve Women', ' '],
-    '118 Busselton': ['118', 'Busselton', '1322', 'State League Reserve Women', ' '],
-    '119 Fremantle': ['119', 'Fremantle', '1323', 'State League Reserve Women', ' '],
-    '123 United': ['123', 'United', '1316', 'State League Reserve Women', ' '],
-    '126 Apex': ['126', 'Apex', '1324', 'State League Reserve Women', ' '],
+    '111 UWA': ['111', 'UWA', '1315', 'State League Reserves Women', ' '],
+    '113 Southern Cross': ['113', 'Southern Cross', '1317', 'State League Reserves Women', ' '],
+    '114 Reds': ['114', 'Reds', '1318', 'State League Reserves Women', ' '],
+    '115 Balcatta': ['115', 'Balcatta', '1319', 'State League Reserves Women', ' '],
+    '116 Rossmoyne': ['116', 'Rossmoyne', '1320', 'State League Reserves Women', ' '],
+    '117 ECU': ['117', 'ECU', '1321', 'State League Reserves Women', ' '],
+    '118 Busselton': ['118', 'Busselton', '1322', 'State League Reserves Women', ' '],
+    '119 Fremantle': ['119', 'Fremantle', '1323', 'State League Reserves Women', ' '],
+    '123 United': ['123', 'United', '1316', 'State League Reserves Women', ' '],
+    '126 Apex': ['126', 'Apex', '1324', 'State League Reserves Women', ' '],
 
     // Not Updated
     '121 Fremantle': ['121', 'Fremantle', '1043', 'Division 1 Women'],
