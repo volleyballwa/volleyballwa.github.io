@@ -2513,7 +2513,10 @@ function html_to_fixture(venues, leagues, in_date, all_html) {
                     console.log(venue_lookup)
                     console.log(ven)
                     console.log(_court)
+                    console.log("9999")
                     console.log(div)
+                    console.log(__CONFIG__.jl)
+                    console.log("9999")
                     console.log(_team_a)
                     console.log(_team_b)
                     console.log(_duty)
@@ -2538,6 +2541,10 @@ function html_to_fixture(venues, leagues, in_date, all_html) {
                     }
                     
                     let zero_venue_split = venue_lookup[ven]
+                    console.log("**")
+                    console.log(zero_venue_split)
+                    console.log(venue_usage)
+                    console.log("**")
                     if (venue_usage.includes(zero_venue_split)) {
                         console.log(venue_lookup)
                         let venue_realname = alias_layer[zero_venue_split];
@@ -2580,7 +2587,8 @@ function html_to_fixture(venues, leagues, in_date, all_html) {
                                                 _sorting, _time_sorting, [],
                                                 []
                                                 ])
-                            } catch {
+                            } catch (e) {
+                                console.log(e)
                                 window.alert("Missing Venue - " + zero_venue_split)
                                 console.log("Missing Venue - " + zero_venue_split)
                             }
