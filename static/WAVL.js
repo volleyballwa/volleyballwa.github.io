@@ -2647,7 +2647,7 @@ function html_to_fixture(venues, leagues, in_date, all_html_prom) {
                             }
                         } else {
                             window.alert("Missing Venue - " + zero_venue_split)
-                            onsole.log("Missing Venue - " + zero_venue_split)
+                            console.log("Missing Venue - " + zero_venue_split)
                         }
                     } 
                     

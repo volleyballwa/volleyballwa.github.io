@@ -168,7 +168,7 @@ const __CONFIG__ = {
             "top": "",
             "mid": "",
             "bot": "Lords",
-            "alias": []
+            "alias": ["LORDS", "Lords Recreation Centre"]
         },
         "Lumen Christi": {
             "name": "Lumen Christi",
