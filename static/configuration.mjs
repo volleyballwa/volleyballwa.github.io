@@ -573,7 +573,7 @@ const __CONFIG__ = {
         },
         "2024 VWA Schools Cup": {
             "name": "2024 VWA Schools Cup",
-            "fixture_url": "https://cors-anywhere-og-v5kf.onrender.com/volleyball.exposureevents.com/227017/wa-schools-cup/documents/schedule?layout=datetime",
+            "fixture_url": "https://cors-anywhere-og-v5kf.onrender.com/volleyball.exposureevents.com/227017/wa-schools-cup/documents/schedule?layout=datetime&r=321",
             //"fixture_url": "https://volleyball.exposureevents.com/227017/wa-schools-cup/documents/schedule?layout=datetime",
             "players_url": "https://volleyball.exposureevents.com/227017/wa-schools-cup/documents/players",
             "printPlayers": "true",
