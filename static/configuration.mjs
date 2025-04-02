@@ -2,6 +2,10 @@ const FINALS_DATES = ["2022-09-04", "2022-09-11", "2022-09-18", "2023-08-27", "2
 
 const SL_FINALS_DATES = ["2023-07-14", "2023-07-16", "2023-07-22", "2024-07-19", "2024-07-21", "2024-07-27"]
 
+// This is used to convert the "(Pool x)" into "- x"
+const DIV_GRADING_DATES = ["2025-04-06", "2025-04-13", "2025-04-20", "2025-04-27", "2025-05-04", "2025-05-11"]
+const DIV_GRADING_DIVS = ["D2M", "D2W", "D3M"]
+
 const DO_NOT_PRINT = ["David Poulivaati"]
 
 // This is used to get a list of all players. eg: https://vwa.bracketpal.com/leaders/season/27
@@ -37,6 +41,13 @@ const __CONFIG__ = {
             "bot": "Bendat",
             "alias": ["Bendat Basketball Centre", "BEND"]
         },
+        "Cannington Leisureplex": {
+            "name": "Cannington Leisureplex",
+            "top": "",
+            "mid": "Cannington",
+            "bot": "Liesureplex",
+            "alias": ["Cannington", "CANN"]
+        },
         "Cockburn": {
             "name": "Cockburn",
             "top": "",
@@ -70,7 +81,7 @@ const __CONFIG__ = {
             "top": "Gold",
             "mid": "Netball",
             "bot": "Centre",
-            "alias": ["Gold Netball"]
+            "alias": ["Gold Netball", "GOLD"]
         },
         "Guildford Grammar School": {
             "name": "Guildford Grammar School",
@@ -322,7 +333,7 @@ const __CONFIG__ = {
             "top": "",
             "mid": "",
             "bot": "",
-            "alias": []
+            "alias": ["To Be Confirmed"]
         },
         "Home Round": {
             "name": "Home Round",
@@ -553,17 +564,17 @@ const __CONFIG__ = {
         }
     },
     "events":{
-        "2024 WAVL Season": {
-            "name": "2024 WAVL Season",
-            "fixture_url": "https://cors-anywhere-og-v5kf.onrender.com/volleyball.exposureevents.com/220866/wavl/documents/schedule?layout=datetime",
-            "players_url": "https://volleyball.exposureevents.com/220866/wavl/documents/players",
+        "2025 WAVL Season": {
+            "name": "2025 WAVL Season",
+            "fixture_url": "https://cors-anywhere-og-v5kf.onrender.com/volleyball.exposureevents.com/232730/wavl/documents/schedule?layout=datetime",
+            "players_url": "https://volleyball.exposureevents.com/232730/wavl/documents/players",
             "printPlayers": "true",
             "scoresheet": {
                 "default": "12-sub"
             }
         },
-        "2024 WAVjL Season": {
-            "name": "2024 WAVjL Season",
+        "2025 WAVjL Season": {
+            "name": "2025 WAVjL Season",
             "fixture_url": "https://cors-anywhere-og-v5kf.onrender.com/volleyball.exposureevents.com/220963/wavjl/documents/schedule?layout=datetime",
             "players_url": "https://volleyball.exposureevents.com/220963/wavjl/documents/players",
             "printPlayers": "false",
@@ -571,7 +582,25 @@ const __CONFIG__ = {
                 "default": "junior"
             }
         },
-        "2024 VWA Schools Cup": {
+        /*"2024 WAVL Season": {
+            "name": "2024 WAVL Season",
+            "fixture_url": "https://cors-anywhere-og-v5kf.onrender.com/volleyball.exposureevents.com/220866/wavl/documents/schedule?layout=datetime",
+            "players_url": "https://volleyball.exposureevents.com/220866/wavl/documents/players",
+            "printPlayers": "true",
+            "scoresheet": {
+                "default": "12-sub"
+            }
+        },*/
+        /*"2024 WAVjL Season": {
+            "name": "2024 WAVjL Season",
+            "fixture_url": "https://cors-anywhere-og-v5kf.onrender.com/volleyball.exposureevents.com/220963/wavjl/documents/schedule?layout=datetime",
+            "players_url": "https://volleyball.exposureevents.com/220963/wavjl/documents/players",
+            "printPlayers": "false",
+            "scoresheet": {
+                "default": "junior"
+            }
+        },*/
+        /*"2024 VWA Schools Cup": {
             "name": "2024 VWA Schools Cup",
             "fixture_url": "https://cors-anywhere-og-v5kf.onrender.com/volleyball.exposureevents.com/227017/wa-schools-cup/documents/schedule?layout=datetime&r=321",
             //"fixture_url": "https://volleyball.exposureevents.com/227017/wa-schools-cup/documents/schedule?layout=datetime",
@@ -581,22 +610,23 @@ const __CONFIG__ = {
                 "honours": "12-sub",
                 "default": "junior"
             }
-        }
+        }*/
     }
 }
 
 const __PRESIDENTS__ = {
-    "Apex": "Eugene Lee",
+    "Apex": "Hugo Tam",
     "Balcatta": "Ari Zuvela",
     "Baldivis": "Denzil Fernandes",
-    "Bunbury": "Brad Barclay",
+    "Bunbury": "Alex Moir",
     "Busselton": "David Boyle",
     "Chequers": "Dylan Wood",
     "Chequers Blue": "Dylan Wood",
     "Chequers White": "Dylan Wood",
     "Chequers Yellow": "Dylan Wood",
     "ECU": "Dylan Wood",
-    "Fremantle": "Matthew Andrews",
+    "Fremantle": "Hussain Alattas / Elijah Gravestock",
+    "Horizon": "Phyo Min Nathan",
     "Mandurah": "Charlie Grigio",
     "Murdoch": "Justine Ross",
     "Murdoch University": "Justine Ross",
@@ -604,22 +634,23 @@ const __PRESIDENTS__ = {
     "Murdoch Sylvie": "Justine Ross",
     "Murdoch Thor": "Justine Ross",
     "Murdoch Valkyrie": "Justine Ross",
-    "Murdoch Knights": "Michael Tran",
+    "Murdoch Knights": "Vikranth Ghandi",
     "Northern Stars": "Chapmann Chan",
     "Northern Stars Black": "Chapmann Chan",
     "Northern Stars Blue": "Chapmann Chan",
     "Northern Stars White": "Chapmann Chan",
     "Northshore": "Jo-Han Bay",
     "Northshore Rockets": "Jo-Han Bay",
-    "Perth Scorpions": "Shaun Barnett",
+    "North Shore Rockets": "Jo-Han Bay",
+    "Perth Scorpions": "James Benjamin",
     "Reds": "Anthony Meo",
     "Reds Junior": "Logan Vanderweide",
-    "Rossmoyne": "Matthew Waddington",
-    "Southern Cross": "Codi Versteeg / Remi Cousin",
+    "Rossmoyne": "Carol Hodgen",
+    "Southern Cross": "David Hedge",
     "Southern Cross Masters": "Toma Stanca",
-    "UWA": "Nick Bew",
+    "UWA": "Nick Bew"
     // "United": "Tani Bernados",
-    "VIRSA": "Paramdeep Gill"
+    // "VIRSA": "Paramdeep Gill"
 }
 const __TEAMS__ = {
     // Updated

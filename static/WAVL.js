@@ -159,6 +159,7 @@ function WAVL_ONLINE() {
     var venues = []
     var wavjl = []
     var wavl = []
+    var events = []
     
     // Get all selected venues.
     document.getElementsByName("Venues").forEach((checkbox) => {
@@ -181,6 +182,13 @@ function WAVL_ONLINE() {
         }
     })
 
+    // Get all selected events
+    document.getElementsByName("EVENTS_teams").forEach((checkbox) => {
+        if (document.getElementById(checkbox.id).checked) {
+            events.push(document.getElementById(checkbox.id).title)
+        }
+    })
+
     // Update webpage to disable button and display a "Please Wait".
     document.getElementById("Button4").value = "Please Wait";
     window.setInterval(dots)
@@ -191,7 +199,9 @@ function WAVL_ONLINE() {
 
     let dates = getDates()
     
-    let events = [__CONFIG__.events["2024 WAVL Season"], __CONFIG__.events["2024 WAVjL Season"], __CONFIG__.events["2024 VWA Schools Cup"]]
+    //let events = [__CONFIG__.events["2024 WAVL Season"], __CONFIG__.events["2024 WAVjL Season"], __CONFIG__.events["2024 VWA Schools Cup"]]
+    //let events = [__CONFIG__.events["2025 WAVL Season"], __CONFIG__.events["2025 WAVjL Season"]]//, __CONFIG__.events["2024 VWA Schools Cup"]]
+
 
     // If a CSV file has been uploaded, do that.
     if (document.getElementById("csvUpload").value != "") {
@@ -224,6 +234,7 @@ function WAVL_ONLINE() {
             }).catch(error => catch_error(error))
         };
     } else {
+        console.log(events)
         pdf_init(venues, wavl, wavjl, dates, events);
     }
     
@@ -1277,18 +1288,33 @@ async function modifyPdf(fix, dates) {
                     b_pres = " ";
                 }
 
-                await extraWAVLfirstPage.drawText(a_pres, {
-                    x: parseInt((325 - measureText(a_pres, 10)).toString()),
-                    y: 462,
-                    size: 10,
-                    font: extraWAVLhelveticaFont
-                })
-                await extraWAVLfirstPage.drawText(b_pres, {
-                    x: parseInt((520 - measureText(b_pres, 10)).toString()),
-                    y: 462,
-                    size: 10,
-                    font: extraWAVLhelveticaFont
-                })
+                if (measureText(a_pres.toUpperCase(), 10) >= 90 || measureText(b_pres.toUpperCase(), 10) >= 90 ) {
+                    await extraWAVLfirstPage.drawText(a_pres, {
+                        x: parseInt((328 - measureText(a_pres, 8)).toString()),
+                        y: 462,
+                        size: 8,
+                        font: extraWAVLhelveticaFont
+                    })
+                    await extraWAVLfirstPage.drawText(b_pres, {
+                        x: parseInt((523 - measureText(b_pres, 8)).toString()),
+                        y: 462,
+                        size: 8,
+                        font: extraWAVLhelveticaFont
+                    })
+                } else {
+                    await extraWAVLfirstPage.drawText(a_pres, {
+                        x: parseInt((325 - measureText(a_pres, 10)).toString()),
+                        y: 462,
+                        size: 10,
+                        font: extraWAVLhelveticaFont
+                    })
+                    await extraWAVLfirstPage.drawText(b_pres, {
+                        x: parseInt((520 - measureText(b_pres, 10)).toString()),
+                        y: 462,
+                        size: 10,
+                        font: extraWAVLhelveticaFont
+                    })
+                }
 
                 // Team Names
                 if (fixtures[i][6].length > 22 || fixtures[i][7].length > 22) {
@@ -1712,6 +1738,7 @@ async function modifyPdf(fix, dates) {
                 // Club President
                 let a_pres = __PRESIDENTS__[fixtures[i][6].substring(fixtures[i][6].indexOf(' ') + 1)];
                 let b_pres = __PRESIDENTS__[fixtures[i][7].substring(fixtures[i][7].indexOf(' ') + 1)];
+                
 
                 if (a_pres == __PRESIDENTS__["a"]){
                     a_pres = " ";
@@ -1721,18 +1748,33 @@ async function modifyPdf(fix, dates) {
                     b_pres = " ";
                 }
 
-                await newWAVLfirstPage.drawText(a_pres, {
-                    x: parseInt((325 - measureText(a_pres, 10)).toString()),
-                    y: 462,
-                    size: 10,
-                    font: newWAVLhelveticaFont
-                })
-                await newWAVLfirstPage.drawText(b_pres, {
-                    x: parseInt((520 - measureText(b_pres, 10)).toString()),
-                    y: 462,
-                    size: 10,
-                    font: newWAVLhelveticaFont
-                })
+                if (measureText(a_pres.toUpperCase(), 10) >= 90 || measureText(b_pres.toUpperCase(), 10) >= 90 ) {
+                    await newWAVLfirstPage.drawText(a_pres, {
+                        x: parseInt((328 - measureText(a_pres, 8)).toString()),
+                        y: 462,
+                        size: 8,
+                        font: newWAVLhelveticaFont
+                    })
+                    await newWAVLfirstPage.drawText(b_pres, {
+                        x: parseInt((523 - measureText(b_pres, 8)).toString()),
+                        y: 462,
+                        size: 8,
+                        font: newWAVLhelveticaFont
+                    })
+                } else {
+                    await newWAVLfirstPage.drawText(a_pres, {
+                        x: parseInt((325 - measureText(a_pres, 10)).toString()),
+                        y: 462,
+                        size: 10,
+                        font: newWAVLhelveticaFont
+                    })
+                    await newWAVLfirstPage.drawText(b_pres, {
+                        x: parseInt((520 - measureText(b_pres, 10)).toString()),
+                        y: 462,
+                        size: 10,
+                        font: newWAVLhelveticaFont
+                    })
+                }
 
                 // Team Names
                 if (fixtures[i][6].length > 22 || fixtures[i][7].length > 22) {
@@ -2437,6 +2479,7 @@ function html_to_fixture(venues, leagues, in_date, all_html_prom) {
             //console.log(all_html[i].value)
             all_html.push(all_html_prom[i].value)
         } else {
+            console.log(all_html_prom[i])
             let faulty_url = all_html_prom[i].reason.response.request.responseURL
             console.log(faulty_url)
             let ev_name = getEventNameFromURL(faulty_url, "fixture")
@@ -2524,6 +2567,7 @@ function html_to_fixture(venues, leagues, in_date, all_html_prom) {
                     let ven = all_curr_game[1].innerText.trim()
                     let _court = all_curr_game[2].innerText.trim()
                     let div = all_curr_game[3].innerText.split(" (")[0].trim()
+                    let div_pool = all_curr_game[3].innerText.split("(Pool ")[1].trim().slice(0,1).trim()
                     let _team_b = all_curr_game[4].innerText.trim()
                     let _team_a = all_curr_game[5].innerText.trim()
                     let _duty = all_curr_game[6].innerText.trim()
@@ -2582,9 +2626,15 @@ function html_to_fixture(venues, leagues, in_date, all_html_prom) {
                             console.log(div)
                             div_long = div
                             div_short = div.match(/\b[a-zA-Z]?\d*\/?/g).join('').replaceAll("  ", " ")
+                            if (DIV_GRADING_DATES.includes(test_date) & DIV_GRADING_DIVS.includes(div_short)){
+                                div_addition = " - " + div_pool
+                            } else {
+                                div_addition = ""
+                            }
                             console.log("*******************")
+                            console.log(div)
                             console.log(div_long)
-                            console.log(div_short)
+                            console.log(div_short+div_addition)
                             console.log("*******************")
                             if (div.includes("Division") || div.includes("State")) {
                                 /*_division = [
@@ -2594,7 +2644,7 @@ function html_to_fixture(venues, leagues, in_date, all_html_prom) {
                                 ];*/
                                 _division = [
                                     div,
-                                    div.match(/\b[a-zA-Z]?\d*\/?/g).join('').replaceAll("  ", " "),
+                                    div.match(/\b[a-zA-Z]?\d*\/?/g).join('').replaceAll("  ", " ") + div_addition,
                                     1
                                 ]
                             } else {
@@ -2646,8 +2696,8 @@ function html_to_fixture(venues, leagues, in_date, all_html_prom) {
                                 console.log("Missing Venue - " + zero_venue_split)
                             }
                         } else {
-                            window.alert("Missing Venue - " + zero_venue_split)
-                            console.log("Missing Venue - " + zero_venue_split)
+                            //window.alert("Missing Venue - " + zero_venue_split)
+                            console.log("Deselected / Missing Venue - " + zero_venue_split)
                         }
                     } 
                     
