@@ -581,7 +581,8 @@ const __CONFIG__ = {
         "2025 WAVL Season": {
             "name": "2025 WAVL Season",
             "fixture_url": "https://cors-anywhere-og-v5kf.onrender.com/volleyball.exposureevents.com/232730/wavl/documents/schedule?layout=datetime",
-            "players_url": "https://volleyball.exposureevents.com/232730/wavl/documents/players",
+            //"players_url": "https://volleyball.exposureevents.com/232730/wavl/documents/players",
+            "players_url": "https://cors-anywhere-og-v5kf.onrender.com/volleyball.exposureevents.com/232730/wavl/documents/players",
             "printPlayers": "true",
             "scoresheet": {
                 "default": "12-sub"
@@ -589,8 +590,8 @@ const __CONFIG__ = {
         },
         "2025 WAVjL Season": {
             "name": "2025 WAVjL Season",
-            "fixture_url": "https://cors-anywhere-og-v5kf.onrender.com/volleyball.exposureevents.com/220963/wavjl/documents/schedule?layout=datetime",
-            "players_url": "https://volleyball.exposureevents.com/220963/wavjl/documents/players",
+            "fixture_url": "https://cors-anywhere-og-v5kf.onrender.com/volleyball.exposureevents.com/242327/wavjl/documents/schedule?layout=datetime",
+            "players_url": "https://volleyball.exposureevents.com/242327/wavjl/documents/players",
             "printPlayers": "false",
             "scoresheet": {
                 "default": "junior"
