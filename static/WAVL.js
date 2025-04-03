@@ -543,6 +543,8 @@ function pdf_init(venues, wavl, wavjl, dates, events_) {
     }
     */
     for (var i = 0; i < events_.length; i++) {
+        console.log("abcd")
+        console.log(__CONFIG__.events)
         console.log(events_)
         console.log(events_[i])
         console.log(__CONFIG__.events[events_[i].name])
