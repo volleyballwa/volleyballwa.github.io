@@ -200,7 +200,7 @@ function WAVL_ONLINE() {
     let dates = getDates()
     
     //let events = [__CONFIG__.events["2024 WAVL Season"], __CONFIG__.events["2024 WAVjL Season"], __CONFIG__.events["2024 VWA Schools Cup"]]
-    //let events = [__CONFIG__.events["2025 WAVL Season"], __CONFIG__.events["2025 WAVjL Season"]]//, __CONFIG__.events["2024 VWA Schools Cup"]]
+    let events = [__CONFIG__.events["2025 WAVL Season"], __CONFIG__.events["2025 WAVjL Season"]]//, __CONFIG__.events["2024 VWA Schools Cup"]]
 
 
     // If a CSV file has been uploaded, do that.
@@ -544,8 +544,10 @@ function pdf_init(venues, wavl, wavjl, dates, events_) {
     */
     for (var i = 0; i < events_.length; i++) {
         console.log(events_)
+        console.log(events_[i])
         console.log(__CONFIG__.events[events_[i].name])
         var indiv_event = get_single_fixture(__CONFIG__.events[events_[i].name])
+        console.log(indiv_event)
         fixtures.push(indiv_event)
     }
     //var indiv_wavl = get_single_fixture(dates[0], dates[1], "WAVL");
