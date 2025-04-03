@@ -27,6 +27,13 @@ const __CONFIG__ = {
             "bot": "College",
             "alias": ["Aquinas College", "Aquinas Col.", "Aquin"]
         },
+        "Ashdale Secondary College": {
+            "name": "Ashdale Secondary College",
+            "top": "Ashdale",
+            "mid": "Secondary",
+            "bot": "College",
+            "alias": ["ASH", "Ashdale College"]
+        },
         "Ballajura": {
             "name": "Ballajura",
             "top": "",
@@ -222,6 +229,13 @@ const __CONFIG__ = {
             "mid": "Murdoch",
             "bot": "Active",
             "alias": []
+        },
+        "Naturaliste Community Centre": {
+            "name": "Naturaliste Community Centre",
+            "top": "Naturaliste",
+            "mid": "Community",
+            "bot": "Centre",
+            "alias": ["NCC"]
         },
         "Newman College": {
             "name": "Newman College",

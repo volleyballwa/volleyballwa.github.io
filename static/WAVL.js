@@ -200,7 +200,7 @@ function WAVL_ONLINE() {
     let dates = getDates()
     
     //let events = [__CONFIG__.events["2024 WAVL Season"], __CONFIG__.events["2024 WAVjL Season"], __CONFIG__.events["2024 VWA Schools Cup"]]
-    let events = [__CONFIG__.events["2025 WAVL Season"], __CONFIG__.events["2025 WAVjL Season"]]//, __CONFIG__.events["2024 VWA Schools Cup"]]
+    //let events = [__CONFIG__.events["2025 WAVL Season"], __CONFIG__.events["2025 WAVjL Season"]]//, __CONFIG__.events["2024 VWA Schools Cup"]]
 
 
     // If a CSV file has been uploaded, do that.
@@ -306,6 +306,8 @@ function parsePlayerList(players_list, upd_fixtures) {
             console.log(players_list[i].value)
             successful_player_lists.push(players_list[i].value)
         } else {
+            console.log("abcd")
+            console.log(players_list[i])
             let faulty_url = players_list[i].reason.response.request.responseURL
             console.log(faulty_url)
             let ev_name = getEventNameFromURL(faulty_url, "player")
@@ -547,8 +549,8 @@ function pdf_init(venues, wavl, wavjl, dates, events_) {
         console.log(__CONFIG__.events)
         console.log(events_)
         console.log(events_[i])
-        console.log(__CONFIG__.events[events_[i].name])
-        var indiv_event = get_single_fixture(__CONFIG__.events[events_[i].name])
+        console.log(__CONFIG__.events[events_[i]])
+        var indiv_event = get_single_fixture(__CONFIG__.events[events_[i]])
         console.log(indiv_event)
         fixtures.push(indiv_event)
     }
@@ -563,7 +565,7 @@ function pdf_init(venues, wavl, wavjl, dates, events_) {
         var player_lists = []
         var upd_fixtures = html_to_fixture(venues, leagues, dates, fix_val);
         for (var i = 0; i < events_.length; i++) {
-            var player_List = getPlayerList(__CONFIG__.events[events_[i].name]);
+            var player_List = getPlayerList(__CONFIG__.events[events_[i]]);
             player_lists.push(player_List)
         }
         console.log(1)
@@ -587,113 +589,8 @@ function pdf_init(venues, wavl, wavjl, dates, events_) {
                     }).catch(error => catch_error(error))
                 }).catch(error => catch_error(error))
             }).catch(error => catch_error(error))
-        }).catch((e) => {
-            console.log(e)
-            console.log(e.response.status)
-            if (e.response.status == 410) {
-                window.alert("Warning: Athletes Page not loaded.\nPlease go to https://volleyball.exposureevents.com/220866/wavl/documents and click the ATHLETES report, then try again.")
-                window.alert("Continuing without player names...")
-                
-                /*window.clearInterval(dots);
-                document.getElementById("Button4").value = "Generate Scoresheets";
-                document.getElementById("Button4").style.backgroundColor = "#3370B7";
-                document.getElementById("Button4").style.color = "#FFFFFF"
-                document.getElementById("Button4").disabled = false;
-                document.getElementById("csvUpload").disabled = false;
-                document.getElementById("csvUpload").value = "";
-                window.open("https://volleyball.exposureevents.com/220866/wavl/documents", '_blank').focus();*/
-
-                for (i = 0; i < upd_fixtures.length; i++) {
-                    upd_fixtures[i][17] = [["",""]];
-                    upd_fixtures[i][18] = [["",""]];
-                }
-
-                let finalised_fixtures = upd_fixtures;
-                
-                modifyPdf(finalised_fixtures, dates[2]).then(value => {
-                    Promise.all(value).then(value_3 => {
-                        mergePDFDocuments(value_3).then(value_2 => {
-                            let filename = "Scoresheets " + dates[2].toString() + ".pdf"
-                            download(value_2, filename, "application/pdf");
-                            window.clearInterval(dots);
-                            document.getElementById("Button4").value = "Generate Scoresheets";
-                            document.getElementById("Button4").style.backgroundColor = "#3370B7";
-                            document.getElementById("Button4").style.color = "#FFFFFF"
-                            document.getElementById("Button4").disabled = false;
-                            document.getElementById("csvUpload").disabled = false;
-                            document.getElementById("csvUpload").value = "";
-                        }).catch(error => catch_error(error))
-                    }).catch(error => catch_error(error))
-                }).catch(error => catch_error(error))
-                
-            }
-        })
-    }).catch((e) => {
-        console.log(e)
-        console.log(e.response.status)
-        if (e.response.status == 500){
-            window.alert("Error with BracketPal. Trying a slower method...")
-            document.getElementById("Button4").style.backgroundColor = "#FFA500";
-            var fixtures = [];
-            // If we get this dumb error, try running it again but requesting EACH team on EACH date.
-            if (document.getElementById("Checkbox99").checked) {       
-                for (var j = -6; j <= 0; j++) {
-                    var looping_date = $("#DatePicker2").datepicker("getDate");
-                    looping_date.setTime(looping_date.getTime() + (j * (24*60*60*1000)));
-                    var mon = looping_date.getMonth() + 1;
-                    var date_time = looping_date.getFullYear().toString().split(-2) + "-" +
-                                        mon.toString().padStart(2, '0') + "-" +
-                                        looping_date.getDate().toString().padStart(2, '0');
-                    for (var i = 0; i < leagues.length; i++) {
-                        var indiv = individual_fixture(leagues[i][2], date_time);
-                        fixtures.push(indiv);
-                    }
-                }
-            } else {
-                for (var i = 0; i < leagues.length; i++) {
-                    var indiv = individual_fixture(leagues[i][2], dates[2]);
-                    fixtures.push(indiv);
-                }
-            }
-
-
-            Promise.all(fixtures).then(fix_val => {
-                var team_list = []
-
-                var upd_fixtures = html_to_fixture(venues, leagues, dates, fix_val);
-                var player_lists = []
-                for (var i = 0; i < events_.length; i++) {
-                    var player_List = getPlayerList(__CONFIG__.events[events_[i]]);
-                    player_lists.push(player_List)
-                }
-                Promise.all(player_lists).then(players_list => {
-                    let finalised_fixtures = parsePlayerList(players_list, upd_fixtures);
-                    modifyPdf(finalised_fixtures, dates[2]).then(value => {
-                        Promise.all(value).then(value_3 => {
-                            mergePDFDocuments(value_3).then(value_2 => {
-                                let filename = "Scoresheets " + dates[2].toString() + ".pdf"
-
-                                download(value_2, filename, "application/pdf");
-
-                                window.clearInterval(dots);
-                                document.getElementById("Button4").value = "Generate Scoresheets";
-                                document.getElementById("Button4").style.backgroundColor = "#3370B7";
-                                document.getElementById("Button4").style.color = "#FFFFFF"
-                                document.getElementById("Button4").disabled = false;
-                                document.getElementById("csvUpload").disabled = false;
-                                document.getElementById("csvUpload").value = "";
-                            }).catch(error => catch_error(error))
-                        }).catch(error => catch_error(error))
-                    }).catch(error => catch_error(error))
-                }).catch(error => catch_error(error))
-            }).catch(error => catch_error(error))
-        } else if (e.response.status == 410) {
-            // If this error occurs, then you need to go to the athletes page to manually load it.
-            catch_error(e);
-        } else {
-            catch_error(error);
-        }
-    })
+        }).catch(error => catch_error(error))
+    }).catch(error => catch_error(error))
 }
 
 /**
@@ -2483,6 +2380,7 @@ function html_to_fixture(venues, leagues, in_date, all_html_prom) {
             //console.log(all_html[i].value)
             all_html.push(all_html_prom[i].value)
         } else {
+            console.log("abcd")
             console.log(all_html_prom[i])
             let faulty_url = all_html_prom[i].reason.response.request.responseURL
             console.log(faulty_url)
