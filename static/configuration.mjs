@@ -581,7 +581,7 @@ const __CONFIG__ = {
             "scoresheet": {
                 "default": "junior"
             }
-        },
+        }
         /*"2024 WAVL Season": {
             "name": "2024 WAVL Season",
             "fixture_url": "https://cors-anywhere-og-v5kf.onrender.com/volleyball.exposureevents.com/220866/wavl/documents/schedule?layout=datetime",
