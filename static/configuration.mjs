@@ -69,6 +69,13 @@ const __CONFIG__ = {
             "bot": "Stadium",
             "alias": ["Curtin"]
         },
+        "Cyril Jackson Recreation Centre": {
+            "name": "Cyril Jackson Recreation Centre",
+            "top": "Cyril Jackson",
+            "mid": "Recreation",
+            "bot": "Centre",
+            "alias": ["Cyril Jackson", "CJRC"]
+        },
         "ECU Mt. Lawley": {
             "name": "ECU Mt. Lawley",
             "top": "",
