@@ -336,6 +336,7 @@ function parsePlayerList(players_list, upd_fixtures) {
                     console.log(all_td[1])
                     let player_name = all_td[1].innerText
                     player_name = player_name.replace("\uFFFD","")
+                    player_name = player_name.replaceAll("*","");
                     let team_name = all_td[2].innerText
                     if (!(Object.keys(all_team_lists).includes(team_name))) {
                         all_team_lists[team_name] = [[split_name(player_name.trim()),5]]
