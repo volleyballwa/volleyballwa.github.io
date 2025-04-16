@@ -666,9 +666,12 @@ const __PRESIDENTS__ = {
     "North Shore Rockets": "Jo-Han Bay",
     "Perth Scorpions": "James Benjamin",
     "Reds": "Anthony Meo",
+    "Reds Black": "Anthony Meo",
     "Reds Junior": "Logan Vanderweide",
     "Rossmoyne": "Carol Hodgen",
     "Southern Cross": "David Hedge",
+    "Southern Cross Green": "David Hedge",
+    "Southern Cross White": "David Hedge",
     "Southern Cross Masters": "Toma Stanca",
     "UWA": "Nick Bew"
     // "United": "Tani Bernados",
