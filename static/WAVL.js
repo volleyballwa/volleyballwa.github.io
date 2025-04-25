@@ -332,8 +332,8 @@ function parsePlayerList(players_list, upd_fixtures) {
                 let all_rows = all_divs[k].getElementsByTagName("tr")
                 for (let j = 1; j < all_rows.length; j = j + 1) {
                     let all_td = all_rows[j].getElementsByTagName("td")
-                    console.log(all_td)
-                    console.log(all_td[1])
+                    //console.log(all_td)
+                    //console.log(all_td[1])
                     let player_name = all_td[1].innerText
                     player_name = player_name.replace("\uFFFD","")
                     player_name = player_name.replaceAll("*","");
@@ -379,8 +379,22 @@ function parsePlayerList(players_list, upd_fixtures) {
                 if (Object.keys(dict).includes(team_a)) {upd_fixtures[i][17] = dict[team_a];}
                 if (Object.keys(dict).includes(team_b)) {upd_fixtures[i][18] = dict[team_b];}
             }*/
-            if (Object.keys(all_team_lists).includes(team_a)) {upd_fixtures[i][17] = all_team_lists[team_a];}
-            if (Object.keys(all_team_lists).includes(team_b)) {upd_fixtures[i][18] = all_team_lists[team_b];}
+            if (Object.keys(all_team_lists).includes(team_a)) {
+                upd_fixtures[i][17] = all_team_lists[team_a].sort(function (a, b) {
+                    if (a[0][1] > b[0][1]){ return 1
+                        } else if (a[0][1] < b[0][1]){ return -1
+                    } else if (a[0][1] === b[0][1]){if (a[0][0] > b[0][0]){return 1}
+                      return -1
+                    }})
+            }
+            if (Object.keys(all_team_lists).includes(team_b)) {
+                upd_fixtures[i][18] = all_team_lists[team_b].sort(function (a, b) {
+                    if (a[0][1] > b[0][1]){ return 1
+                        } else if (a[0][1] < b[0][1]){ return -1
+                    } else if (a[0][1] === b[0][1]){if (a[0][0] > b[0][0]){return 1}
+                      return -1
+                    }})
+            }
         }
     }
     return upd_fixtures;
@@ -1330,7 +1344,7 @@ async function modifyPdf(fix, dates) {
                 }
 
                 // Team A Players
-                if (fixtures[i][17].length >= 1) {
+                if (fixtures[i][17].length >= 1 && fixtures[i][17][0] != "") {
                     for (var k = 0; k < fixtures[i][17].length; k++) {
                         if (k < Math.ceil(fixtures[i][17].length / 2)) {
                             // first name, first column
@@ -1438,7 +1452,7 @@ async function modifyPdf(fix, dates) {
                 }
 
                 // Team B Players
-                if (fixtures[i][18].length >= 1) {
+                if (fixtures[i][18].length >= 1  && fixtures[i][18][0] != "") {
                     for (var k = 0; k < fixtures[i][18].length; k++) {
                         if (k < Math.ceil(fixtures[i][18].length / 2)) {
                             // first name, first column
@@ -1739,7 +1753,7 @@ async function modifyPdf(fix, dates) {
             // Junior League
             
             // Team A Players
-            if (fixtures[i][17].length >= 1) {
+            if (fixtures[i][17].length >= 1 && fixtures[i][17][0] != "") {
                 for (var k = 0; k < fixtures[i][17].length; k++) {
                     if (k < Math.ceil(fixtures[i][17].length / 2)) {
                         // first name, first column
@@ -1848,7 +1862,7 @@ async function modifyPdf(fix, dates) {
             }
 
             // Team B Players
-            if (fixtures[i][18].length >= 1) {
+            if (fixtures[i][18].length >= 1 && fixtures[i][18][0] != "") {
                 for (var k = 0; k < fixtures[i][18].length; k++) {
                     if (k < Math.ceil(fixtures[i][18].length / 2)) {
                         // first name, first column
