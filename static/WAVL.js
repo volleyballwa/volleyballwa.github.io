@@ -313,6 +313,9 @@ function parsePlayerList(players_list, upd_fixtures) {
             let ev_name = getEventNameFromURL(faulty_url, "player")
             window.alert("Unable to retreive player list for:\r\n  " + ev_name + "\r\nContinuing for this event without player names.")
             missed_urls.push(faulty_url)
+            /*if (ev_name = "2025 WAVL Season") {
+
+            }*/
         }
     }
 
