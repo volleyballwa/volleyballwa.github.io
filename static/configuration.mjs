@@ -41,6 +41,20 @@ const __CONFIG__ = {
             "bot": "Ballajura",
             "alias": ["Ballajura Indoor Spo"]
         },
+        "Baldivis": {
+            "name": "Baldivis",
+            "top": "",
+            "mid": "",
+            "bot": "Baldivis",
+            "alias": ["Baldivis", "Baldivis Indoor Sports Complex", "BISC"]
+        },
+        "Belmont Oasis": {
+            "name": "Belmont Oasis",
+            "top": "",
+            "mid": "",
+            "bot": "Belmont Oasis",
+            "alias": ["Belmont Oasis", "Belmot", "BELM"]
+        },
         "Bendat": {
             "name": "Bendat",
             "top": "",
@@ -265,6 +279,20 @@ const __CONFIG__ = {
             "bot": "Rossmoyne",
             "alias": ["Rossmoyne SHS", "ROSSY"]
         },
+        "Sacred Heart": {
+            "name": "Sacred Heart",
+            "top": "",
+            "mid": "Sacred Heart",
+            "bot": "College",
+            "alias": ["Sacred Heart College", "SHC"]
+        },
+        "Saint James": {
+            "name": "Saint James",
+            "top": "",
+            "mid": "Saint",
+            "bot": "James",
+            "alias": ["Saint James' Anglican School", "St James Anglican School", "SJAS"]
+        },
         "Santa Maria": {
             "name": "Santa Maria",
             "top": "",
@@ -457,85 +485,85 @@ const __CONFIG__ = {
         }
     },
     "jl__": {
-        "7 Female": {
+        "7/8 Male Central North": {
             "id": 148,
-            "long": "7 Female",
-            "short": "7 F"
-        },
-        "7 Male": {
-            "id": 146,
-            "long": "7 Male",
-            "short": "7 M"
-        },
-        "8 Female North": {
-            "id": 149,
-            "long": "8 Female North",
-            "short": "8 F N"
-        },
-        "8 Female South": {
-            "id": 150,
-            "long": "8 Female South",
-            "short": "8 F S"
-        },
-        "8 Female": {
-            "id": 181,
-            "long": "8 Female",
-            "short": "8 F"
-        },
-        "8 Male": {
-            "id": 147,
-            "long": "8 Male",
-            "short": "8 M"
-        },
-        "9 Female North": {
-            "id": 139,
-            "long": "9 Female North",
-            "short": "9 F N"
-        },
-        "9 Female South": {
-            "id": 1329,
-            "long": "9 Female South",
-            "short": "9 F S"
-        },
-        "9 Female": {
-            "id": 1,
-            "long": "9 Female",
-            "short": "9 F"
-        },
-        "9 Male South": {
-            "id": 138,
-            "long": "9 Male South",
-            "short": "9 M S"
-        },
-        "9 Male": {
-            "id": 2,
-            "long": "9 Male",
-            "short": "9 M"
+            "long": "7/8 Male Cent. Nth.",
+            "short": "7/8 M CN"
         },
         "9/10 Male North": {
-            "id": 140,
-            "long": "9/10 Male North",
+            "id": 146,
+            "long": "9/10 Male Nth.",
             "short": "9/10 M N"
         },
-        "9/10 Male": {
+        "11/12 Male North": {
+            "id": 149,
+            "long": "11/12 Male Nth.",
+            "short": "11/12 M N"
+        },
+        "7/8 Female North": {
+            "id": 150,
+            "long": "7/8 Female Nth.",
+            "short": "7/8 F N"
+        },
+        "9/10 Female North": {
+            "id": 181,
+            "long": "9/10 Female Nth.",
+            "short": "9/10 F N"
+        },
+        "11/12 Female Central North": {
+            "id": 147,
+            "long": "11/12 Female Cent. Nth.",
+            "short": "11/12 F CN"
+        },
+        "9/10 Male Central": {
+            "id": 139,
+            "long": "9/10 Male Cent.",
+            "short": "9/10 M C"
+        },
+        "11/12 Male Central South Metro": {
+            "id": 1329,
+            "long": "11/12 Male Cent. Sth. Metro",
+            "short": "11/12 M CSM"
+        },
+        "7/8 Female Central": {
+            "id": 1,
+            "long": "7/8 Female Cent.",
+            "short": "7/8 F C"
+        },
+        "9/10 Female Central": {
+            "id": 138,
+            "long": "9/10 Female Cent.",
+            "short": "9/10 F C"
+        },
+        "11/12 Female Central South Metro": {
+            "id": 2,
+            "long": "11/12 Female Cent. Sth. Metro",
+            "short": "11/12 F CSM"
+        },
+        "7/8 Male South Metro": {
+            "id": 140,
+            "long": "7/8 Male Sth. Metro",
+            "short": "7/8 M SM"
+        },
+        "9 Male South Metro": {
             "id": 3,
-            "long": "9/10 Male",
-            "short": "9/10 M"
+            "long": "9 Male Sth. Metro",
+            "short": "9 M SM"
         },
-        "10 Female North": {
+        "7/8 Female South Metro": {
             "id": 151,
-            "long": "10 Female North",
-            "short": "10 F N"
+            "long": "7/8 Female Sth. Metro",
+            "short": "7/8 F SM"
         },
-        "10 Female South": {
+        "9/10 Female South Metro": {
             "id": 152,
-            "long": "10 Female South",
-            "short": "10 F S"
+            "long": "9/10 Female Sth. Metro",
+            "short": "9/10 F SM"
         },
-        "10 Female": {
+        "9-12 Male South": {
             "id": 4,
-            "long": "10 Female",
-            "short": "10 F"
+            "long": "9-12 Male Sth.",
+            "short": "9-12 M S"
         },
         /*"10 Female South Pool 2": {
             "id": 153,
@@ -543,11 +571,12 @@ const __CONFIG__ = {
             "short": "10 F S 2"
         },*/
         
-        "10 Male South": {
+        "9-12 Female South": {
             "id": 141,
-            "long": "10 Male South",
-            "short": "10 M S"
-        },
+            "long": "9-12 Female Sth.",
+            "short": "9-12 F S"
+        }
+        /*
         "10 Male": {
             "id": 5,
             "long": "10 Male",
@@ -582,7 +611,7 @@ const __CONFIG__ = {
             "id": 7,
             "long": "11/12 Male",
             "short": "11/12 M"
-        }
+        }*/
     },
     "events":{
         "2025 WAVL Season": {

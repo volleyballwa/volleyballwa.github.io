@@ -2011,12 +2011,23 @@ async function modifyPdf(fix, dates) {
             }
             
             // Division (Long)
+            
             await JLfirstPage.drawText(fixtures[i][9][0], {
-                x: parseInt((720 - measureText(fixtures[i][9][0], 13)).toString()),
+                x: parseInt((721 - measureText(fixtures[i][9][0], 13)).toString()),
                 y: 504,
                 size: 13,
                 font: JLhelveticaFont
             })
+
+            // Division (Short)
+            /*
+            await JLfirstPage.drawText(fixtures[i][9][1], {
+                x: parseInt((721 - measureText(fixtures[i][9][1], 13)).toString()),
+                y: 504,
+                size: 13,
+                font: JLhelveticaFont
+            })
+            */
 
             // Team Names
             if (fixtures[i][6].length > 25 || fixtures[i][7].length > 25) {
@@ -2576,8 +2587,8 @@ function html_to_fixture(venues, leagues, in_date, all_html_prom) {
                                     __CONFIG__.jl[div].id
                                 ];*/
                                 _division = [
-                                    div,
-                                    div.match(/\b\s?[a-zA-Z]?\s?\d*\/?/g).join('').replaceAll("  ", " "),
+                                    div.replace("South ", "S").replace("North ", "N").replace("Central ", "C").replace("Metro ", "M").replace("South", "S").replace("North", "N").replace("Central", "C").replace("Metro", "M"),
+                                    div.match(/\b\s?[a-zA-Z]?\s?\d*[\/-]?/g).join('').replaceAll("  ", " "),
                                     1
                                 ]
                             }
