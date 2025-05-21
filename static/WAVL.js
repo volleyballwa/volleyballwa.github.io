@@ -297,54 +297,129 @@ async function getPlayerList(event) {
     
 }
 
-function parsePlayerList(players_list, upd_fixtures) {
+async function parsePlayerList(players_list, upd_fixtures) {
     let successful_player_lists = [];
-    let missed_urls = []
+    let missed_urls = [];
+    let all_team_lists = {};
+    let missed_events = [];
     for (let i = 0; i < players_list.length; i++) {
         if (players_list[i].status == "fulfilled") {
             // Do Nothing For now
             console.log(players_list[i].value)
             successful_player_lists.push(players_list[i].value)
         } else {
-            console.log("abcd")
-            console.log(players_list[i])
             let faulty_url = players_list[i].reason.response.request.responseURL
             console.log(faulty_url)
             let ev_name = getEventNameFromURL(faulty_url, "player")
-            window.alert("Unable to retreive player list for:\r\n  " + ev_name + "\r\nContinuing for this event without player names.")
+            if (ev_name == "2025 WAVL Season") {
+                // window.alert("Unable to retreive player list for:\r\n  " + ev_name + "\r\nContinuing for this event without player names.")
+                let temp_do_nothing = ""
+            } else if (__CONFIG__.events[ev_name].printPlayers == "true") {
+                window.alert("Unable to retreive player list for:\r\n  " + ev_name + "\r\nContinuing for this event without player names.")
+            }
             missed_urls.push(faulty_url)
-            /*if (ev_name = "2025 WAVL Season") {
-
-            }*/
+            console.log(ev_name);
+            missed_events.push(ev_name)
         }
     }
+    
+    if (players_list.length == missed_events.length){
+        if (ev_name = "2025 WAVL Season") {
+            var player_lists_slow = [];
+            var slow_id_list = __CONFIG__.events["2025 WAVL Season"]["backup_players"]["id_array"];
+            var slow_head = __CONFIG__.events["2025 WAVL Season"]["backup_players"]["base_url"];
+            //console.log(slow_id_list)
+            //console.log(slow_head)
+            for (var j = 0; j < slow_id_list.length; j++) {
+                var slow_object = {"players_url": slow_head+slow_id_list[j].toString()}
+                //console.log(slow_object)
+                var player_List_slow = getPlayerList(slow_object);
+                //console.log(player_List_slow)
+                player_lists_slow.push(player_List_slow)
+            }
+            //console.log(1)
+            //console.log(player_lists_slow)
+            await Promise.allSettled(player_lists_slow).then(player_lists_slow => {
+                //console.log(player_lists_slow)
+                for(let k = 0; k < player_lists_slow.length; k++){
+                    //console.log(player_lists_slow[k])
+                    let current_team = player_lists_slow[k].value.data.Results;
+                    //console.log(current_team)
+                    for (let x = 0; x < current_team.length; x++){
+                        //console.log(current_team[x])
+                        let current_player = current_team[x].Name.trim().replace("\uFFFD","").replaceAll("*","");
+                        let team_name = current_team[x].TeamName.trim().toUpperCase()
+                        if (!(Object.keys(all_team_lists).includes(team_name))) {
+                            all_team_lists[team_name] = [[split_name(current_player.trim()),5]]
+                        } else {
+                            all_team_lists[team_name].push([split_name(current_player.trim()),5])
+                        }
+                    }
+                }
+            })
+        }
 
-    for (let j = 0; j < successful_player_lists.length; j++) {
-        let parser = new DOMParser();
-        let htmlDoc = parser.parseFromString(successful_player_lists[j].request.responseText, 'text/html');
+        console.log(all_team_lists)
+        console.log(upd_fixtures)
+        console.log("HELP ME_1")
+        for (i = 0; i < upd_fixtures.length; i++) {
+            let fixture_date = upd_fixtures[i][12]+"-"+upd_fixtures[i][11]+"-"+upd_fixtures[i][10]
+            let fixture_division = upd_fixtures[i][9]
+            let team_a = upd_fixtures[i][6].toUpperCase()//.split(" ")[0];
+            let team_b = upd_fixtures[i][7].toUpperCase()//.split(" ")[0];
+            console.log(team_a)
+            console.log(team_b)
+            console.log(all_team_lists[team_a])
+            console.log(all_team_lists[team_b])
+            upd_fixtures[i][17] = [["",""]];
+            upd_fixtures[i][18] = [["",""]];
 
-        let all_tables = htmlDoc.getElementsByClassName("team")
-        let numFix = all_tables.length;
+            if (Object.keys(all_team_lists).includes(team_a)) {
+                upd_fixtures[i][17] = all_team_lists[team_a].sort(function (a, b) {
+                    if (a[0][1] > b[0][1]){ return 1
+                        } else if (a[0][1] < b[0][1]){ return -1
+                    } else if (a[0][1] === b[0][1]){if (a[0][0] > b[0][0]){return 1}
+                        return -1
+                    }})
+            }
 
-        let all_team_lists = {}
+            if (Object.keys(all_team_lists).includes(team_b)) {
+                upd_fixtures[i][18] = all_team_lists[team_b].sort(function (a, b) {
+                    if (a[0][1] > b[0][1]){ return 1
+                        } else if (a[0][1] < b[0][1]){ return -1
+                    } else if (a[0][1] === b[0][1]){if (a[0][0] > b[0][0]){return 1}
+                        return -1
+                    }})
+            }
+        }
 
-        for (let i = 0; i < numFix; i = i + 1) {
-            let division = all_tables[i].getElementsByTagName("h3")[0].textContent
-            let all_divs = all_tables[i].getElementsByClassName("roster")
-            for (let k = 0; k < all_divs.length; k++) {
-                let all_rows = all_divs[k].getElementsByTagName("tr")
-                for (let j = 1; j < all_rows.length; j = j + 1) {
-                    let all_td = all_rows[j].getElementsByTagName("td")
-                    //console.log(all_td)
-                    //console.log(all_td[1])
-                    let player_name = all_td[1].innerText
-                    player_name = player_name.replace("\uFFFD","")
-                    player_name = player_name.replaceAll("*","");
-                    let team_name = all_td[2].innerText
-                    if (!(Object.keys(all_team_lists).includes(team_name))) {
-                        all_team_lists[team_name] = [[split_name(player_name.trim()),5]]
-                    } else {
-                        all_team_lists[team_name].push([split_name(player_name.trim()),5])
+        return await upd_fixtures;
+
+    } else {
+
+        for (let j = 0; j < successful_player_lists.length; j++) {
+            let parser = new DOMParser();
+            let htmlDoc = parser.parseFromString(successful_player_lists[j].request.responseText, 'text/html');
+
+            let all_tables = htmlDoc.getElementsByClassName("team")
+            let numFix = all_tables.length;
+
+            for (let i = 0; i < numFix; i = i + 1) {
+                let division = all_tables[i].getElementsByTagName("h3")[0].textContent
+                let all_divs = all_tables[i].getElementsByClassName("roster")
+                for (let k = 0; k < all_divs.length; k++) {
+                    let all_rows = all_divs[k].getElementsByTagName("tr")
+                    for (let j = 1; j < all_rows.length; j = j + 1) {
+                        let all_td = all_rows[j].getElementsByTagName("td")
+                        let player_name = all_td[1].innerText
+                        player_name = player_name.replace("\uFFFD","")
+                        player_name = player_name.replaceAll("*","");
+                        let team_name = all_td[2].innerText
+                        if (!(Object.keys(all_team_lists).includes(team_name))) {
+                            all_team_lists[team_name] = [[split_name(player_name.trim()),5]]
+                        } else {
+                            all_team_lists[team_name].push([split_name(player_name.trim()),5])
+                        }
                     }
                 }
             }
@@ -352,7 +427,7 @@ function parsePlayerList(players_list, upd_fixtures) {
 
         console.log(all_team_lists)
         console.log(upd_fixtures)
-        console.log("HELP ME")
+        console.log("HELP ME_2")
         for (i = 0; i < upd_fixtures.length; i++) {
             let fixture_date = upd_fixtures[i][12]+"-"+upd_fixtures[i][11]+"-"+upd_fixtures[i][10]
             let fixture_division = upd_fixtures[i][9]
@@ -363,31 +438,12 @@ function parsePlayerList(players_list, upd_fixtures) {
             upd_fixtures[i][17] = [["",""]];
             upd_fixtures[i][18] = [["",""]];
 
-            /*if (SL_FINALS_DATES.includes(fixture_date) && (fixture_division[0] == "State League Men" || fixture_division[0] == "State League Women")){
-                if (Object.keys(all_team_lists).includes(team_a)) {
-                    team_a_list = [];
-                    for (j = 0; j < all_team_lists[team_a].length; j++) {
-                        if (all_team_lists[team_a][j][1] >= 5) {team_a_list.push(all_team_lists[team_a][j])}
-                    }
-                    upd_fixtures[i][17] = team_a_list;
-                }
-                if (Object.keys(dict).includes(team_b)) {
-                    team_b_list = [];
-                    for (j = 0; j < dict[team_b].length; j++) {
-                        if (dict[team_b][j][1] >= 5) {team_b_list.push(dict[team_b][j])}
-                    }
-                    upd_fixtures[i][18] = team_b_list;
-                }
-            } else {
-                if (Object.keys(dict).includes(team_a)) {upd_fixtures[i][17] = dict[team_a];}
-                if (Object.keys(dict).includes(team_b)) {upd_fixtures[i][18] = dict[team_b];}
-            }*/
             if (Object.keys(all_team_lists).includes(team_a)) {
                 upd_fixtures[i][17] = all_team_lists[team_a].sort(function (a, b) {
                     if (a[0][1] > b[0][1]){ return 1
                         } else if (a[0][1] < b[0][1]){ return -1
                     } else if (a[0][1] === b[0][1]){if (a[0][0] > b[0][0]){return 1}
-                      return -1
+                        return -1
                     }})
             }
             if (Object.keys(all_team_lists).includes(team_b)) {
@@ -395,13 +451,48 @@ function parsePlayerList(players_list, upd_fixtures) {
                     if (a[0][1] > b[0][1]){ return 1
                         } else if (a[0][1] < b[0][1]){ return -1
                     } else if (a[0][1] === b[0][1]){if (a[0][0] > b[0][0]){return 1}
-                      return -1
+                        return -1
                     }})
             }
         }
-    }
-    return upd_fixtures;
 
+    return await upd_fixtures;
+
+    }
+    /*
+    console.log(all_team_lists)
+    console.log(upd_fixtures)
+    console.log("HELP ME")
+    for (i = 0; i < upd_fixtures.length; i++) {
+        let fixture_date = upd_fixtures[i][12]+"-"+upd_fixtures[i][11]+"-"+upd_fixtures[i][10]
+        let fixture_division = upd_fixtures[i][9]
+        let team_a = upd_fixtures[i][6].toUpperCase()//.split(" ")[0];
+        let team_b = upd_fixtures[i][7].toUpperCase()//.split(" ")[0];
+        console.log(team_a)
+        console.log(team_b)
+        upd_fixtures[i][17] = [["",""]];
+        upd_fixtures[i][18] = [["",""]];
+
+        if (Object.keys(all_team_lists).includes(team_a)) {
+            upd_fixtures[i][17] = all_team_lists[team_a].sort(function (a, b) {
+                if (a[0][1] > b[0][1]){ return 1
+                    } else if (a[0][1] < b[0][1]){ return -1
+                } else if (a[0][1] === b[0][1]){if (a[0][0] > b[0][0]){return 1}
+                    return -1
+                }})
+        }
+        if (Object.keys(all_team_lists).includes(team_b)) {
+            upd_fixtures[i][18] = all_team_lists[team_b].sort(function (a, b) {
+                if (a[0][1] > b[0][1]){ return 1
+                    } else if (a[0][1] < b[0][1]){ return -1
+                } else if (a[0][1] === b[0][1]){if (a[0][0] > b[0][0]){return 1}
+                    return -1
+                }})
+        }
+    }
+
+    return await upd_fixtures;
+    */
 }
 
 /**
@@ -589,21 +680,24 @@ function pdf_init(venues, wavl, wavjl, dates, events_) {
         console.log(1)
         Promise.allSettled(player_lists).then(players_list => {
             console.log(players_list)
-            let finalised_fixtures = parsePlayerList(players_list, upd_fixtures);
-            modifyPdf(finalised_fixtures, dates[2]).then(value => {
-                Promise.all(value).then(value_3 => {
-                    mergePDFDocuments(value_3).then(value_2 => {
-                        let filename = "Scoresheets " + dates[2].toString() + ".pdf"
-                        
-                        download(value_2, filename, "application/pdf");
-                        
-                        window.clearInterval(dots);
-                        document.getElementById("Button4").value = "Generate Scoresheets";
-                        document.getElementById("Button4").style.backgroundColor = "#3370B7";
-                        document.getElementById("Button4").style.color = "#FFFFFF"
-                        document.getElementById("Button4").disabled = false;
-                        document.getElementById("csvUpload").disabled = false;
-                        document.getElementById("csvUpload").value = "";
+            parsePlayerList(players_list, upd_fixtures).then(value_4 => {
+                Promise.all(value_4).then(finalised_fixtures => {
+                    modifyPdf(finalised_fixtures, dates[2]).then(value => {
+                        Promise.all(value).then(value_3 => {
+                            mergePDFDocuments(value_3).then(value_2 => {
+                                let filename = "Scoresheets " + dates[2].toString() + ".pdf"
+                                
+                                download(value_2, filename, "application/pdf");
+                                
+                                window.clearInterval(dots);
+                                document.getElementById("Button4").value = "Generate Scoresheets";
+                                document.getElementById("Button4").style.backgroundColor = "#3370B7";
+                                document.getElementById("Button4").style.color = "#FFFFFF"
+                                document.getElementById("Button4").disabled = false;
+                                document.getElementById("csvUpload").disabled = false;
+                                document.getElementById("csvUpload").value = "";
+                            }).catch(error => catch_error(error))
+                        }).catch(error => catch_error(error))
                     }).catch(error => catch_error(error))
                 }).catch(error => catch_error(error))
             }).catch(error => catch_error(error))
@@ -1756,212 +1850,217 @@ async function modifyPdf(fix, dates) {
             // Junior League
             
             // Team A Players
-            if (fixtures[i][17].length >= 1 && fixtures[i][17][0] != "") {
-                for (var k = 0; k < fixtures[i][17].length; k++) {
-                    if (k < Math.ceil(fixtures[i][17].length / 2)) {
-                        // first name, first column
-                        //console.log(fixtures[i][17][k][0].toUpperCase() + ": " + measureText(fixtures[i][17][k][0].toUpperCase(),6))
-                        console.log(k)
-                        console.log(i)
-                        console.log(fixtures[i])
-                        console.log(fixtures[i][17])
-                        //console.log(fixutres[i][17][k])
-                        console.log(fixtures[i][17][k][0])
-                        if (measureText(fixtures[i][17][k][0][0].toUpperCase(), 6) >= 32) {
-                            await JLfirstPage.drawText(fixtures[i][17][k][0][0].toUpperCase(), {
-                                x: 102.25,
-                                y: 445-((15.50*k)),
-                                size: 5,
-                                font: JLhelveticaFont
-                            })
-                        } else {
-                            await JLfirstPage.drawText(fixtures[i][17][k][0][0].toUpperCase(), {
-                                x: 102.25,
-                                y: 445-((15.50*k)),
-                                size: 6,
-                                font: JLhelveticaFont
-                            })
-                        }
+            console.log(fixtures[i][9][2])
+            console.log(__CONFIG__.events[fixtures[i][9][2]])
+            console.log(__CONFIG__.events[fixtures[i][9][2]]["printPlayers"])
+            if (__CONFIG__.events[fixtures[i][9][2]]["printPlayers"] == "true") {
+                if (fixtures[i][17].length >= 1 && fixtures[i][17][0] != "") {
+                    for (var k = 0; k < fixtures[i][17].length; k++) {
+                        if (k < Math.ceil(fixtures[i][17].length / 2)) {
+                            // first name, first column
+                            //console.log(fixtures[i][17][k][0].toUpperCase() + ": " + measureText(fixtures[i][17][k][0].toUpperCase(),6))
+                            console.log(k)
+                            console.log(i)
+                            console.log(fixtures[i])
+                            console.log(fixtures[i][17])
+                            //console.log(fixutres[i][17][k])
+                            console.log(fixtures[i][17][k][0])
+                            if (measureText(fixtures[i][17][k][0][0].toUpperCase(), 6) >= 32) {
+                                await JLfirstPage.drawText(fixtures[i][17][k][0][0].toUpperCase(), {
+                                    x: 102.25,
+                                    y: 445-((15.50*k)),
+                                    size: 5,
+                                    font: JLhelveticaFont
+                                })
+                            } else {
+                                await JLfirstPage.drawText(fixtures[i][17][k][0][0].toUpperCase(), {
+                                    x: 102.25,
+                                    y: 445-((15.50*k)),
+                                    size: 6,
+                                    font: JLhelveticaFont
+                                })
+                            }
 
-                        // surname, first column
-                        //console.log(fixtures[i][17][k][1].toUpperCase() + ": " + measureText(fixtures[i][17][k][1].toUpperCase(),6))
-                        console.log(fixtures[i][17][k][0][1])
-                        if (measureText(fixtures[i][17][k][0][1].toUpperCase(), 6) >= 32) {
-                            await JLfirstPage.drawText(fixtures[i][17][k][0][1].toUpperCase(), {
-                                x: 102.25,
-                                y: 445-((15.50*k+7.0)),
-                                size: 5,
-                                font: JLhelveticaFont
-                            })
+                            // surname, first column
+                            //console.log(fixtures[i][17][k][1].toUpperCase() + ": " + measureText(fixtures[i][17][k][1].toUpperCase(),6))
+                            console.log(fixtures[i][17][k][0][1])
+                            if (measureText(fixtures[i][17][k][0][1].toUpperCase(), 6) >= 32) {
+                                await JLfirstPage.drawText(fixtures[i][17][k][0][1].toUpperCase(), {
+                                    x: 102.25,
+                                    y: 445-((15.50*k+7.0)),
+                                    size: 5,
+                                    font: JLhelveticaFont
+                                })
+                            } else {
+                                await JLfirstPage.drawText(fixtures[i][17][k][0][1].toUpperCase(), {
+                                    x: 102.25,
+                                    y: 445-((15.50*k+7.0)),
+                                    size: 6,
+                                    font: JLhelveticaFont
+                                })
+                            }
                         } else {
-                            await JLfirstPage.drawText(fixtures[i][17][k][0][1].toUpperCase(), {
-                                x: 102.25,
-                                y: 445-((15.50*k+7.0)),
-                                size: 6,
-                                font: JLhelveticaFont
-                            })
-                        }
-                    } else {
-                        // first name, second column
-                        //console.log(fixtures[i][17][k][0].toUpperCase() + ": " + measureText(fixtures[i][17][k][0].toUpperCase(),6))
-                        if (measureText(fixtures[i][17][k][0][0].toUpperCase(), 6) >= 32) {
-                            await JLfirstPage.drawText(fixtures[i][17][k][0][0].toUpperCase(), {
-                                x: 260,
-                                y: 445-((15.50*(k-Math.ceil(fixtures[i][17].length / 2)))),
-                                size: 5,
-                                font: JLhelveticaFont
-                            })
-                        } else {
-                            await JLfirstPage.drawText(fixtures[i][17][k][0][0].toUpperCase(), {
-                                x: 260,
-                                y: 445-((15.50*(k-Math.ceil(fixtures[i][17].length / 2)))),
-                                size: 6,
-                                font: JLhelveticaFont
-                            })
-                        }
+                            // first name, second column
+                            //console.log(fixtures[i][17][k][0].toUpperCase() + ": " + measureText(fixtures[i][17][k][0].toUpperCase(),6))
+                            if (measureText(fixtures[i][17][k][0][0].toUpperCase(), 6) >= 32) {
+                                await JLfirstPage.drawText(fixtures[i][17][k][0][0].toUpperCase(), {
+                                    x: 260,
+                                    y: 445-((15.50*(k-Math.ceil(fixtures[i][17].length / 2)))),
+                                    size: 5,
+                                    font: JLhelveticaFont
+                                })
+                            } else {
+                                await JLfirstPage.drawText(fixtures[i][17][k][0][0].toUpperCase(), {
+                                    x: 260,
+                                    y: 445-((15.50*(k-Math.ceil(fixtures[i][17].length / 2)))),
+                                    size: 6,
+                                    font: JLhelveticaFont
+                                })
+                            }
 
-                        // surname, second column
-                        //console.log(fixtures[i][17][k][1].toUpperCase() + ": " + measureText(fixtures[i][17][k][1].toUpperCase(),6))
-                        if (measureText(fixtures[i][17][k][0][1].toUpperCase(), 6) >= 32){
-                            await JLfirstPage.drawText(fixtures[i][17][k][0][1].toUpperCase(), {
-                                x: 260,
-                                y: 445-((15.50*(k-Math.ceil(fixtures[i][17].length / 2))+7.0)),
-                                size: 5,
-                                font: JLhelveticaFont
-                            })
+                            // surname, second column
+                            //console.log(fixtures[i][17][k][1].toUpperCase() + ": " + measureText(fixtures[i][17][k][1].toUpperCase(),6))
+                            if (measureText(fixtures[i][17][k][0][1].toUpperCase(), 6) >= 32){
+                                await JLfirstPage.drawText(fixtures[i][17][k][0][1].toUpperCase(), {
+                                    x: 260,
+                                    y: 445-((15.50*(k-Math.ceil(fixtures[i][17].length / 2))+7.0)),
+                                    size: 5,
+                                    font: JLhelveticaFont
+                                })
+                            } else {
+                                await JLfirstPage.drawText(fixtures[i][17][k][0][1].toUpperCase(), {
+                                    x: 260,
+                                    y: 445-((15.50*(k-Math.ceil(fixtures[i][17].length / 2))+7.0)),
+                                    size: 6,
+                                    font: JLhelveticaFont
+                                })
+                            }
+                        }
+                        
+                    }
+                    
+                    // Team A, Second column numbers
+                    if (fixtures[i][17].length > 1) {
+                        let line_y_a = 452 -(15.50*Math.ceil(fixtures[i][17].length /2));
+
+                        //console.log(line_y_a);
+                        await JLfirstPage.drawLine({
+                            start: { x: 230, y: 452 },
+                            end: { x: 230, y: line_y_a },
+                            thickness: 0.5,
+                            color: rgb(0,0,0),
+                            opacity: 1
+                        })
+                        
+                        await JLfirstPage.drawLine({
+                            start: { x: 255, y: 452 },
+                            end: { x: 255, y: line_y_a },
+                            thickness: 0.5,
+                            color: rgb(0,0,0),
+                            opacity: 1
+                        })
+                    }
+                }
+
+                // Team B Players
+                if (fixtures[i][18].length >= 1 && fixtures[i][18][0] != "") {
+                    for (var k = 0; k < fixtures[i][18].length; k++) {
+                        if (k < Math.ceil(fixtures[i][18].length / 2)) {
+                            // first name, first column
+                            //console.log(fixtures[i][18][k][0].toUpperCase() + ": " + measureText(fixtures[i][18][k][0].toUpperCase(),6))
+                            if (measureText(fixtures[i][18][k][0][0].toUpperCase(), 6) >= 32) {
+                                await JLfirstPage.drawText(fixtures[i][18][k][0][0].toUpperCase(), {
+                                    x: 525,
+                                    y: 445-((15.50*k)),
+                                    size: 5,
+                                    font: JLhelveticaFont
+                                })
+                            } else {
+                                await JLfirstPage.drawText(fixtures[i][18][k][0][0].toUpperCase(), {
+                                    x: 525,
+                                    y: 445-((15.50*k)),
+                                    size: 6,
+                                    font: JLhelveticaFont
+                                })
+                            }
+
+                            // surname, first column
+                            //console.log(fixtures[i][18][k][1].toUpperCase() + ": " + measureText(fixtures[i][18][k][1].toUpperCase(),6))
+                            if (measureText(fixtures[i][18][k][0][1].toUpperCase(), 6) >= 32) {
+                                await JLfirstPage.drawText(fixtures[i][18][k][0][1].toUpperCase(), {
+                                    x: 525,
+                                    y: 445-((15.50*k+7.0)),
+                                    size: 5,
+                                    font: JLhelveticaFont
+                                })
+                            } else {
+                                await JLfirstPage.drawText(fixtures[i][18][k][0][1].toUpperCase(), {
+                                    x: 525,
+                                    y: 445-((15.50*k+7.0)),
+                                    size: 6,
+                                    font: JLhelveticaFont
+                                })
+                            }
                         } else {
-                            await JLfirstPage.drawText(fixtures[i][17][k][0][1].toUpperCase(), {
-                                x: 260,
-                                y: 445-((15.50*(k-Math.ceil(fixtures[i][17].length / 2))+7.0)),
-                                size: 6,
-                                font: JLhelveticaFont
-                            })
+                            // first name, second column
+                            //console.log(fixtures[i][18][k][0].toUpperCase() + ": " + measureText(fixtures[i][18][k][0].toUpperCase(),6))
+                            if (measureText(fixtures[i][18][k][0][0].toUpperCase(), 6) >= 32) {
+                                await JLfirstPage.drawText(fixtures[i][18][k][0][0].toUpperCase(), {
+                                    x: 665,
+                                    y: 445-((15.50*(k-Math.ceil(fixtures[i][18].length / 2)))),
+                                    size: 5,
+                                    font: JLhelveticaFont
+                                })
+                            } else {
+                                await JLfirstPage.drawText(fixtures[i][18][k][0][0].toUpperCase(), {
+                                    x: 665,
+                                    y: 445-((15.50*(k-Math.ceil(fixtures[i][18].length / 2)))),
+                                    size: 6,
+                                    font: JLhelveticaFont
+                                })
+                            }
+
+                            // surname, second column
+                            //console.log(fixtures[i][18][k][1].toUpperCase() + ": " + measureText(fixtures[i][18][k][1].toUpperCase(),6))
+                            if (measureText(fixtures[i][18][k][0][1].toUpperCase(), 6) >= 32) {
+                                await JLfirstPage.drawText(fixtures[i][18][k][0][1].toUpperCase(), {
+                                    x: 665,
+                                    y: 445-((15.50*(k-Math.ceil(fixtures[i][18].length / 2))+7.0)),
+                                    size: 5,
+                                    font: JLhelveticaFont
+                                })
+                            } else {
+                                await JLfirstPage.drawText(fixtures[i][18][k][0][1].toUpperCase(), {
+                                    x: 665,
+                                    y: 445-((15.50*(k-Math.ceil(fixtures[i][18].length / 2))+7.0)),
+                                    size: 6,
+                                    font: JLhelveticaFont
+                                })
+                            }
                         }
                     }
                     
-                }
-                
-                // Team A, Second column numbers
-                if (fixtures[i][17].length > 1) {
-                    let line_y_a = 452 -(15.50*Math.ceil(fixtures[i][17].length /2));
+                    if (fixtures[i][18].length > 1) {
+                        // Team B, second column numbers
+                        let line_y_b = 452 -(15.50*Math.ceil(fixtures[i][18].length /2));
+                        //console.log(line_y_b);
 
-                    //console.log(line_y_a);
-                    await JLfirstPage.drawLine({
-                        start: { x: 230, y: 452 },
-                        end: { x: 230, y: line_y_a },
-                        thickness: 0.5,
-                        color: rgb(0,0,0),
-                        opacity: 1
-                    })
-                    
-                    await JLfirstPage.drawLine({
-                        start: { x: 255, y: 452 },
-                        end: { x: 255, y: line_y_a },
-                        thickness: 0.5,
-                        color: rgb(0,0,0),
-                        opacity: 1
-                    })
-                }
-            }
-
-            // Team B Players
-            if (fixtures[i][18].length >= 1 && fixtures[i][18][0] != "") {
-                for (var k = 0; k < fixtures[i][18].length; k++) {
-                    if (k < Math.ceil(fixtures[i][18].length / 2)) {
-                        // first name, first column
-                        //console.log(fixtures[i][18][k][0].toUpperCase() + ": " + measureText(fixtures[i][18][k][0].toUpperCase(),6))
-                        if (measureText(fixtures[i][18][k][0][0].toUpperCase(), 6) >= 32) {
-                            await JLfirstPage.drawText(fixtures[i][18][k][0][0].toUpperCase(), {
-                                x: 525,
-                                y: 445-((15.50*k)),
-                                size: 5,
-                                font: JLhelveticaFont
-                            })
-                        } else {
-                            await JLfirstPage.drawText(fixtures[i][18][k][0][0].toUpperCase(), {
-                                x: 525,
-                                y: 445-((15.50*k)),
-                                size: 6,
-                                font: JLhelveticaFont
-                            })
-                        }
-
-                        // surname, first column
-                        //console.log(fixtures[i][18][k][1].toUpperCase() + ": " + measureText(fixtures[i][18][k][1].toUpperCase(),6))
-                        if (measureText(fixtures[i][18][k][0][1].toUpperCase(), 6) >= 32) {
-                            await JLfirstPage.drawText(fixtures[i][18][k][0][1].toUpperCase(), {
-                                x: 525,
-                                y: 445-((15.50*k+7.0)),
-                                size: 5,
-                                font: JLhelveticaFont
-                            })
-                        } else {
-                            await JLfirstPage.drawText(fixtures[i][18][k][0][1].toUpperCase(), {
-                                x: 525,
-                                y: 445-((15.50*k+7.0)),
-                                size: 6,
-                                font: JLhelveticaFont
-                            })
-                        }
-                    } else {
-                        // first name, second column
-                        //console.log(fixtures[i][18][k][0].toUpperCase() + ": " + measureText(fixtures[i][18][k][0].toUpperCase(),6))
-                        if (measureText(fixtures[i][18][k][0][0].toUpperCase(), 6) >= 32) {
-                            await JLfirstPage.drawText(fixtures[i][18][k][0][0].toUpperCase(), {
-                                x: 665,
-                                y: 445-((15.50*(k-Math.ceil(fixtures[i][18].length / 2)))),
-                                size: 5,
-                                font: JLhelveticaFont
-                            })
-                        } else {
-                            await JLfirstPage.drawText(fixtures[i][18][k][0][0].toUpperCase(), {
-                                x: 665,
-                                y: 445-((15.50*(k-Math.ceil(fixtures[i][18].length / 2)))),
-                                size: 6,
-                                font: JLhelveticaFont
-                            })
-                        }
-
-                        // surname, second column
-                        //console.log(fixtures[i][18][k][1].toUpperCase() + ": " + measureText(fixtures[i][18][k][1].toUpperCase(),6))
-                        if (measureText(fixtures[i][18][k][0][1].toUpperCase(), 6) >= 32) {
-                            await JLfirstPage.drawText(fixtures[i][18][k][0][1].toUpperCase(), {
-                                x: 665,
-                                y: 445-((15.50*(k-Math.ceil(fixtures[i][18].length / 2))+7.0)),
-                                size: 5,
-                                font: JLhelveticaFont
-                            })
-                        } else {
-                            await JLfirstPage.drawText(fixtures[i][18][k][0][1].toUpperCase(), {
-                                x: 665,
-                                y: 445-((15.50*(k-Math.ceil(fixtures[i][18].length / 2))+7.0)),
-                                size: 6,
-                                font: JLhelveticaFont
-                            })
-                        }
+                        await JLfirstPage.drawLine({
+                            start: { x: 635, y: 452 },
+                            end: { x: 635, y: line_y_b },
+                            thickness: 0.5,
+                            color: rgb(0,0,0),
+                            opacity: 1
+                        })
+                        
+                        await JLfirstPage.drawLine({
+                            start: { x: 660, y: 452  },
+                            end: { x: 660, y: line_y_b },
+                            thickness: 0.5,
+                            color: rgb(0,0,0),
+                            opacity: 1
+                        })
                     }
-                }
-                
-                if (fixtures[i][18].length > 1) {
-                    // Team B, second column numbers
-                    let line_y_b = 452 -(15.50*Math.ceil(fixtures[i][18].length /2));
-                    //console.log(line_y_b);
-
-                    await JLfirstPage.drawLine({
-                        start: { x: 635, y: 452 },
-                        end: { x: 635, y: line_y_b },
-                        thickness: 0.5,
-                        color: rgb(0,0,0),
-                        opacity: 1
-                    })
-                    
-                    await JLfirstPage.drawLine({
-                        start: { x: 660, y: 452  },
-                        end: { x: 660, y: line_y_b },
-                        thickness: 0.5,
-                        color: rgb(0,0,0),
-                        opacity: 1
-                    })
                 }
             }
 
@@ -2576,7 +2675,7 @@ function html_to_fixture(venues, leagues, in_date, all_html_prom) {
                                 _division = [
                                     div,
                                     div.match(/\b[a-zA-Z]?\d*\/?/g).join('').replaceAll("  ", " ") + div_addition,
-                                    1
+                                    event_Name
                                 ]
                             } else {
                                 div = div.replace("Year ", "")
@@ -2589,7 +2688,7 @@ function html_to_fixture(venues, leagues, in_date, all_html_prom) {
                                 _division = [
                                     div.replace("South ", "S").replace("North ", "N").replace("Central ", "C").replace("Metro ", "M").replace("South", "S").replace("North", "N").replace("Central", "C").replace("Metro", "M"),
                                     div.match(/\b\s?[a-zA-Z]?\s?\d*[\/-]?/g).join('').replaceAll("  ", " "),
-                                    1
+                                    event_Name
                                 ]
                             }
                             
