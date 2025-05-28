@@ -940,8 +940,6 @@ async function modifyPdf(fix, dates, doc, run) {
     //var mergedPdf = await PDFLib.PDFDocument.create();
     //var merged64 = await mergedPdf.saveAsBase64()
     var merged64 = 0;
-    var prev_venue = "";
-    var curr_venue = "";
 
     for (var i = 0; i < fixtures.length; i++) {
         scoresheet_type = fixtures[i][19]
@@ -988,8 +986,6 @@ async function modifyPdf(fix, dates, doc, run) {
         // use OLD scoresheet for divisions (for now)
         //if (fixtures[i][9][0].includes("Division") || fixtures[i][9][0].includes("State")) {
         if (scoresheet_type == "12-sub") {
-            prev_venue = curr_venue;
-            curr_venue = fixtures[i][0]
             // If we need to use the scoresheet with more names
             if (fixtures[i][17].length > 18 || fixtures[i][18].length > 18){
                 if ((SL_FINALS_DATES.includes(fixtures[i][12]+"-"+fixtures[i][11]+"-"+fixtures[i][10]) && (fixtures[i][9][0] == "State League Men" || fixtures[i][9][0] == "State League Women")) || FINALS_DATES.includes(fixtures[i][12]+"-"+fixtures[i][11]+"-"+fixtures[i][10])){
@@ -1505,7 +1501,7 @@ async function modifyPdf(fix, dates, doc, run) {
                             // first name, first column
                             //console.log(fixtures[i][17][k][0].toUpperCase() + ": " + measureText(fixtures[i][17][k][0].toUpperCase(),6))
                             //console.log(k)
-                            console.log(i)
+                            //console.log(i)
                             //console.log(fixtures[i])
                             //console.log(fixtures[i][17])
                             //console.log(fixutres[i][17][k])
@@ -1905,14 +1901,12 @@ async function modifyPdf(fix, dates, doc, run) {
                 var saved = await newWAVLpdfDoc.saveAsBase64();
             }
         } else if (scoresheet_type == "junior") {
-            prev_venue = curr_venue;
-            curr_venue = "Junior Leauge"
             // Junior League
             
             // Team A Players
-            console.log(fixtures[i][9][2])
-            console.log(__CONFIG__.events[fixtures[i][9][2]])
-            console.log(__CONFIG__.events[fixtures[i][9][2]]["printPlayers"])
+            //console.log(fixtures[i][9][2])
+            //console.log(__CONFIG__.events[fixtures[i][9][2]])
+            //console.log(__CONFIG__.events[fixtures[i][9][2]]["printPlayers"])
             if (__CONFIG__.events[fixtures[i][9][2]]["printPlayers"] == "true") {
                 if (fixtures[i][17].length >= 1 && fixtures[i][17][0] != "") {
                     for (var k = 0; k < fixtures[i][17].length; k++) {
@@ -1920,7 +1914,7 @@ async function modifyPdf(fix, dates, doc, run) {
                             // first name, first column
                             //console.log(fixtures[i][17][k][0].toUpperCase() + ": " + measureText(fixtures[i][17][k][0].toUpperCase(),6))
                             //console.log(k)
-                            console.log(i)
+                            //console.log(i)
                             //console.log(fixtures[i])
                             //console.log(fixtures[i][17])
                             //console.log(fixutres[i][17][k])
@@ -2224,8 +2218,50 @@ async function modifyPdf(fix, dates, doc, run) {
             console.log("** ERROR **")
             console.log(fixtures[i])
         }
+        
 
+        await saved;
+        await curr_merged_pdf;
+
+        var final = false
+        var curr_venue = fixtures[i][0]
+        var next_venue = fixtures[i][0]
+
+        if (fixtures[i][9][2] == '2025 WAVjL Season') {
+            curr_venue = "Junior League"
+        }
+
+        if (i == fixtures.length - 1) {
+            final = true;
+            next_venue = "__Final__";
+        } else {
+            final = false;
+            if (fixtures[i+1][9][2] == '2025 WAVjL Season') {
+                next_venue = "Junior League"
+            } else {
+                next_venue = fixtures[i+1][0]
+            }
+            
+        }
+
+        if (curr_venue != next_venue){
+            final = true
+        }
+
+        console.log(curr_venue)
+        console.log(next_venue)
+        console.log(fixtures[i])
+        console.log(final)
+        console.log(i)
+        console.log(fixtures.length)
+        //console.log(dates)
+        //console.log(saved_doc)
+        //merged64 = mergePDFDocuments_v2(saved_doc[0], saved_doc[1], final, dates, curr_venue, fixtures, i)
+        merged64 = mergePDFDocuments_v3(await saved, await curr_merged_pdf, final, dates, curr_venue)
+
+        /*
         Promise.all([saved, curr_merged_pdf]).then(saved_doc => {
+            console.log("--")
             /*
             if (run == 0) {
                 console.log("mergePDFDocuments");
@@ -2239,19 +2275,45 @@ async function modifyPdf(fix, dates, doc, run) {
                 }
                 var mergedPdf = await mergedPdf.save();
             }
-            */
+            
 
             //var mergedPdf = await PDFLib.PDFDocument.create();
             var final = false
-            if ((curr_venue != prev_venue && prev_venue != "") || i == fixtures.length-1){
+            var curr_venue = fixtures[i][0]
+            var next_venue = fixtures[i][0]
+
+            if (fixtures[i][9][2] == '2025 WAVjL Season') {
+                curr_venue = "Junior League"
+            }
+
+            if (i == fixtures.length - 1) {
+                final = true;
+                next_venue = "__Final__";
+            } else {
+                final = false;
+                if (fixtures[i+1][9][2] == '2025 WAVjL Season') {
+                    next_venue = "Junior League"
+                } else {
+                    next_venue = fixtures[i+1][0]
+                }
+                
+            }
+
+            if (curr_venue != next_venue){
                 final = true
             }
+
             console.log(curr_venue)
-            console.log(prev_venue)
+            console.log(next_venue)
+            console.log(fixtures[i])
+            console.log(final)
+            console.log(i)
+            console.log(fixtures.length)
             //console.log(dates)
             //console.log(saved_doc)
-            merged64 = mergePDFDocuments_v2(saved_doc[0], saved_doc[1], final, dates, prev_venue)
-        })
+            //merged64 = mergePDFDocuments_v2(saved_doc[0], saved_doc[1], final, dates, curr_venue, fixtures, i)
+            merged64 = mergePDFDocuments_v3(saved_doc[0], saved_doc[1], final, dates, curr_venue)
+        })*/
 
         //total[i] = saved;
     }
@@ -2515,17 +2577,49 @@ async function mergePDFDocuments(documents) {
     return await saved;
 }
 
+
+
+async function mergePDFDocuments_v3(to_append, running_document, final, dates, venue) {
+    if (running_document == 0) {
+        var docone = await PDFLib.PDFDocument.load(await to_append);
+        running_document = await docone.saveAsBase64();
+    } else {
+        var mergedPdf = await PDFLib.PDFDocument.load(await running_document);
+        var docone = await PDFLib.PDFDocument.load(await to_append);
+        var copiedPagesone = await mergedPdf.copyPages(docone, docone.getPageIndices());
+        for (var j = 0; j < docone.getPageIndices().length; j++) {
+            mergedPdf.addPage(await copiedPagesone[j]);
+        }
+        running_document = await mergedPdf.saveAsBase64();
+    }
+
+    if (final) {
+        var temp = await PDFLib.PDFDocument.load(await running_document)
+        var saved_dl = await temp.save()
+        let filename = "Scoresheets " + dates.toString() + " " + venue + ".pdf"
+        //let filename = "Scoresheets.pdf"
+        download(saved_dl, filename, "application/pdf");
+        running_document = 0
+    }
+    return await running_document;
+
+}
+
+
+
 /**
  * Merge modified PDF's into one single PDF.
  * @param {*} documents 
  * @returns 
  */
-async function mergePDFDocuments_v2(to_append, main_doc, final, dates, venue) {
+async function mergePDFDocuments_v2(to_append, main_doc, final, dates, venue, last_appended) {
     console.log("mergePDFDocuments_v2");
+    var saved;
     if (main_doc == 0) {
         console.log("main == 0")
         if (final) {
             console.log("main == 0 and final")
+            console.log(last_appended)
             var docone = await PDFLib.PDFDocument.load(await to_append);
             var saved_dl = await docone.save()
             let filename = "Scoresheets " + dates.toString() + " " + venue + ".pdf"
@@ -2533,29 +2627,34 @@ async function mergePDFDocuments_v2(to_append, main_doc, final, dates, venue) {
             download(saved_dl, filename, "application/pdf");
             //var mergedPdf_new = await PDFLib.PDFDocument.create();
             //saved = await mergedPdf_new.saveAsBase64();
-            var saved = 0;
+            saved = 0;
         } else {
             var docone = await PDFLib.PDFDocument.load(await to_append);
-            var saved = await docone.saveAsBase64();
+            saved = await docone.saveAsBase64();
         }
     } else {
+        console.log("main != 0")
         var mergedPdf = await PDFLib.PDFDocument.load(await main_doc);
         var docone = await PDFLib.PDFDocument.load(await to_append);
         var copiedPagesone = await mergedPdf.copyPages(docone, docone.getPageIndices());
         for (var j = 0; j < docone.getPageIndices().length; j++) {
             mergedPdf.addPage(await copiedPagesone[j]);
         }
+        saved = await mergedPdf.saveAsBase64();
         if (final){
             console.log("final = true")
-            var saved_dl = await mergedPdf.save()
+            var temp = await PDFLib.PDFDocument.load(await saved)
+            var saved_dl = await temp.save()
             let filename = "Scoresheets " + dates.toString() + " " + venue + ".pdf"
             //let filename = "Scoresheets.pdf"
-            download(saved_dl, filename, "application/pdf");
+            console.log(last_appended)
+            await download(saved_dl, filename, "application/pdf");
             //var mergedPdf_new = await PDFLib.PDFDocument.create();
             //saved = await mergedPdf_new.saveAsBase64();
             saved = 0
         } else {
-            var saved = await mergedPdf.saveAsBase64();
+            //var saved = await mergedPdf.saveAsBase64();
+            let do_nothing = 0;
         }
     }
     return await saved;
