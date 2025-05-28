@@ -215,12 +215,12 @@ function WAVL_ONLINE() {
             uploaded_fixtures = csvToArray(text);
             
             // Call modifyPdf
-            modifyPdf(uploaded_fixtures, dates[2]).then(value => {
+            modifyPdf(uploaded_fixtures, dates[2], 0, 0).then(value => {
                 Promise.all(value).then(value_3 => {
                     mergePDFDocuments(value_3).then(value_2 => {
                         let filename = "Scoresheets " + dates[2].toString() + ".pdf"
                         
-                        download(value_2, filename, "application/pdf");
+                        //download(value_2, filename, "application/pdf");
                         
                         window.clearInterval(dots);
                         document.getElementById("Button4").value = "Generate Scoresheets";
@@ -308,6 +308,7 @@ async function parsePlayerList(players_list, upd_fixtures) {
             console.log(players_list[i].value)
             successful_player_lists.push(players_list[i].value)
         } else {
+            console.log(players_list[i])
             let faulty_url = players_list[i].reason.response.request.responseURL
             console.log(faulty_url)
             let ev_name = getEventNameFromURL(faulty_url, "player")
@@ -323,8 +324,11 @@ async function parsePlayerList(players_list, upd_fixtures) {
         }
     }
     
-    if (players_list.length == missed_events.length){
-        if (ev_name = "2025 WAVL Season") {
+    console.log("PLAYERS_LIST")
+    console.log(successful_player_lists)
+
+    if (true == true){
+        /*if (ev_name = "2025 WAVL Season") {
             var player_lists_slow = [];
             var slow_id_list = __CONFIG__.events["2025 WAVL Season"]["backup_players"]["id_array"];
             var slow_head = __CONFIG__.events["2025 WAVL Season"]["backup_players"]["base_url"];
@@ -356,7 +360,24 @@ async function parsePlayerList(players_list, upd_fixtures) {
                         }
                     }
                 }
+                player_lists_slow = []
             })
+        }*/
+
+        for(let k = 0; k < successful_player_lists.length; k++){
+            //console.log(player_lists_slow[k])
+            let current_team = successful_player_lists[k].data.Results;
+            //console.log(current_team)
+            for (let x = 0; x < current_team.length; x++){
+                //console.log(current_team[x])
+                let current_player = current_team[x].Name.trim().replace("\uFFFD","").replaceAll("*","");
+                let team_name = current_team[x].TeamName.trim().toUpperCase()
+                if (!(Object.keys(all_team_lists).includes(team_name))) {
+                    all_team_lists[team_name] = [[split_name(current_player.trim()),5]]
+                } else {
+                    all_team_lists[team_name].push([split_name(current_player.trim()),5])
+                }
+            }
         }
 
         console.log(all_team_lists)
@@ -424,6 +445,7 @@ async function parsePlayerList(players_list, upd_fixtures) {
                 }
             }
         }
+        successful_player_lists = []
 
         console.log(all_team_lists)
         console.log(upd_fixtures)
@@ -674,20 +696,28 @@ function pdf_init(venues, wavl, wavjl, dates, events_) {
         var player_lists = []
         var upd_fixtures = html_to_fixture(venues, leagues, dates, fix_val);
         for (var i = 0; i < events_.length; i++) {
-            var player_List = getPlayerList(__CONFIG__.events[events_[i]]);
-            player_lists.push(player_List)
+            if (__CONFIG__.events[events_[i]]["printPlayers"] == "true") {
+                var slow_id_list = __CONFIG__.events[events_[i]]["backup_players"]["id_array"];
+                var slow_head = __CONFIG__.events[events_[i]]["backup_players"]["base_url"];
+                for (var j = 0; j < slow_id_list.length; j++) {
+                    console.log(slow_id_list[j])
+                    var slow_object = {"players_url": slow_head+slow_id_list[j].toString()}
+                    var player_List = getPlayerList(slow_object);
+                    player_lists.push(player_List)
+                }
+            }
         }
         console.log(1)
         Promise.allSettled(player_lists).then(players_list => {
             console.log(players_list)
             parsePlayerList(players_list, upd_fixtures).then(value_4 => {
                 Promise.all(value_4).then(finalised_fixtures => {
-                    modifyPdf(finalised_fixtures, dates[2]).then(value => {
+                    modifyPdf(finalised_fixtures, dates[2], 0, 0).then(value => {
                         Promise.all(value).then(value_3 => {
                             mergePDFDocuments(value_3).then(value_2 => {
                                 let filename = "Scoresheets " + dates[2].toString() + ".pdf"
                                 
-                                download(value_2, filename, "application/pdf");
+                                //download(value_2, filename, "application/pdf");
                                 
                                 window.clearInterval(dots);
                                 document.getElementById("Button4").value = "Generate Scoresheets";
@@ -857,7 +887,7 @@ function time_sorting(a, b) {
  * @param {String} dates 
  * @returns Array of PDF's (Base64Doc)
  */
-async function modifyPdf(fix, dates) {
+async function modifyPdf(fix, dates, doc, run) {
     console.log("modifyPdf");
     console.log(fix);
     const {
@@ -892,6 +922,27 @@ async function modifyPdf(fix, dates) {
         }
     }
 
+    /*
+    if (run == 0) {
+        console.log("mergePDFDocuments");
+        var mergedPdf = await PDFLib.PDFDocument.create();
+        for (var i = 0; i < documents.length; i++) {
+            var docone = await PDFLib.PDFDocument.load(await documents[i]);
+            var copiedPagesone = await mergedPdf.copyPages(docone, docone.getPageIndices());
+            for (var j = 0; j < docone.getPageIndices().length; j++) {
+                mergedPdf.addPage(await copiedPagesone[j]);
+            }
+        }
+        var saved = await mergedPdf.save();
+    }
+    */
+
+    //var mergedPdf = await PDFLib.PDFDocument.create();
+    //var merged64 = await mergedPdf.saveAsBase64()
+    var merged64 = 0;
+    var prev_venue = "";
+    var curr_venue = "";
+
     for (var i = 0; i < fixtures.length; i++) {
         scoresheet_type = fixtures[i][19]
         // Load WAVL and Junior League scoresheets
@@ -922,7 +973,9 @@ async function modifyPdf(fix, dates) {
         var extraWAVLfirstPage = await extraWAVLpages[0];
         var extraWAVLbackPage = await extraWAVLpages[1];
 
-
+        var curr_merged_pdf = await merged64;
+        
+        
         //var JLexistingPdfBytes = await fetch(JLurl).then(resp => resp.arrayBuffer());
 
         var JLpdfDoc = await PDFLib.PDFDocument.load(JLexistingPdfBytes);
@@ -935,6 +988,8 @@ async function modifyPdf(fix, dates) {
         // use OLD scoresheet for divisions (for now)
         //if (fixtures[i][9][0].includes("Division") || fixtures[i][9][0].includes("State")) {
         if (scoresheet_type == "12-sub") {
+            prev_venue = curr_venue;
+            curr_venue = fixtures[i][0]
             // If we need to use the scoresheet with more names
             if (fixtures[i][17].length > 18 || fixtures[i][18].length > 18){
                 if ((SL_FINALS_DATES.includes(fixtures[i][12]+"-"+fixtures[i][11]+"-"+fixtures[i][10]) && (fixtures[i][9][0] == "State League Men" || fixtures[i][9][0] == "State League Women")) || FINALS_DATES.includes(fixtures[i][12]+"-"+fixtures[i][11]+"-"+fixtures[i][10])){
@@ -1441,17 +1496,20 @@ async function modifyPdf(fix, dates) {
                 }
 
                 // Team A Players
+                //console.log(fixtures[i][17][0])
+                //console.log(fixtures[i][17].length)
+                //console.log(fixtures[i][17][0]=="")
                 if (fixtures[i][17].length >= 1 && fixtures[i][17][0] != "") {
                     for (var k = 0; k < fixtures[i][17].length; k++) {
                         if (k < Math.ceil(fixtures[i][17].length / 2)) {
                             // first name, first column
                             //console.log(fixtures[i][17][k][0].toUpperCase() + ": " + measureText(fixtures[i][17][k][0].toUpperCase(),6))
-                            console.log(k)
+                            //console.log(k)
                             console.log(i)
-                            console.log(fixtures[i])
-                            console.log(fixtures[i][17])
+                            //console.log(fixtures[i])
+                            //console.log(fixtures[i][17])
                             //console.log(fixutres[i][17][k])
-                            console.log(fixtures[i][17][k][0])
+                            //console.log(fixtures[i][17][k][0])
                             if (measureText(fixtures[i][17][k][0][0].toUpperCase(), 6) >= 32) {
                                 await newWAVLfirstPage.drawText(fixtures[i][17][k][0][0].toUpperCase(), {
                                     x: 276.25,
@@ -1847,6 +1905,8 @@ async function modifyPdf(fix, dates) {
                 var saved = await newWAVLpdfDoc.saveAsBase64();
             }
         } else if (scoresheet_type == "junior") {
+            prev_venue = curr_venue;
+            curr_venue = "Junior Leauge"
             // Junior League
             
             // Team A Players
@@ -1859,12 +1919,12 @@ async function modifyPdf(fix, dates) {
                         if (k < Math.ceil(fixtures[i][17].length / 2)) {
                             // first name, first column
                             //console.log(fixtures[i][17][k][0].toUpperCase() + ": " + measureText(fixtures[i][17][k][0].toUpperCase(),6))
-                            console.log(k)
+                            //console.log(k)
                             console.log(i)
-                            console.log(fixtures[i])
-                            console.log(fixtures[i][17])
+                            //console.log(fixtures[i])
+                            //console.log(fixtures[i][17])
                             //console.log(fixutres[i][17][k])
-                            console.log(fixtures[i][17][k][0])
+                            //console.log(fixtures[i][17][k][0])
                             if (measureText(fixtures[i][17][k][0][0].toUpperCase(), 6) >= 32) {
                                 await JLfirstPage.drawText(fixtures[i][17][k][0][0].toUpperCase(), {
                                     x: 102.25,
@@ -1883,7 +1943,7 @@ async function modifyPdf(fix, dates) {
 
                             // surname, first column
                             //console.log(fixtures[i][17][k][1].toUpperCase() + ": " + measureText(fixtures[i][17][k][1].toUpperCase(),6))
-                            console.log(fixtures[i][17][k][0][1])
+                            //console.log(fixtures[i][17][k][0][1])
                             if (measureText(fixtures[i][17][k][0][1].toUpperCase(), 6) >= 32) {
                                 await JLfirstPage.drawText(fixtures[i][17][k][0][1].toUpperCase(), {
                                     x: 102.25,
@@ -2164,7 +2224,36 @@ async function modifyPdf(fix, dates) {
             console.log("** ERROR **")
             console.log(fixtures[i])
         }
-        total[i] = saved;
+
+        Promise.all([saved, curr_merged_pdf]).then(saved_doc => {
+            /*
+            if (run == 0) {
+                console.log("mergePDFDocuments");
+                var mergedPdf = await PDFLib.PDFDocument.create();
+                for (var i = 0; i < documents.length; i++) {
+                    var docone = await PDFLib.PDFDocument.load(await saved);
+                    var copiedPagesone = await mergedPdf.copyPages(docone, docone.getPageIndices());
+                    for (var j = 0; j < docone.getPageIndices().length; j++) {
+                        mergedPdf.addPage(await copiedPagesone[j]);
+                    }
+                }
+                var mergedPdf = await mergedPdf.save();
+            }
+            */
+
+            //var mergedPdf = await PDFLib.PDFDocument.create();
+            var final = false
+            if ((curr_venue != prev_venue && prev_venue != "") || i == fixtures.length-1){
+                final = true
+            }
+            console.log(curr_venue)
+            console.log(prev_venue)
+            //console.log(dates)
+            //console.log(saved_doc)
+            merged64 = mergePDFDocuments_v2(saved_doc[0], saved_doc[1], final, dates, prev_venue)
+        })
+
+        //total[i] = saved;
     }
 
     // If CSV is to be downloaded (it is no longer to be downloaded)
@@ -2397,7 +2486,10 @@ async function modifyPdf(fix, dates) {
             console.log(e)
         }*/
     }
-    return await total;
+
+    
+    return await [merged64]
+    //return await total;
 }
 
 /**
@@ -2407,6 +2499,10 @@ async function modifyPdf(fix, dates) {
  */
 async function mergePDFDocuments(documents) {
     console.log("mergePDFDocuments");
+    return await documents[0]
+    var mergedPdf = await PDFLib.PDFDocument.load(await documents[0])
+    var saved = await mergedPdf.save();
+    return await saved;
     var mergedPdf = await PDFLib.PDFDocument.create();
     for (var i = 0; i < documents.length; i++) {
         var docone = await PDFLib.PDFDocument.load(await documents[i]);
@@ -2416,6 +2512,52 @@ async function mergePDFDocuments(documents) {
         }
     }
     var saved = await mergedPdf.save();
+    return await saved;
+}
+
+/**
+ * Merge modified PDF's into one single PDF.
+ * @param {*} documents 
+ * @returns 
+ */
+async function mergePDFDocuments_v2(to_append, main_doc, final, dates, venue) {
+    console.log("mergePDFDocuments_v2");
+    if (main_doc == 0) {
+        console.log("main == 0")
+        if (final) {
+            console.log("main == 0 and final")
+            var docone = await PDFLib.PDFDocument.load(await to_append);
+            var saved_dl = await docone.save()
+            let filename = "Scoresheets " + dates.toString() + " " + venue + ".pdf"
+            //let filename = "Scoresheets.pdf"
+            download(saved_dl, filename, "application/pdf");
+            //var mergedPdf_new = await PDFLib.PDFDocument.create();
+            //saved = await mergedPdf_new.saveAsBase64();
+            var saved = 0;
+        } else {
+            var docone = await PDFLib.PDFDocument.load(await to_append);
+            var saved = await docone.saveAsBase64();
+        }
+    } else {
+        var mergedPdf = await PDFLib.PDFDocument.load(await main_doc);
+        var docone = await PDFLib.PDFDocument.load(await to_append);
+        var copiedPagesone = await mergedPdf.copyPages(docone, docone.getPageIndices());
+        for (var j = 0; j < docone.getPageIndices().length; j++) {
+            mergedPdf.addPage(await copiedPagesone[j]);
+        }
+        if (final){
+            console.log("final = true")
+            var saved_dl = await mergedPdf.save()
+            let filename = "Scoresheets " + dates.toString() + " " + venue + ".pdf"
+            //let filename = "Scoresheets.pdf"
+            download(saved_dl, filename, "application/pdf");
+            //var mergedPdf_new = await PDFLib.PDFDocument.create();
+            //saved = await mergedPdf_new.saveAsBase64();
+            saved = 0
+        } else {
+            var saved = await mergedPdf.saveAsBase64();
+        }
+    }
     return await saved;
 }
 

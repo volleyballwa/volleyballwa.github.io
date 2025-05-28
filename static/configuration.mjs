@@ -62,6 +62,13 @@ const __CONFIG__ = {
             "bot": "Bendat",
             "alias": ["Bendat Basketball Centre", "BEND"]
         },
+        "Bunbury PCYC": {
+            "name": "Bunbury PCYC",
+            "top": "",
+            "mid": "",
+            "bot": "Bunbury PCYC",
+            "alias": ["Bunbury PCYC", "PCYC"]
+        },
         "Cannington Leisureplex": {
             "name": "Cannington Leisureplex",
             "top": "",
@@ -173,6 +180,13 @@ const __CONFIG__ = {
             "mid": "John",
             "bot": "Wollaston",
             "alias": ["John Wollaston ACS C", "John Wollaston ACS", "JOHN"]
+        },
+        "Karratha Leisureplex": {
+            "name": "Karratha Leisureplex",
+            "top": "",
+            "mid": "Karratha",
+            "bot": "Leisureplex",
+            "alias": ["KL", "Karratha", "Karratha Leisureplex"]
         },
         "Kingsway": {
             "name": "Kingsway",
@@ -286,13 +300,6 @@ const __CONFIG__ = {
             "bot": "College",
             "alias": ["Sacred Heart College", "SHC"]
         },
-        "Saint James": {
-            "name": "Saint James",
-            "top": "",
-            "mid": "Saint",
-            "bot": "James",
-            "alias": ["Saint James' Anglican School", "St James Anglican School", "SJAS"]
-        },
         "Santa Maria": {
             "name": "Santa Maria",
             "top": "",
@@ -333,7 +340,7 @@ const __CONFIG__ = {
             "top": "St James'",
             "mid": "Anglican",
             "bot": "School",
-            "alias": ["SJAS", "St James", "St James' Anglican School"]
+            "alias": ["SJAS", "St James", "St James' Anglican School", "Saint James"]
         },
         "The Rise": {
             "name": "The Rise",
@@ -635,6 +642,10 @@ const __CONFIG__ = {
             "printPlayers": "false",
             "scoresheet": {
                 "default": "junior"
+            },
+            "backup_players" : {
+                "base_url" : "https://volleyball.exposureevents.com/242327/wavjl/documents/player",
+                "id_array" : [""]
             }
         },
         /*"2024 WAVL Season": {
