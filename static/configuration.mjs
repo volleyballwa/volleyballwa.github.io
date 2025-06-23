@@ -683,7 +683,7 @@ const __CONFIG__ = {
 const __PRESIDENTS__ = {
     "Apex": "Hugo Tam",
     "Balcatta": "Ari Zuvela",
-    "Baldivis": "Denzil Fernandes",
+    "Baldivis": "Kali Langley",
     "Bunbury": "Alex Moir",
     "Busselton": "David Boyle",
     "Chequers": "Dylan Wood",
