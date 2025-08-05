@@ -2857,6 +2857,11 @@ function html_to_fixture(venues, leagues, in_date, all_html_prom) {
                         time_hr = parseInt(time_hr) + 12
                         time_hr = time_hr.toString().trim()
                     }
+                    
+                    if (_duty == "L1 (Championship)" || _duty == "L2 (Championship)" || _duty == "L3 (Championship)" || _duty == "L4 (Championship)") {
+                        _duty = "Previous Loser"
+                    }
+                    
                     console.log(time)
                     console.log(venue_lookup)
                     console.log(ven)
