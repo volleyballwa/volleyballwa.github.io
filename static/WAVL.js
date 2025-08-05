@@ -2838,7 +2838,13 @@ function html_to_fixture(venues, leagues, in_date, all_html_prom) {
                     let ven = all_curr_game[1].innerText.trim()
                     let _court = all_curr_game[2].innerText.trim()
                     let div = all_curr_game[3].innerText.split(" (")[0].trim()
-                    let div_pool = all_curr_game[3].innerText.split("(Pool ")[1].trim().slice(0,1).trim()
+                    //let div_pool = all_curr_game[3].innerText.split("(Pool ")[1].trim().slice(0,1).trim()
+                    let div_pool = " "
+                    try{
+                        div_pool = all_curr_game[3].innerText.split("(Pool ")[1].trim().slice(0,1).trim()
+                    } catch (e) {
+                        div_pool = "Ch" // for Championship
+                    }
                     let _team_b = all_curr_game[4].innerText.trim()
                     let _team_a = all_curr_game[5].innerText.trim()
                     let _duty = all_curr_game[6].innerText.trim()
