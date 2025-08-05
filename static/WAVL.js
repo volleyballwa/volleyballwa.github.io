@@ -1499,13 +1499,15 @@ async function modifyPdf(fix, dates, doc, run) {
                     for (var k = 0; k < fixtures[i][17].length; k++) {
                         if (k < Math.ceil(fixtures[i][17].length / 2)) {
                             // first name, first column
+                            console.log("---")
                             //console.log(fixtures[i][17][k][0].toUpperCase() + ": " + measureText(fixtures[i][17][k][0].toUpperCase(),6))
-                            //console.log(k)
-                            //console.log(i)
-                            //console.log(fixtures[i])
-                            //console.log(fixtures[i][17])
-                            //console.log(fixutres[i][17][k])
-                            //console.log(fixtures[i][17][k][0])
+                            console.log(k)
+                            console.log(i)
+                            console.log(fixtures[i])
+                            console.log(fixtures[i][17])
+                            console.log(fixutres[i][17][k])
+                            console.log(fixtures[i][17][k][0])
+                            console.log(fixtures[i][17][k][0][0])
                             if (measureText(fixtures[i][17][k][0][0].toUpperCase(), 6) >= 32) {
                                 await newWAVLfirstPage.drawText(fixtures[i][17][k][0][0].toUpperCase(), {
                                     x: 276.25,
