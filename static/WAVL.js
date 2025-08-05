@@ -1505,7 +1505,7 @@ async function modifyPdf(fix, dates, doc, run) {
                             console.log(i)
                             console.log(fixtures[i])
                             console.log(fixtures[i][17])
-                            console.log(fixutres[i][17][k])
+                            console.log(fixtures[i][17][k])
                             console.log(fixtures[i][17][k][0])
                             console.log(fixtures[i][17][k][0][0])
                             if (measureText(fixtures[i][17][k][0][0].toUpperCase(), 6) >= 32) {
