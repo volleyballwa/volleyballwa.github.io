@@ -648,6 +648,18 @@ const __CONFIG__ = {
                 "id_array" : [""]
             }
         },
+        "2025 VWA Schools Cup": {
+            "name": "2025 VWA Schools Cup",
+            "fixture_url": "https://cors-anywhere-og-v5kf.onrender.com/volleyball.exposureevents.com/247628/wa-schools-cup-2025/documents/schedule?layout=datetime&r=321",
+            //"fixture_url": "https://volleyball.exposureevents.com/227017/wa-schools-cup/documents/schedule?layout=datetime",
+            "players_url": "https://volleyball.exposureevents.com/247628/wa-schools-cup-2025/documents/players",
+            "printPlayers": "false",
+            "scoresheet": {
+                "honours": "12-sub",
+                "honors": "12-sub",
+                "default": "junior"
+            }
+        }
         /*"2024 WAVL Season": {
             "name": "2024 WAVL Season",
             "fixture_url": "https://cors-anywhere-og-v5kf.onrender.com/volleyball.exposureevents.com/220866/wavl/documents/schedule?layout=datetime",

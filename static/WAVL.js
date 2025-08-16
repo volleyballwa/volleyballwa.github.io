@@ -1492,10 +1492,14 @@ async function modifyPdf(fix, dates, doc, run) {
                 }
 
                 // Team A Players
-                //console.log(fixtures[i][17][0])
-                //console.log(fixtures[i][17].length)
-                //console.log(fixtures[i][17][0]=="")
-                if (fixtures[i][17].length >= 1 && fixtures[i][17][0] != "") {
+                /*console.log(fixtures[i][17][0])
+                console.log(fixtures[i][17].length)
+                console.log(fixtures[i][17][0])
+                console.log(fixtures[i][17][0]!=['',''])
+                console.log(fixtures[i][17][0][0]!='')
+                console.log("abc" != ['',''])
+                */
+                if (fixtures[i][17].length >= 1 && fixtures[i][17][0] != '' && fixtures[i][17][0][0] != '') {
                     for (var k = 0; k < fixtures[i][17].length; k++) {
                         if (k < Math.ceil(fixtures[i][17].length / 2)) {
                             // first name, first column
@@ -1605,7 +1609,7 @@ async function modifyPdf(fix, dates, doc, run) {
                 }
 
                 // Team B Players
-                if (fixtures[i][18].length >= 1  && fixtures[i][18][0] != "") {
+                if (fixtures[i][18].length >= 1  && fixtures[i][18][0] != "" && fixtures[i][18][0][0] != "") {
                     for (var k = 0; k < fixtures[i][18].length; k++) {
                         if (k < Math.ceil(fixtures[i][18].length / 2)) {
                             // first name, first column
@@ -2858,7 +2862,11 @@ function html_to_fixture(venues, leagues, in_date, all_html_prom) {
                         time_hr = time_hr.toString().trim()
                     }
                     
-                    if (_duty == "L1 (Championship)" || _duty == "L2 (Championship)" || _duty == "L3 (Championship)" || _duty == "L4 (Championship)") {
+                    if (_duty == "L1 (Championship)" || _duty == "L2 (Championship)" || _duty == "L3 (Championship)" || _duty == "L4 (Championship)" || _duty == "L5 (Championship)" || _duty == "L6 (Championship)") {
+                        _duty = "Previous Loser"
+                    }
+
+                    if (_duty == "L1 (Consolations)" || _duty == "L2 (Consolations)" || _duty == "L3 (Consolations)" || _duty == "L4 (Consolations)" || _duty == "L5 (Consolations)" || _duty == "L6 (Consolations)") {
                         _duty = "Previous Loser"
                     }
                     
