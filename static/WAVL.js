@@ -327,6 +327,14 @@ async function parsePlayerList(players_list, upd_fixtures) {
     console.log("PLAYERS_LIST")
     console.log(successful_player_lists)
 
+    var new_method = true
+
+    try {
+        
+    } catch (error) {
+        
+    }
+
     if (true == true){
         /*if (ev_name = "2025 WAVL Season") {
             var player_lists_slow = [];
@@ -366,18 +374,59 @@ async function parsePlayerList(players_list, upd_fixtures) {
 
         for(let k = 0; k < successful_player_lists.length; k++){
             //console.log(player_lists_slow[k])
-            let current_team = successful_player_lists[k].data.Results;
-            //console.log(current_team)
-            for (let x = 0; x < current_team.length; x++){
-                //console.log(current_team[x])
-                let current_player = current_team[x].Name.trim().replace("\uFFFD","").replaceAll("*","");
-                let team_name = current_team[x].TeamName.trim().toUpperCase()
-                if (!(Object.keys(all_team_lists).includes(team_name))) {
-                    all_team_lists[team_name] = [[split_name(current_player.trim()),5]]
-                } else {
-                    all_team_lists[team_name].push([split_name(current_player.trim()),5])
+            new_method = true
+            try {
+                current_team = successful_player_lists[k].data.Results
+                console.log(current_team)
+
+            } catch (error) {
+                new_method = false
+            }
+
+            if (successful_player_lists[k].data.Results) {
+                let current_team = successful_player_lists[k].data.Results;
+                console.log("if")
+                console.log(current_team)
+                
+                for (let x = 0; x < current_team.length; x++){
+                    //console.log(current_team[x])
+                    let current_player = current_team[x].Name.trim().replace("\uFFFD","").replaceAll("*","");
+                    let team_name = current_team[x].TeamName.trim().toUpperCase()
+                    if (!(Object.keys(all_team_lists).includes(team_name))) {
+                        all_team_lists[team_name] = [[split_name(current_player.trim()),5]]
+                    } else {
+                        all_team_lists[team_name].push([split_name(current_player.trim()),5])
+                    }
+                }
+            } else {
+                let parser = new DOMParser();
+                let htmlDoc = parser.parseFromString(successful_player_lists[k].request.responseText, 'text/html');
+
+                let all_tables = htmlDoc.getElementsByClassName("team")
+                let numFix = all_tables.length;
+                for (let i = 0; i < numFix; i = i + 1) {
+                    let division = all_tables[i].getElementsByTagName("h3")[0].textContent
+                    let all_divs = all_tables[i].getElementsByClassName("roster")
+                    for (let x = 0; x < all_divs.length; x++) {
+                        let all_rows = all_divs[x].getElementsByTagName("tr")
+                        for (let j = 1; j < all_rows.length; j = j + 1) {
+                            let all_td = all_rows[j].getElementsByTagName("td")
+                            //console.log(all_td)
+                            //console.log(all_td[1])
+                            let player_name = all_td[1].innerText
+                            player_name = player_name.replace("\uFFFD","")
+                            player_name = player_name.replaceAll("*","");
+                            let team_name = all_td[2].innerText
+                            if (!(Object.keys(all_team_lists).includes(team_name))) {
+                                all_team_lists[team_name] = [[split_name(player_name.trim()),5]]
+                            } else {
+                                all_team_lists[team_name].push([split_name(player_name.trim()),5])
+                            }
+                        }
+                    }
                 }
             }
+
         }
 
         console.log(all_team_lists)
@@ -703,6 +752,10 @@ function pdf_init(venues, wavl, wavjl, dates, events_) {
                     console.log(slow_id_list[j])
                     var slow_object = {"players_url": slow_head+slow_id_list[j].toString()}
                     var player_List = getPlayerList(slow_object);
+                    player_lists.push(player_List)
+                }
+                if (slow_id_list.length < 1) {
+                    var player_List = getPlayerList(__CONFIG__.events[events_[i]]);
                     player_lists.push(player_List)
                 }
             }
@@ -1503,15 +1556,15 @@ async function modifyPdf(fix, dates, doc, run) {
                     for (var k = 0; k < fixtures[i][17].length; k++) {
                         if (k < Math.ceil(fixtures[i][17].length / 2)) {
                             // first name, first column
-                            console.log("---")
+                            //console.log("---")
                             //console.log(fixtures[i][17][k][0].toUpperCase() + ": " + measureText(fixtures[i][17][k][0].toUpperCase(),6))
-                            console.log(k)
-                            console.log(i)
-                            console.log(fixtures[i])
-                            console.log(fixtures[i][17])
-                            console.log(fixtures[i][17][k])
-                            console.log(fixtures[i][17][k][0])
-                            console.log(fixtures[i][17][k][0][0])
+                            //console.log(k)
+                            //console.log(i)
+                            //console.log(fixtures[i])
+                            //console.log(fixtures[i][17])
+                            //console.log(fixtures[i][17][k])
+                            //console.log(fixtures[i][17][k][0])
+                            //console.log(fixtures[i][17][k][0][0])
                             if (measureText(fixtures[i][17][k][0][0].toUpperCase(), 6) >= 32) {
                                 await newWAVLfirstPage.drawText(fixtures[i][17][k][0][0].toUpperCase(), {
                                     x: 276.25,
@@ -1914,17 +1967,19 @@ async function modifyPdf(fix, dates, doc, run) {
             //console.log(__CONFIG__.events[fixtures[i][9][2]])
             //console.log(__CONFIG__.events[fixtures[i][9][2]]["printPlayers"])
             if (__CONFIG__.events[fixtures[i][9][2]]["printPlayers"] == "true") {
-                if (fixtures[i][17].length >= 1 && fixtures[i][17][0] != "") {
+                if (fixtures[i][17].length >= 1 && fixtures[i][17][0] != '' && fixtures[i][17][0][0] != '') {
                     for (var k = 0; k < fixtures[i][17].length; k++) {
                         if (k < Math.ceil(fixtures[i][17].length / 2)) {
                             // first name, first column
+                            console.log("---")
                             //console.log(fixtures[i][17][k][0].toUpperCase() + ": " + measureText(fixtures[i][17][k][0].toUpperCase(),6))
-                            //console.log(k)
-                            //console.log(i)
-                            //console.log(fixtures[i])
-                            //console.log(fixtures[i][17])
-                            //console.log(fixutres[i][17][k])
-                            //console.log(fixtures[i][17][k][0])
+                            console.log(k)
+                            console.log(i)
+                            console.log(fixtures[i])
+                            console.log(fixtures[i][17])
+                            console.log(fixtures[i][17][k])
+                            console.log(fixtures[i][17][k][0])
+                            console.log(fixtures[i][17][k][0][0])
                             if (measureText(fixtures[i][17][k][0][0].toUpperCase(), 6) >= 32) {
                                 await JLfirstPage.drawText(fixtures[i][17][k][0][0].toUpperCase(), {
                                     x: 102.25,
@@ -2023,7 +2078,7 @@ async function modifyPdf(fix, dates, doc, run) {
                 }
 
                 // Team B Players
-                if (fixtures[i][18].length >= 1 && fixtures[i][18][0] != "") {
+                if (fixtures[i][18].length >= 1 && fixtures[i][18][0] != '' && fixtures[i][18][0][0] != '') {
                     for (var k = 0; k < fixtures[i][18].length; k++) {
                         if (k < Math.ceil(fixtures[i][18].length / 2)) {
                             // first name, first column
