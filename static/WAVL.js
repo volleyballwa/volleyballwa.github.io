@@ -302,7 +302,47 @@ async function parsePlayerList(players_list, upd_fixtures) {
     let missed_urls = [];
     let all_team_lists = {};
     let missed_events = [];
+    let completely_missed_events = []
+    let promise_array = [];
+    let alert_string = "Unable to retreive player list for:\r\n  "
+
     for (let i = 0; i < players_list.length; i++) {
+        console.log(i)
+        promise_array.push(new Promise((resolve, reject) => {
+            if (players_list[i].status == "fulfilled") {
+                console.log("resolve(players_list[i].value)")
+                resolve(players_list[i].value)
+            } else {
+                let ev_name = getEventNameFromURL(players_list[i].reason.response.request.responseURL, "player")
+                console.log("Athletes_"+players_list[i])
+                console.log("Athletes_"+players_list[i].value)
+                if (document.getElementById("Athletes_"+ev_name).value != "") {
+                    console.log("Can Read Data")
+                    const reader = new FileReader();
+                    
+                    // Parse HTML Upload
+                    reader.readAsText(document.getElementById("Athletes_"+ev_name).files[0])
+
+                    reader.onload = function (e) {
+                        const text = e.target.result;
+                        console.log(text)
+                        resolve({"request": {"responseText": text}})
+                    }
+
+                    reader.onerror = () => {
+                        reject("Something bad happened here")
+                    }
+                } else {
+                    alert_string = alert_string + ev_name + "\r\n"
+                }
+            }
+        }))
+
+    }
+
+
+
+    /*for (let i = 0; i < players_list.length; i++) {
         if (players_list[i].status == "fulfilled") {
             // Do Nothing For now
             console.log(players_list[i].value)
@@ -312,12 +352,12 @@ async function parsePlayerList(players_list, upd_fixtures) {
             let faulty_url = players_list[i].reason.response.request.responseURL
             console.log(faulty_url)
             let ev_name = getEventNameFromURL(faulty_url, "player")
-            if (ev_name == "2025 WAVL Season") {
-                // window.alert("Unable to retreive player list for:\r\n  " + ev_name + "\r\nContinuing for this event without player names.")
-                let temp_do_nothing = ""
-            } else if (__CONFIG__.events[ev_name].printPlayers == "true") {
-                window.alert("Unable to retreive player list for:\r\n  " + ev_name + "\r\nContinuing for this event without player names.")
-            }
+            //if (ev_name == "2025 WAVL Season") {
+            //    // window.alert("Unable to retreive player list for:\r\n  " + ev_name + "\r\nContinuing for this event without player names.")
+            //    let temp_do_nothing = ""
+            //} else if (__CONFIG__.events[ev_name].printPlayers == "true") {
+            //    window.alert("Unable to retreive player list for:\r\n  " + ev_name + "\r\nContinuing for this event without player names.")
+            //}
             missed_urls.push(faulty_url)
             console.log(ev_name);
             missed_events.push(ev_name)
@@ -326,6 +366,32 @@ async function parsePlayerList(players_list, upd_fixtures) {
     
     console.log("PLAYERS_LIST")
     console.log(successful_player_lists)
+    let alert_string = "Unable to retreive player list for:\r\n  "
+
+    for (let i = 0; i < missed_events.length; i++) {
+        console.log("Findable String")
+        console.log(missed_events[i])
+        if (document.getElementById("Athletes_"+missed_events[i]).value != "") {
+            console.log("Can Read Data")
+            const reader = new FileReader();
+            
+            // Parse CSV Upload
+            reader.readAsText(document.getElementById("Athletes_"+missed_events[i]).files[0])
+
+            reader.onload = function (e) {
+                const text = e.target.result;
+                console.log(text)
+                successful_player_lists.push({"request": {"responseText": text}})
+            }
+            await reader;
+        } else {
+            alert_string = alert_string + missed_events[i] + "\r\n"
+        }
+    }
+    */
+    if (alert_string.length > 50) {
+        window.alert(alert_string + "Continuing for these events without player names.")
+    }
 
     var new_method = true
 
@@ -335,28 +401,74 @@ async function parsePlayerList(players_list, upd_fixtures) {
         
     }
 
-    if (true == true){
-        /*if (ev_name = "2025 WAVL Season") {
-            var player_lists_slow = [];
-            var slow_id_list = __CONFIG__.events["2025 WAVL Season"]["backup_players"]["id_array"];
-            var slow_head = __CONFIG__.events["2025 WAVL Season"]["backup_players"]["base_url"];
-            //console.log(slow_id_list)
-            //console.log(slow_head)
-            for (var j = 0; j < slow_id_list.length; j++) {
-                var slow_object = {"players_url": slow_head+slow_id_list[j].toString()}
-                //console.log(slow_object)
-                var player_List_slow = getPlayerList(slow_object);
-                //console.log(player_List_slow)
-                player_lists_slow.push(player_List_slow)
-            }
-            //console.log(1)
-            //console.log(player_lists_slow)
-            await Promise.allSettled(player_lists_slow).then(player_lists_slow => {
+    await successful_player_lists;
+    
+    await Promise.allSettled(promise_array).then(successful_player_lists => {
+        //console.log(promise_array)
+        //for (let i = 0; i < promise_array.length; i++) {
+        //    console.log(promise_array[i])
+        //}
+    //})
+        if (true == true){
+            /*if (ev_name = "2025 WAVL Season") {
+                var player_lists_slow = [];
+                var slow_id_list = __CONFIG__.events["2025 WAVL Season"]["backup_players"]["id_array"];
+                var slow_head = __CONFIG__.events["2025 WAVL Season"]["backup_players"]["base_url"];
+                //console.log(slow_id_list)
+                //console.log(slow_head)
+                for (var j = 0; j < slow_id_list.length; j++) {
+                    var slow_object = {"players_url": slow_head+slow_id_list[j].toString()}
+                    //console.log(slow_object)
+                    var player_List_slow = getPlayerList(slow_object);
+                    //console.log(player_List_slow)
+                    player_lists_slow.push(player_List_slow)
+                }
+                //console.log(1)
                 //console.log(player_lists_slow)
-                for(let k = 0; k < player_lists_slow.length; k++){
-                    //console.log(player_lists_slow[k])
-                    let current_team = player_lists_slow[k].value.data.Results;
+                await Promise.allSettled(player_lists_slow).then(player_lists_slow => {
+                    //console.log(player_lists_slow)
+                    for(let k = 0; k < player_lists_slow.length; k++){
+                        //console.log(player_lists_slow[k])
+                        let current_team = player_lists_slow[k].value.data.Results;
+                        //console.log(current_team)
+                        for (let x = 0; x < current_team.length; x++){
+                            //console.log(current_team[x])
+                            let current_player = current_team[x].Name.trim().replace("\uFFFD","").replaceAll("*","");
+                            let team_name = current_team[x].TeamName.trim().toUpperCase()
+                            if (!(Object.keys(all_team_lists).includes(team_name))) {
+                                all_team_lists[team_name] = [[split_name(current_player.trim()),5]]
+                            } else {
+                                all_team_lists[team_name].push([split_name(current_player.trim()),5])
+                            }
+                        }
+                    }
+                    player_lists_slow = []
+                })
+            }*/
+
+            for(let k = 0; k < successful_player_lists.length; k++){
+                console.log(successful_player_lists[k].value)
+                new_method = true
+                try {
+                    current_team = successful_player_lists[k].value.data.Results
+                    console.log(current_team)
+
+                } catch (error) {
+                    try {
+                        current_team = successful_player_lists[k].value.request.responseText
+                        console.log(current_team)
+                        new_method = false
+                    } catch (error) {
+                        new_method = "bypass"
+                    }
+                }
+                console.log(new_method)
+                //if (successful_player_lists[k].data.Results) {
+                if (new_method == true) {
+                    let current_team = successful_player_lists[k].value.data.Results;
+                    //console.log("if")
                     //console.log(current_team)
+                    
                     for (let x = 0; x < current_team.length; x++){
                         //console.log(current_team[x])
                         let current_player = current_team[x].Name.trim().replace("\uFFFD","").replaceAll("*","");
@@ -367,52 +479,90 @@ async function parsePlayerList(players_list, upd_fixtures) {
                             all_team_lists[team_name].push([split_name(current_player.trim()),5])
                         }
                     }
-                }
-                player_lists_slow = []
-            })
-        }*/
-
-        for(let k = 0; k < successful_player_lists.length; k++){
-            //console.log(player_lists_slow[k])
-            new_method = true
-            try {
-                current_team = successful_player_lists[k].data.Results
-                console.log(current_team)
-
-            } catch (error) {
-                new_method = false
-            }
-
-            if (successful_player_lists[k].data.Results) {
-                let current_team = successful_player_lists[k].data.Results;
-                console.log("if")
-                console.log(current_team)
-                
-                for (let x = 0; x < current_team.length; x++){
-                    //console.log(current_team[x])
-                    let current_player = current_team[x].Name.trim().replace("\uFFFD","").replaceAll("*","");
-                    let team_name = current_team[x].TeamName.trim().toUpperCase()
-                    if (!(Object.keys(all_team_lists).includes(team_name))) {
-                        all_team_lists[team_name] = [[split_name(current_player.trim()),5]]
-                    } else {
-                        all_team_lists[team_name].push([split_name(current_player.trim()),5])
+                } else if (new_method == false){
+                    let parser = new DOMParser();
+                    let htmlDoc = parser.parseFromString(successful_player_lists[k].value.request.responseText, 'text/html');
+                    console.log(htmlDoc)
+                    let all_tables = htmlDoc.getElementsByClassName("team")
+                    let numFix = all_tables.length;
+                    for (let i = 0; i < numFix; i = i + 1) {
+                        let division = all_tables[i].getElementsByTagName("h3")[0].textContent
+                        let all_divs = all_tables[i].getElementsByClassName("roster")
+                        for (let x = 0; x < all_divs.length; x++) {
+                            let all_rows = all_divs[x].getElementsByTagName("tr")
+                            for (let j = 1; j < all_rows.length; j = j + 1) {
+                                let all_td = all_rows[j].getElementsByTagName("td")
+                                //console.log(all_td)
+                                //console.log(all_td[1])
+                                let player_name = all_td[1].innerText
+                                player_name = player_name.replace("\uFFFD","")
+                                player_name = player_name.replaceAll("*","");
+                                let team_name = all_td[2].innerText
+                                if (!(Object.keys(all_team_lists).includes(team_name))) {
+                                    all_team_lists[team_name] = [[split_name(player_name.trim()),5]]
+                                } else {
+                                    all_team_lists[team_name].push([split_name(player_name.trim()),5])
+                                }
+                            }
+                        }
                     }
                 }
-            } else {
+
+            }
+
+            console.log(all_team_lists)
+            console.log(upd_fixtures)
+            console.log("HELP ME_1")
+            for (i = 0; i < upd_fixtures.length; i++) {
+                let fixture_date = upd_fixtures[i][12]+"-"+upd_fixtures[i][11]+"-"+upd_fixtures[i][10]
+                let fixture_division = upd_fixtures[i][9]
+                let team_a = upd_fixtures[i][6].toUpperCase()//.split(" ")[0];
+                let team_b = upd_fixtures[i][7].toUpperCase()//.split(" ")[0];
+                //console.log(team_a)
+                //console.log(team_b)
+                console.log(all_team_lists[team_a])
+                console.log(all_team_lists[team_b])
+                upd_fixtures[i][17] = [["",""]];
+                upd_fixtures[i][18] = [["",""]];
+
+                if (Object.keys(all_team_lists).includes(team_a)) {
+                    upd_fixtures[i][17] = all_team_lists[team_a].sort(function (a, b) {
+                        if (a[0][1] > b[0][1]){ return 1
+                            } else if (a[0][1] < b[0][1]){ return -1
+                        } else if (a[0][1] === b[0][1]){if (a[0][0] > b[0][0]){return 1}
+                            return -1
+                        }})
+                }
+
+                if (Object.keys(all_team_lists).includes(team_b)) {
+                    upd_fixtures[i][18] = all_team_lists[team_b].sort(function (a, b) {
+                        if (a[0][1] > b[0][1]){ return 1
+                            } else if (a[0][1] < b[0][1]){ return -1
+                        } else if (a[0][1] === b[0][1]){if (a[0][0] > b[0][0]){return 1}
+                            return -1
+                        }})
+                }
+            }
+
+            //return await upd_fixtures;
+            //return upd_fixtures
+
+        } else {
+
+            for (let j = 0; j < successful_player_lists.length; j++) {
                 let parser = new DOMParser();
-                let htmlDoc = parser.parseFromString(successful_player_lists[k].request.responseText, 'text/html');
+                let htmlDoc = parser.parseFromString(successful_player_lists[j].value.request.responseText, 'text/html');
 
                 let all_tables = htmlDoc.getElementsByClassName("team")
                 let numFix = all_tables.length;
+
                 for (let i = 0; i < numFix; i = i + 1) {
                     let division = all_tables[i].getElementsByTagName("h3")[0].textContent
                     let all_divs = all_tables[i].getElementsByClassName("roster")
-                    for (let x = 0; x < all_divs.length; x++) {
-                        let all_rows = all_divs[x].getElementsByTagName("tr")
+                    for (let k = 0; k < all_divs.length; k++) {
+                        let all_rows = all_divs[k].getElementsByTagName("tr")
                         for (let j = 1; j < all_rows.length; j = j + 1) {
                             let all_td = all_rows[j].getElementsByTagName("td")
-                            //console.log(all_td)
-                            //console.log(all_td[1])
                             let player_name = all_td[1].innerText
                             player_name = player_name.replace("\uFFFD","")
                             player_name = player_name.replaceAll("*","");
@@ -426,110 +576,44 @@ async function parsePlayerList(players_list, upd_fixtures) {
                     }
                 }
             }
+            successful_player_lists = []
 
-        }
+            console.log(all_team_lists)
+            console.log(upd_fixtures)
+            console.log("HELP ME_2")
+            for (i = 0; i < upd_fixtures.length; i++) {
+                let fixture_date = upd_fixtures[i][12]+"-"+upd_fixtures[i][11]+"-"+upd_fixtures[i][10]
+                let fixture_division = upd_fixtures[i][9]
+                let team_a = upd_fixtures[i][6].toUpperCase()//.split(" ")[0];
+                let team_b = upd_fixtures[i][7].toUpperCase()//.split(" ")[0];
+                console.log(team_a)
+                console.log(team_b)
+                upd_fixtures[i][17] = [["",""]];
+                upd_fixtures[i][18] = [["",""]];
 
-        console.log(all_team_lists)
-        console.log(upd_fixtures)
-        console.log("HELP ME_1")
-        for (i = 0; i < upd_fixtures.length; i++) {
-            let fixture_date = upd_fixtures[i][12]+"-"+upd_fixtures[i][11]+"-"+upd_fixtures[i][10]
-            let fixture_division = upd_fixtures[i][9]
-            let team_a = upd_fixtures[i][6].toUpperCase()//.split(" ")[0];
-            let team_b = upd_fixtures[i][7].toUpperCase()//.split(" ")[0];
-            console.log(team_a)
-            console.log(team_b)
-            console.log(all_team_lists[team_a])
-            console.log(all_team_lists[team_b])
-            upd_fixtures[i][17] = [["",""]];
-            upd_fixtures[i][18] = [["",""]];
-
-            if (Object.keys(all_team_lists).includes(team_a)) {
-                upd_fixtures[i][17] = all_team_lists[team_a].sort(function (a, b) {
-                    if (a[0][1] > b[0][1]){ return 1
-                        } else if (a[0][1] < b[0][1]){ return -1
-                    } else if (a[0][1] === b[0][1]){if (a[0][0] > b[0][0]){return 1}
-                        return -1
-                    }})
-            }
-
-            if (Object.keys(all_team_lists).includes(team_b)) {
-                upd_fixtures[i][18] = all_team_lists[team_b].sort(function (a, b) {
-                    if (a[0][1] > b[0][1]){ return 1
-                        } else if (a[0][1] < b[0][1]){ return -1
-                    } else if (a[0][1] === b[0][1]){if (a[0][0] > b[0][0]){return 1}
-                        return -1
-                    }})
-            }
-        }
-
-        return await upd_fixtures;
-
-    } else {
-
-        for (let j = 0; j < successful_player_lists.length; j++) {
-            let parser = new DOMParser();
-            let htmlDoc = parser.parseFromString(successful_player_lists[j].request.responseText, 'text/html');
-
-            let all_tables = htmlDoc.getElementsByClassName("team")
-            let numFix = all_tables.length;
-
-            for (let i = 0; i < numFix; i = i + 1) {
-                let division = all_tables[i].getElementsByTagName("h3")[0].textContent
-                let all_divs = all_tables[i].getElementsByClassName("roster")
-                for (let k = 0; k < all_divs.length; k++) {
-                    let all_rows = all_divs[k].getElementsByTagName("tr")
-                    for (let j = 1; j < all_rows.length; j = j + 1) {
-                        let all_td = all_rows[j].getElementsByTagName("td")
-                        let player_name = all_td[1].innerText
-                        player_name = player_name.replace("\uFFFD","")
-                        player_name = player_name.replaceAll("*","");
-                        let team_name = all_td[2].innerText
-                        if (!(Object.keys(all_team_lists).includes(team_name))) {
-                            all_team_lists[team_name] = [[split_name(player_name.trim()),5]]
-                        } else {
-                            all_team_lists[team_name].push([split_name(player_name.trim()),5])
-                        }
-                    }
+                if (Object.keys(all_team_lists).includes(team_a)) {
+                    upd_fixtures[i][17] = all_team_lists[team_a].sort(function (a, b) {
+                        if (a[0][1] > b[0][1]){ return 1
+                            } else if (a[0][1] < b[0][1]){ return -1
+                        } else if (a[0][1] === b[0][1]){if (a[0][0] > b[0][0]){return 1}
+                            return -1
+                        }})
+                }
+                if (Object.keys(all_team_lists).includes(team_b)) {
+                    upd_fixtures[i][18] = all_team_lists[team_b].sort(function (a, b) {
+                        if (a[0][1] > b[0][1]){ return 1
+                            } else if (a[0][1] < b[0][1]){ return -1
+                        } else if (a[0][1] === b[0][1]){if (a[0][0] > b[0][0]){return 1}
+                            return -1
+                        }})
                 }
             }
+
+            //return await upd_fixtures;
+            //return upd_fixtures
         }
-        successful_player_lists = []
-
-        console.log(all_team_lists)
-        console.log(upd_fixtures)
-        console.log("HELP ME_2")
-        for (i = 0; i < upd_fixtures.length; i++) {
-            let fixture_date = upd_fixtures[i][12]+"-"+upd_fixtures[i][11]+"-"+upd_fixtures[i][10]
-            let fixture_division = upd_fixtures[i][9]
-            let team_a = upd_fixtures[i][6].toUpperCase()//.split(" ")[0];
-            let team_b = upd_fixtures[i][7].toUpperCase()//.split(" ")[0];
-            console.log(team_a)
-            console.log(team_b)
-            upd_fixtures[i][17] = [["",""]];
-            upd_fixtures[i][18] = [["",""]];
-
-            if (Object.keys(all_team_lists).includes(team_a)) {
-                upd_fixtures[i][17] = all_team_lists[team_a].sort(function (a, b) {
-                    if (a[0][1] > b[0][1]){ return 1
-                        } else if (a[0][1] < b[0][1]){ return -1
-                    } else if (a[0][1] === b[0][1]){if (a[0][0] > b[0][0]){return 1}
-                        return -1
-                    }})
-            }
-            if (Object.keys(all_team_lists).includes(team_b)) {
-                upd_fixtures[i][18] = all_team_lists[team_b].sort(function (a, b) {
-                    if (a[0][1] > b[0][1]){ return 1
-                        } else if (a[0][1] < b[0][1]){ return -1
-                    } else if (a[0][1] === b[0][1]){if (a[0][0] > b[0][0]){return 1}
-                        return -1
-                    }})
-            }
-        }
-
-    return await upd_fixtures;
-
-    }
+    })
+    return await upd_fixtures
     /*
     console.log(all_team_lists)
     console.log(upd_fixtures)
@@ -3169,7 +3253,7 @@ function generate_Table() {
             cell2.innerHTML = '<p style="font-size:8px;line-height:9.5px;">&nbsp;</p>'
         }
 
-        // WAVL Division
+        // Events
         cell3.classList.add("cell1")
         cell3.innerHTML = '<p style="font-size:8px;line-height:9.5px;">&nbsp;</p>'
 
@@ -3182,9 +3266,34 @@ function generate_Table() {
                 '</div>'
 
             cell5.classList.add("cell9")
+            
+            /*
             cell5.innerHTML = '<div id="wb_Text32">' +
                 '<span style="color:#000000;font-family:Arial;font-size:16px;">' + events.name + '</span>' +
                 '</div>'
+            */
+            
+            cell5.innerHTML = '<table id="Table2">'+
+                '<tbody><tr><td id="Row1"><div id="wb_TextNew"><span style="color:#000000;font-family:Arial;font-size:16px;z-index:60;">' + events.name + '</span></div></td>'+
+                '<td id="Row2"><div id="fileUpload"><input type="file" label="Athletes .html" id="Athletes_'+events.name+'" name="filename" style="display:inline-block;" accept=".html, .htm"></div></td></tr></tbody></table>'    
+
+                
+            /*
+            
+            <div id="fileUpload"><input type="file" id="Athletes_'+events.name+'" name="filename" style="display:inline-block;" accept=".html"></div>
+            
+            
+            cell7.classList.add("cell2")
+            cell7.innerHTML = '<div id="event_file_' + i.toString() + '" style="display:inline-block;width:16px;height:20px;z-index:60;">' +
+                '<input type="checkbox" id="event_file_' + i.toString() + '" name="WAVjL_teams" value="on" checked="" style="display:inline-block;opacity:0;" title="' + events.name + '">' +
+                '<label for="event_file_' + i.toString() + '"></label>' +
+                '</div>'
+
+            cell8.classList.add("cell9")
+            cell8.innerHTML = '<div id="wb_Text49">' +
+                '<span style="color:#000000;font-family:Arial;font-size:16px;">' + events.name + '</span>' +
+                '</div>'*/
+
         } catch (e) {
             cell4.classList.add("cell10")
             cell4.innerHTML = '<p style="font-size:8px;line-height:9.5px;">&nbsp;</p>'
