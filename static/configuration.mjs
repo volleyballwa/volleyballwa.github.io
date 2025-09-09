@@ -13,6 +13,75 @@ const SEASON_ID = "27";
 
 const __CONFIG__ = {
     "venues": {
+        
+        "Adelaide 36ers Arena": {
+            "name": "Adelaide 36ers Arena",
+            "top": "Adelaide",
+            "mid": "36ers",
+            "bot": "Arena",
+            "alias": ["36ers", "Adelaide 36ers Arena"]
+        },
+        "Iona College, Lindum QLD": {
+            "name": "Iona College, Lindum QLD",
+            "top": "",
+            "mid": "Iona",
+            "bot": "College",
+            "alias": ["Iona College, Lindum QLD", "IONA"]
+        },
+        "Melbourne Sports and Aquatic Centre": {
+            "name": "Melbourne Sports and Aquatic Centre",
+            "top": "Melbourne",
+            "mid": "Sports and",
+            "bot": "Aquatic Centre",
+            "alias": ["Melbourne Sports and Aquatic Centre", "MSAC"]
+        },
+        "Netball Central, NSW": {
+            "name": "Netball Central, NSW",
+            "top": "",
+            "mid": "Netball",
+            "bot": "Central",
+            "alias": ["Netball Central, NSW", "NC"]
+        },
+        "Radford College": {
+            "name": "Radford College",
+            "top": "",
+            "mid": "Radford",
+            "bot": "College",
+            "alias": ["Radford College", "Radfo"]
+        },
+        "Reynella East College": {
+            "name": "Reynella East College",
+            "top": "Reynella",
+            "mid": "East",
+            "bot": "College",
+            "alias": ["Reynella East College", "Reyne"]
+        },
+        "Shoalhaven Indoor Sports Centre": {
+            "name": "Shoalhaven Indoor Sports Centre",
+            "top": "Shoalhaven",
+            "mid": "Indoor Sports",
+            "bot": "Centre",
+            "alias": ["Shoalhaven Indoor Sports Centre", "SISC"]
+        },
+        "South Pine Indoor Sports Centre": {
+            "name": "South Pine Indoor Sports Centre",
+            "top": "South Pine",
+            "mid": "Indoor Sports",
+            "bot": "Centre",
+            "alias": ["South Pine Indoor Sports Centre", "SPine"]
+        },
+        "State Netball Arena - Parkville": {
+            "name": "State Netball Arena - Parkville",
+            "top": "State",
+            "mid": "Netball",
+            "bot": "Arena",
+            "alias": ["State Netball Arena - Parkville", "SNA"]
+        },
+        
+        
+        
+        
+        
         "Albany Leisure Centre": {
             "name": "Albany Leisure Centre",
             "top": "Albany",
@@ -60,7 +129,7 @@ const __CONFIG__ = {
             "top": "",
             "mid": "",
             "bot": "Bendat",
-            "alias": ["Bendat Basketball Centre", "BEND"]
+            "alias": ["Bendat Basketball Centre", "BEND", "Benda"]
         },
         "Bunbury PCYC": {
             "name": "Bunbury PCYC",
@@ -662,6 +731,19 @@ const __CONFIG__ = {
             "backup_players" : {
                 "base_url" : "https://cors-anywhere-og-v5kf.onrender.com/volleyball.exposureevents.com/232730/wavl/teamroster?divisionteamid=",
                 "id_array" : []
+            }
+        },
+        "2025 AVSL Season": {
+            "name": "2025 AVSL Season",
+            "fixture_url": "https://cors-anywhere-og-v5kf.onrender.com/volleyball.exposureevents.com/253383/2025-mahindra-australian-volleyball-super-league/documents/schedule?layout=datetime",
+            "players_url": "https://volleyball.exposureevents.com/253383/2025-mahindra-australian-volleyball-super-league/documents/players",
+            "printPlayers": "false",
+            "scoresheet": {
+                "default": "avsl"
+            },
+            "backup_players" : {
+                "base_url" : "https://volleyball.exposureevents.com/253383/2025-mahindra-australian-volleyball-super-league/documents/players",
+                "id_array" : [""]
             }
         }
         /*"2024 WAVL Season": {

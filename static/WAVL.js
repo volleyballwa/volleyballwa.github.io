@@ -1040,6 +1040,7 @@ async function modifyPdf(fix, dates, doc, run) {
     var JLurl = "https://volleyballwa.github.io/static/def_jl.pdf";
     var newWAVLurl = "https://volleyballwa.github.io/static/new_def.pdf";
     var extraWAVLurl = "https://volleyballwa.github.io/static/extra_def.pdf";
+    var AVSLurl = "https://volleyballwa.github.io/static/AVSL.pdf";
     //var newWAVLurl = "https://og1764.github.io/static/new_def.pdf";
     //var extraWAVLurl = "https://og1764.github.io/static/extra_def.pdf";
 
@@ -1047,6 +1048,7 @@ async function modifyPdf(fix, dates, doc, run) {
     const JLexistingPdfBytes = await fetch(JLurl).then(resp => resp.arrayBuffer());
     const newWAVLexistingPdfBytes = await fetch(newWAVLurl).then(res => res.arrayBuffer());
     const extraWAVLexistingPdfBytes = await fetch(extraWAVLurl).then(res => res.arrayBuffer());
+    const AVSLexistingPdfBytes = await fetch(WAVLurl).then(res => res.arrayBuffer());
 
     // Used for new venues - converts all aliases back to main name.
     var __venues__ = {};
@@ -1085,7 +1087,7 @@ async function modifyPdf(fix, dates, doc, run) {
         var JLurl = "https://volleyballwa.github.io/static/def_jl.pdf";
         var newWAVLurl = "https://volleyballwa.github.io/static/new_def.pdf";
         var extraWAVLurl = "https://volleyballwa.github.io/static/extra_def.pdf";
-
+        var AVSLurl = "https://volleyballwa.github.io/static/AVSL.pdf";
         //var WAVLexistingPdfBytes = await fetch(WAVLurl).then(res => res.arrayBuffer());
 
         var WAVLpdfDoc = await PDFLib.PDFDocument.load(WAVLexistingPdfBytes);
@@ -1118,6 +1120,12 @@ async function modifyPdf(fix, dates, doc, run) {
         var JLhelveticaBold = await JLpdfDoc.embedFont(PDFLib.StandardFonts.HelveticaBold);
         var JLpages = await JLpdfDoc.getPages();
         var JLfirstPage = await JLpages[0];
+
+        var AVSLpdfDoc = await PDFLib.PDFDocument.load(AVSLexistingPdfBytes);
+        var AVSLhelveticaFont = await AVSLpdfDoc.embedFont(PDFLib.StandardFonts.Helvetica);
+        var AVSLhelveticaBold = await AVSLpdfDoc.embedFont(PDFLib.StandardFonts.HelveticaBold);
+        var AVSLpages = await AVSLpdfDoc.getPages();
+        var AVSLfirstPage = await AVSLpages[0];
 
         // If WAVL Game (Divisions or State League)
         // use OLD scoresheet for divisions (for now)
@@ -2358,6 +2366,7 @@ async function modifyPdf(fix, dates, doc, run) {
                 })
             }
             var saved = await JLpdfDoc.saveAsBase64();
+        } else if (scoresheet_type == "avsl") {
         } else {
             window.alert("Invalid Scoresheet Type - " + scoresheet_type)
             console.log("** ERROR **")
