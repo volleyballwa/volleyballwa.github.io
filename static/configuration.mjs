@@ -2,6 +2,19 @@ const FINALS_DATES = ["2022-09-04", "2022-09-11", "2022-09-18", "2023-08-27", "2
 
 const SL_FINALS_DATES = ["2023-07-14", "2023-07-16", "2023-07-22", "2024-07-19", "2024-07-21", "2024-07-27"]
 
+const AVSL_FINAL_DATES = ["2025-11-02"]
+
+const AVSL_SEMI_DATES = ["2025-10-26"]
+
+const AVSL_TRICODE = {
+    "Adelaide Storm" : "A  D  E",
+    "Canberra Heat" : "C  B  R",
+    "Melbourne Vipers" : "M  E  L",
+    "NSW Phoenix" : "N  S  W",
+    "Perth Steel" : "P  E  R",
+    "Queensland Pirates" : "Q  L  D"
+}
+
 // This is used to convert the "(Pool x)" into "- x"
 const DIV_GRADING_DATES = ["2025-04-06", "2025-04-13", "2025-04-20", "2025-04-27", "2025-05-04", "2025-05-11"]
 const DIV_GRADING_DIVS = ["D2M", "D2W", "D3M"]
@@ -16,65 +29,74 @@ const __CONFIG__ = {
         
         "Adelaide 36ers Arena": {
             "name": "Adelaide 36ers Arena",
-            "top": "Adelaide",
-            "mid": "36ers",
-            "bot": "Arena",
+            "top": "",
+            "mid": "",
+            "bot": "36ers Arena",
+            "city": "Findon",
             "alias": ["36ers", "Adelaide 36ers Arena"]
         },
         "Iona College, Lindum QLD": {
             "name": "Iona College, Lindum QLD",
             "top": "",
-            "mid": "Iona",
-            "bot": "College",
+            "mid": "",
+            "bot": "Iona College",
+            "city": "Lindum",
             "alias": ["Iona College, Lindum QLD", "IONA"]
         },
         "Melbourne Sports and Aquatic Centre": {
             "name": "Melbourne Sports and Aquatic Centre",
-            "top": "Melbourne",
-            "mid": "Sports and",
-            "bot": "Aquatic Centre",
+            "top": "",
+            "mid": "",
+            "bot": "M S A C",
+            "city": "Albert Park",
             "alias": ["Melbourne Sports and Aquatic Centre", "MSAC"]
         },
         "Netball Central, NSW": {
             "name": "Netball Central, NSW",
             "top": "",
-            "mid": "Netball",
-            "bot": "Central",
+            "mid": "",
+            "bot": "Netball Central",
+            "city": "Sydney Olympic Park",
             "alias": ["Netball Central, NSW", "NC"]
         },
         "Radford College": {
             "name": "Radford College",
             "top": "",
-            "mid": "Radford",
-            "bot": "College",
+            "mid": "",
+            "bot": "Radford College",
+            "city": "Bruce",
             "alias": ["Radford College", "Radfo"]
         },
         "Reynella East College": {
             "name": "Reynella East College",
-            "top": "Reynella",
-            "mid": "East",
-            "bot": "College",
+            "top": "",
+            "mid": "",
+            "bot": "Reynella East College",
+            "city": "Reynella East",
             "alias": ["Reynella East College", "Reyne"]
         },
         "Shoalhaven Indoor Sports Centre": {
             "name": "Shoalhaven Indoor Sports Centre",
-            "top": "Shoalhaven",
-            "mid": "Indoor Sports",
-            "bot": "Centre",
+            "top": "",
+            "mid": "",
+            "bot": "Shoalhaven",
+            "city": "Bomaderry",
             "alias": ["Shoalhaven Indoor Sports Centre", "SISC"]
         },
         "South Pine Indoor Sports Centre": {
             "name": "South Pine Indoor Sports Centre",
-            "top": "South Pine",
-            "mid": "Indoor Sports",
-            "bot": "Centre",
+            "top": "",
+            "mid": "",
+            "bot": "South Pine",
+            "city": "Brendale",
             "alias": ["South Pine Indoor Sports Centre", "SPine"]
         },
         "State Netball Arena - Parkville": {
             "name": "State Netball Arena - Parkville",
-            "top": "State",
-            "mid": "Netball",
-            "bot": "Arena",
+            "top": "",
+            "mid": "",
+            "bot": "State Netball Arena",
+            "city": "Parkville",
             "alias": ["State Netball Arena - Parkville", "SNA"]
         },
         
@@ -129,6 +151,7 @@ const __CONFIG__ = {
             "top": "",
             "mid": "",
             "bot": "Bendat",
+            "city": "Floreat",
             "alias": ["Bendat Basketball Centre", "BEND", "Benda"]
         },
         "Bunbury PCYC": {
@@ -744,6 +767,21 @@ const __CONFIG__ = {
             "backup_players" : {
                 "base_url" : "https://volleyball.exposureevents.com/253383/2025-mahindra-australian-volleyball-super-league/documents/players",
                 "id_array" : [""]
+            }
+        },
+        "Test - 2025 Australian Youth Volleyball Championship": {
+            "name": "Test - 2025 Australian Youth Volleyball Championship",
+            "fixture_url": "https://cors-anywhere-og-v5kf.onrender.com/volleyball.exposureevents.com/245701/2025-australian-youth-volleyball-championships/documents/schedule?layout=datetime&r=321",
+            //"fixture_url": "https://volleyball.exposureevents.com/227017/wa-schools-cup/documents/schedule?layout=datetime",
+            "players_url": "https://volleyball.exposureevents.com/245701/2025-australian-youth-volleyball-championships/documents/players?r=434",
+            "printPlayers": "true",
+            "scoresheet": {
+                "finals": "ayvc-5",
+                "default": "ayvc-3"
+            },
+            "backup_players" : {
+                "base_url" : "https://cors-anywhere-og-v5kf.onrender.com/volleyball.exposureevents.com/245701/2025-australian-youth-volleyball-championships/teamroster?divisionteamid=",
+                "id_array" : []
             }
         }
         /*"2024 WAVL Season": {

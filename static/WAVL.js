@@ -1048,7 +1048,7 @@ async function modifyPdf(fix, dates, doc, run) {
     const JLexistingPdfBytes = await fetch(JLurl).then(resp => resp.arrayBuffer());
     const newWAVLexistingPdfBytes = await fetch(newWAVLurl).then(res => res.arrayBuffer());
     const extraWAVLexistingPdfBytes = await fetch(extraWAVLurl).then(res => res.arrayBuffer());
-    const AVSLexistingPdfBytes = await fetch(WAVLurl).then(res => res.arrayBuffer());
+    const AVSLexistingPdfBytes = await fetch(AVSLurl).then(res => res.arrayBuffer());
 
     // Used for new venues - converts all aliases back to main name.
     var __venues__ = {};
@@ -2367,6 +2367,131 @@ async function modifyPdf(fix, dates, doc, run) {
             }
             var saved = await JLpdfDoc.saveAsBase64();
         } else if (scoresheet_type == "avsl") {
+            // City
+            let city = __CONFIG__.venues[fixtures[i][0]].city
+            await AVSLfirstPage.drawText(city, {
+                x: 65,
+                y: 809,
+                size: 14,
+                font: AVSLhelveticaBold
+            })
+            // Team Tricodes
+            let team_a_tri = AVSL_TRICODE[fixtures[i][6]]
+            let team_b_tri = AVSL_TRICODE[fixtures[i][7]]
+            
+            await AVSLfirstPage.drawText(team_a_tri, {
+                x: 999,
+                y: 399,
+                size: 14,
+                font: AVSLhelveticaBold
+            })
+
+            await AVSLfirstPage.drawText(team_b_tri, {
+                x: 1101,
+                y: 399,
+                size: 14,
+                font: AVSLhelveticaBold
+            })
+            
+            // Pool
+            let pool = "Pool"
+            let temp_date = fixtures[i][12].toString()+"-"+fixtures[i][11].toString()+"-"+fixtures[i][10].toString()
+            if (AVSL_FINAL_DATES.includes(temp_date)) {
+                pool = "Final"
+            } else if (AVSL_FINAL_DATES.includes(temp_date)) {
+                pool = "Semi"
+            }
+            
+            await AVSLfirstPage.drawText(pool, {
+                x: 281,
+                y: 770.5,
+                size: 13,
+                font: AVSLhelveticaBold
+            })
+
+            // Gender
+            if (fixtures[i][9][1] == "W") {
+                await AVSLfirstPage.drawLine({
+                    start: { x: 176, y: 767.2 },
+                    end: { x: 193, y: 784 },
+                    thickness: 1,
+                    color: rgb(0,0,0),
+                    opacity: 1
+                })
+                await AVSLfirstPage.drawLine({
+                    start: { x: 176, y: 784 },
+                    end: { x: 193, y: 767.2 },
+                    thickness: 1,
+                    color: rgb(0, 0, 0),
+                    opacity: 1
+                })
+            } else if (fixtures[i][9][1] == "M") {
+                await AVSLfirstPage.drawLine({
+                    start: { x: 108.5, y: 767.2 },
+                    end: { x: 125.3, y: 784 },
+                    thickness: 1,
+                    color: rgb(0,0,0),
+                    opacity: 1
+                })
+                await AVSLfirstPage.drawLine({
+                    start: { x: 108.5, y: 784 },
+                    end: { x: 125.3, y: 767.2 },
+                    thickness: 1,
+                    color: rgb(0, 0, 0),
+                    opacity: 1
+                })
+            } 
+
+
+            //var time = fixtures[i][13].toString() + ":" + fixtures[i][14].toString()
+            var hh = fixtures[i][13].toString()[0] + "  " + fixtures[i][13].toString()[1]
+            var mm = fixtures[i][14].toString()[0] + "  " + fixtures[i][14].toString()[1]
+            // Time (hh:mm)
+            await AVSLfirstPage.drawText(hh, {
+                x: 602,
+                y: 809,
+                size: 15,
+                font: AVSLhelveticaBold
+            })
+
+            await AVSLfirstPage.drawText(mm, {
+                x: 635,
+                y: 809,
+                size: 15,
+                font: AVSLhelveticaBold
+            })
+            
+            // Team Names
+            await AVSLfirstPage.drawText(fixtures[i][6], {
+                x: parseInt((461 - measureText(fixtures[i][6], 10)).toString()),
+                y: 777,
+                size: 10,
+                font: AVSLhelveticaBold
+            })
+            await AVSLfirstPage.drawText(fixtures[i][7], {
+                x: parseInt((618 - measureText(fixtures[i][7], 10)).toString()),
+                y: 777,
+                size: 10,
+                font: AVSLhelveticaBold
+            })
+
+            // Venue
+            await AVSLfirstPage.drawText(fixtures[i][3], {
+                x: 65,
+                y: 793,
+                size: 14,
+                font: AVSLhelveticaBold
+            })
+            
+            var ddmmyy = fixtures[i][10].toString()[0] + "  " + fixtures[i][10].toString()[1] + "  " + fixtures[i][11].toString()[0] + "  " + fixtures[i][11].toString()[1] + "  " + fixtures[i][12].slice(2,4).toString()[0] + "  " + fixtures[i][12].slice(2,4).toString()[1]
+
+            await AVSLfirstPage.drawText(ddmmyy, {
+                x: 450,
+                y: 809,
+                size: 15,
+                font: AVSLhelveticaBold
+            })
+            var saved = await AVSLpdfDoc.saveAsBase64();
         } else {
             window.alert("Invalid Scoresheet Type - " + scoresheet_type)
             console.log("** ERROR **")
