@@ -7,12 +7,22 @@ const AVSL_FINAL_DATES = ["2025-11-02"]
 const AVSL_SEMI_DATES = ["2025-10-26"]
 
 const AVSL_TRICODE = {
-    "Adelaide Storm" : "A  D  E",
-    "Canberra Heat" : "C  B  R",
-    "Melbourne Vipers" : "M  E  L",
-    "NSW Phoenix" : "N  S  W",
-    "Perth Steel" : "P  E  R",
-    "Queensland Pirates" : "Q  L  D"
+    "Adelaide Storm" : "S  T  M",
+    "Canberra Heat" : "H  E  A",
+    "Melbourne Vipers" : "V   I   P",
+    "NSW Phoenix" : "P  H  O",
+    "Perth Steel" : "S  T  L",
+    "Queensland Pirates" : "P   I   R"
+}
+
+const AVSL_COACH_SORTING = {
+    "HC": 1,
+    "C2": 20,
+    "C3": 30,
+    "C4": 40,
+    "C5": 50,
+    "": 99,
+    "President": 100
 }
 
 // This is used to convert the "(Pool x)" into "- x"
@@ -713,6 +723,7 @@ const __CONFIG__ = {
         }*/
     },
     "events":{
+        /*
         "2025 WAVL Season": {
             "name": "2025 WAVL Season",
             "fixture_url": "https://cors-anywhere-og-v5kf.onrender.com/volleyball.exposureevents.com/232730/wavl/documents/schedule?layout=datetime",
@@ -755,12 +766,12 @@ const __CONFIG__ = {
                 "base_url" : "https://cors-anywhere-og-v5kf.onrender.com/volleyball.exposureevents.com/232730/wavl/teamroster?divisionteamid=",
                 "id_array" : []
             }
-        },
+        },*/
         "2025 AVSL Season": {
             "name": "2025 AVSL Season",
             "fixture_url": "https://cors-anywhere-og-v5kf.onrender.com/volleyball.exposureevents.com/253383/2025-mahindra-australian-volleyball-super-league/documents/schedule?layout=datetime",
             "players_url": "https://volleyball.exposureevents.com/253383/2025-mahindra-australian-volleyball-super-league/documents/players",
-            "printPlayers": "false",
+            "printPlayers": "true",
             "scoresheet": {
                 "default": "avsl"
             },
@@ -768,7 +779,7 @@ const __CONFIG__ = {
                 "base_url" : "https://volleyball.exposureevents.com/253383/2025-mahindra-australian-volleyball-super-league/documents/players",
                 "id_array" : [""]
             }
-        },
+        }/*,
         "Test - 2025 Australian Youth Volleyball Championship": {
             "name": "Test - 2025 Australian Youth Volleyball Championship",
             "fixture_url": "https://cors-anywhere-og-v5kf.onrender.com/volleyball.exposureevents.com/245701/2025-australian-youth-volleyball-championships/documents/schedule?layout=datetime&r=321",
@@ -783,7 +794,7 @@ const __CONFIG__ = {
                 "base_url" : "https://cors-anywhere-og-v5kf.onrender.com/volleyball.exposureevents.com/245701/2025-australian-youth-volleyball-championships/teamroster?divisionteamid=",
                 "id_array" : []
             }
-        }
+        }*/
         /*"2024 WAVL Season": {
             "name": "2024 WAVL Season",
             "fixture_url": "https://cors-anywhere-og-v5kf.onrender.com/volleyball.exposureevents.com/220866/wavl/documents/schedule?layout=datetime",

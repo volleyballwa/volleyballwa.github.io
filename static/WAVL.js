@@ -301,11 +301,12 @@ async function parsePlayerList(players_list, upd_fixtures) {
     let successful_player_lists = [];
     let missed_urls = [];
     let all_team_lists = {};
+    let all_coach_lists = {};
     let missed_events = [];
     let completely_missed_events = []
     let promise_array = [];
     let alert_string = "Unable to retreive player list for:\r\n  "
-
+    console.log(players_list)
     for (let i = 0; i < players_list.length; i++) {
         console.log(i)
         promise_array.push(new Promise((resolve, reject) => {
@@ -314,6 +315,7 @@ async function parsePlayerList(players_list, upd_fixtures) {
                 resolve(players_list[i].value)
             } else {
                 let ev_name = getEventNameFromURL(players_list[i].reason.response.request.responseURL, "player")
+                console.log(ev_name)
                 console.log("Athletes_"+players_list[i])
                 console.log("Athletes_"+players_list[i].value)
                 if (document.getElementById("Athletes_"+ev_name).value != "") {
@@ -409,6 +411,7 @@ async function parsePlayerList(players_list, upd_fixtures) {
         //    console.log(promise_array[i])
         //}
     //})
+        console.log(successful_player_lists)
         if (true == true){
             /*if (ev_name = "2025 WAVL Season") {
                 var player_lists_slow = [];
@@ -482,11 +485,18 @@ async function parsePlayerList(players_list, upd_fixtures) {
                 } else if (new_method == false){
                     let parser = new DOMParser();
                     let htmlDoc = parser.parseFromString(successful_player_lists[k].value.request.responseText, 'text/html');
-                    console.log(htmlDoc)
+                    //console.log(htmlDoc)
+                    let AVSL_check = htmlDoc.getElementsByClassName("title")[0].textContent.trim()
+                    isAVSL = false
+                    if (AVSL_check == "2025 Mahindra Australian Volleyball Super League") {
+                        isAVSL = true
+                    }
                     let all_tables = htmlDoc.getElementsByClassName("team")
                     let numFix = all_tables.length;
+                    //console.log(numFix)
                     for (let i = 0; i < numFix; i = i + 1) {
                         let division = all_tables[i].getElementsByTagName("h3")[0].textContent
+                        //console.log(division)
                         let all_divs = all_tables[i].getElementsByClassName("roster")
                         for (let x = 0; x < all_divs.length; x++) {
                             let all_rows = all_divs[x].getElementsByTagName("tr")
@@ -498,11 +508,32 @@ async function parsePlayerList(players_list, upd_fixtures) {
                                 player_name = player_name.replace("\uFFFD","")
                                 player_name = player_name.replaceAll("*","");
                                 let team_name = all_td[2].innerText
-                                if (!(Object.keys(all_team_lists).includes(team_name))) {
-                                    all_team_lists[team_name] = [[split_name(player_name.trim()),5]]
-                                } else {
-                                    all_team_lists[team_name].push([split_name(player_name.trim()),5])
+                                let player_number = all_td[0].innerText
+                                let coach_status = ""
+                                try {
+                                    coach_status = all_rows[j].getElementsByClassName("position")[0].textContent
+                                    //console.log(coach_status)
+                                } catch (error) {
+                                    coach_status = ""
                                 }
+                                if (isAVSL) {
+                                    team_name = all_td[2].innerText+"_"+division
+                                }
+                                
+                                if (coach_status == "") {
+                                    if (!(Object.keys(all_team_lists).includes(team_name))) {
+                                        all_team_lists[team_name] = [[split_name(player_name.trim()),player_number]]
+                                    } else {
+                                        all_team_lists[team_name].push([split_name(player_name.trim()),player_number])
+                                    }
+                                } else {
+                                    if (!(Object.keys(all_coach_lists).includes(team_name))) {
+                                        all_coach_lists[team_name] = [[split_name(player_name.trim()),coach_status]]
+                                    } else {
+                                        all_coach_lists[team_name].push([split_name(player_name.trim()),coach_status])
+                                    }
+                                }
+                                
                             }
                         }
                     }
@@ -511,6 +542,7 @@ async function parsePlayerList(players_list, upd_fixtures) {
             }
 
             console.log(all_team_lists)
+            console.log(all_coach_lists)
             console.log(upd_fixtures)
             console.log("HELP ME_1")
             for (i = 0; i < upd_fixtures.length; i++) {
@@ -520,27 +552,119 @@ async function parsePlayerList(players_list, upd_fixtures) {
                 let team_b = upd_fixtures[i][7].toUpperCase()//.split(" ")[0];
                 //console.log(team_a)
                 //console.log(team_b)
-                console.log(all_team_lists[team_a])
-                console.log(all_team_lists[team_b])
-                upd_fixtures[i][17] = [["",""]];
-                upd_fixtures[i][18] = [["",""]];
-
-                if (Object.keys(all_team_lists).includes(team_a)) {
-                    upd_fixtures[i][17] = all_team_lists[team_a].sort(function (a, b) {
-                        if (a[0][1] > b[0][1]){ return 1
-                            } else if (a[0][1] < b[0][1]){ return -1
-                        } else if (a[0][1] === b[0][1]){if (a[0][0] > b[0][0]){return 1}
-                            return -1
-                        }})
+                if (upd_fixtures[i][9][2] == "2025 AVSL Season") {
+                    team_a = team_a + "_" + upd_fixtures[i][9][0]
+                    team_b = team_b + "_" + upd_fixtures[i][9][0]
                 }
 
-                if (Object.keys(all_team_lists).includes(team_b)) {
-                    upd_fixtures[i][18] = all_team_lists[team_b].sort(function (a, b) {
-                        if (a[0][1] > b[0][1]){ return 1
-                            } else if (a[0][1] < b[0][1]){ return -1
-                        } else if (a[0][1] === b[0][1]){if (a[0][0] > b[0][0]){return 1}
-                            return -1
-                        }})
+                //console.log(all_coach_lists[team_a])
+                //console.log(all_coach_lists[team_b])
+
+                //console.log(all_team_lists[team_a])
+                //console.log(all_team_lists[team_b])
+                upd_fixtures[i][17] = [["",""]];
+                upd_fixtures[i][18] = [["",""]];
+                
+                // for AVSL, sort by number
+                if (upd_fixtures[i][9][2] == "2025 AVSL Season") {
+                    if (Object.keys(all_team_lists).includes(team_a)) {
+                        upd_fixtures[i][17] = all_team_lists[team_a].sort(function (a, b) {
+                            if (isNaN(parseInt(a[1])) || isNaN(parseInt(b[1]))) {
+                            if (isNaN(parseInt(a[1])) && isNaN(parseInt(b[1]))) {
+                                if (a[0][1] > b[0][1]){return 1} else {return -1}
+                            } else {if (isNaN(parseInt(a[1]))) {return 1} else {return -1}}
+                            } else {
+                            if (parseInt(a[1]) > parseInt(b[1])){ return 1
+                            } else if (parseInt(a[1]) < parseInt(b[1])){ return -1
+                            } else if (parseInt(a[1]) === parseInt(b[1])){if (a[0][1] > b[0][1]){return 1}
+                                return -1
+                        }}})
+                    }
+                    if (Object.keys(all_team_lists).includes(team_b)) {
+                        upd_fixtures[i][18] = all_team_lists[team_b].sort(function (a, b) {
+                            if (isNaN(parseInt(a[1])) || isNaN(parseInt(b[1]))) {
+                            if (isNaN(parseInt(a[1])) && isNaN(parseInt(b[1]))) {
+                                if (a[0][1] > b[0][1]){return 1} else {return -1}
+                            } else {if (isNaN(parseInt(a[1]))) {return 1} else {return -1}}
+                            } else {
+                            if (parseInt(a[1]) > parseInt(b[1])){ return 1
+                            } else if (parseInt(a[1]) < parseInt(b[1])){ return -1
+                            } else if (parseInt(a[1]) === parseInt(b[1])){if (a[0][1] > b[0][1]){return 1}
+                                return -1
+                        }}})
+                    }
+
+                } else {
+                    if (Object.keys(all_team_lists).includes(team_a)) {
+                        upd_fixtures[i][17] = all_team_lists[team_a].sort(function (a, b) {
+                            if (a[0][1] > b[0][1]){ return 1
+                                } else if (a[0][1] < b[0][1]){ return -1
+                            } else if (a[0][1] === b[0][1]){if (a[0][0] > b[0][0]){return 1}
+                                return -1
+                            }})
+                    }
+
+                    if (Object.keys(all_team_lists).includes(team_b)) {
+                        upd_fixtures[i][18] = all_team_lists[team_b].sort(function (a, b) {
+                            if (a[0][1] > b[0][1]){ return 1
+                                } else if (a[0][1] < b[0][1]){ return -1
+                            } else if (a[0][1] === b[0][1]){if (a[0][0] > b[0][0]){return 1}
+                                return -1
+                            }})
+                    }
+                }
+
+
+                if (Object.keys(all_coach_lists).includes(team_a)) {
+                    let temp = upd_fixtures[i][20]
+
+                    let input_list = all_coach_lists[team_a]
+                    input_list.push([['', ''], ''])
+                    input_list.push([['', ''], ''])
+                    input_list.push([['', ''], ''])
+                    input_list.push([['', ''], ''])
+                    input_list.push([['', ''], ''])
+
+                    // do some sorting
+
+                    for (let m = 0; m < 5; m++) {
+                        console.log(temp[m].length)
+                        if (temp[m][0][0] == "" ) {
+                            temp[m] = input_list[m]
+                            
+                        }
+                    }
+
+                    upd_fixtures[i][20] = temp.sort(function(a,b) {
+                        if (AVSL_COACH_SORTING[a[1]] < AVSL_COACH_SORTING[b[1]]) {return -1} 
+                        else if (AVSL_COACH_SORTING[a[1]] > AVSL_COACH_SORTING[b[1]]) {return 1}
+                        else {return 0}
+                    })
+                }
+
+                if (Object.keys(all_coach_lists).includes(team_b)) {
+                    let temp = upd_fixtures[i][21]
+
+                    let input_list = all_coach_lists[team_b]
+                    input_list.push([['', ''], ''])
+                    input_list.push([['', ''], ''])
+                    input_list.push([['', ''], ''])
+                    input_list.push([['', ''], ''])
+                    input_list.push([['', ''], ''])
+
+                    // do some sorting
+
+                    for (let m = 0; m < 5; m++) {
+                        console.log(temp[m].length)
+                        if (temp[m][0][0] == "" ) {
+                            temp[m] = input_list[m]
+                        }
+                    }
+                    upd_fixtures[i][21] = temp.sort(function(a,b) {
+                        if (AVSL_COACH_SORTING[a[1]] < AVSL_COACH_SORTING[b[1]]) {return -1} 
+                        else if (AVSL_COACH_SORTING[a[1]] > AVSL_COACH_SORTING[b[1]]) {return 1}
+                        else {return 0}
+                    })
                 }
             }
 
@@ -1490,11 +1614,15 @@ async function modifyPdf(fix, dates, doc, run) {
                 let b_pres = __PRESIDENTS__[fixtures[i][7].substring(fixtures[i][7].indexOf(' ') + 1)];
 
                 if (a_pres == __PRESIDENTS__["a"]){
-                    a_pres = " ";
+                    a_pres = [['', ''], ''];
+                } else {
+                    a_pres = [[__PRESIDENTS__[fixtures[i][6].substring(fixtures[i][6].indexOf(' ') + 1)], ''], '']
                 }
 
                 if (b_pres == __PRESIDENTS__["a"]){
-                    b_pres = " ";
+                    b_pres = [['', ''], ''];
+                } else {
+                    b_pres = [[__PRESIDENTS__[fixtures[i][7].substring(fixtures[i][7].indexOf(' ') + 1)], ''], '']
                 }
 
                 if (measureText(a_pres.toUpperCase(), 10) >= 90 || measureText(b_pres.toUpperCase(), 10) >= 90 ) {
@@ -2368,7 +2496,9 @@ async function modifyPdf(fix, dates, doc, run) {
             var saved = await JLpdfDoc.saveAsBase64();
         } else if (scoresheet_type == "avsl") {
             // City
-            let city = __CONFIG__.venues[fixtures[i][0]].city
+            console.log(fixtures[i][4])
+            console.log(__CONFIG__.venues[fixtures[i][4]])
+            let city = __CONFIG__.venues[fixtures[i][4]].city
             await AVSLfirstPage.drawText(city, {
                 x: 65,
                 y: 809,
@@ -2380,14 +2510,14 @@ async function modifyPdf(fix, dates, doc, run) {
             let team_b_tri = AVSL_TRICODE[fixtures[i][7]]
             
             await AVSLfirstPage.drawText(team_a_tri, {
-                x: 999,
+                x: 1000,
                 y: 399,
                 size: 14,
                 font: AVSLhelveticaBold
             })
 
             await AVSLfirstPage.drawText(team_b_tri, {
-                x: 1101,
+                x: 1102,
                 y: 399,
                 size: 14,
                 font: AVSLhelveticaBold
@@ -2491,6 +2621,216 @@ async function modifyPdf(fix, dates, doc, run) {
                 size: 15,
                 font: AVSLhelveticaBold
             })
+
+            // Team A List
+            if (fixtures[i][17].length >= 1 && fixtures[i][17][0] != '' && fixtures[i][17][0][0] != '') {
+                for (var k = 0; k < Math.min(fixtures[i][17].length, 10); k++) {
+                    let name_formatted = fixtures[i][17][k][0][0].toUpperCase() + " " + fixtures[i][17][k][0][1].toUpperCase()
+                    if (measureText(name_formatted, 6) >= 49) {
+                        console.log(name_formatted)
+                        console.log(measureText(name_formatted, 6))
+                        await AVSLfirstPage.drawText(name_formatted, {
+                            x: 972,
+                            y: 368-((14*k)),
+                            size: 6,
+                            font: AVSLhelveticaFont
+                        })
+                    } else if (measureText(name_formatted, 6) >= 43) {
+                        console.log(name_formatted)
+                        console.log(measureText(name_formatted, 6))
+                        await AVSLfirstPage.drawText(name_formatted, {
+                            x: 972,
+                            y: 368-((14*k)),
+                            size: 7,
+                            font: AVSLhelveticaFont
+                        })
+                    } else if (measureText(name_formatted, 6) >= 32) {
+                        console.log(name_formatted)
+                        console.log(measureText(name_formatted, 6))
+                        await AVSLfirstPage.drawText(name_formatted, {
+                            x: 972,
+                            y: 368-((14*k)),
+                            size: 8,
+                            font: AVSLhelveticaFont
+                        })
+                    } else {
+                        await AVSLfirstPage.drawText(name_formatted, {
+                            x: 972,
+                            y: 368-((14*k)),
+                            size: 10,
+                            font: AVSLhelveticaFont
+                        })
+                    }
+                    // draw number
+                    let player_number = fixtures[i][17][k][1]
+                    if (player_number.length == 1) {
+                        player_number = " " + player_number
+                    }
+                    await AVSLfirstPage.drawText(player_number, {
+                        x: 957,
+                        y: 368-((14*k)),
+                        size: 10,
+                        font: AVSLhelveticaFont
+                    })
+                }
+
+            }
+
+            // Team B List
+            if (fixtures[i][18].length >= 1 && fixtures[i][18][0] != '' && fixtures[i][18][0][0] != '') {
+                for (var k = 0; k < Math.min(fixtures[i][18].length, 10); k++) {
+                    let name_formatted = fixtures[i][18][k][0][0].toUpperCase() + " " + fixtures[i][18][k][0][1].toUpperCase()
+                    if (measureText(name_formatted, 6) >= 49) {
+                        console.log(name_formatted)
+                        console.log(measureText(name_formatted, 6))
+                        await AVSLfirstPage.drawText(name_formatted, {
+                            x: 1094,
+                            y: 368-((14*k)),
+                            size: 6,
+                            font: AVSLhelveticaFont
+                        })
+                    } else if (measureText(name_formatted, 6) >= 43) {
+                        console.log(name_formatted)
+                        console.log(measureText(name_formatted, 6))
+                        await AVSLfirstPage.drawText(name_formatted, {
+                            x: 1094,
+                            y: 368-((14*k)),
+                            size: 7,
+                            font: AVSLhelveticaFont
+                        })
+                    } else if (measureText(name_formatted, 6) >= 32) {
+                        console.log(name_formatted)
+                        console.log(measureText(name_formatted, 6))
+                        await AVSLfirstPage.drawText(name_formatted, {
+                            x: 1094,
+                            y: 368-((14*k)),
+                            size: 8,
+                            font: AVSLhelveticaFont
+                        })
+                    } else {
+                        await AVSLfirstPage.drawText(name_formatted, {
+                            x: 1094,
+                            y: 368-((14*k)),
+                            size: 10,
+                            font: AVSLhelveticaFont
+                        })
+                    }
+                    
+                    // draw number
+                    let player_number = fixtures[i][18][k][1]
+                    if (player_number.length == 1) {
+                        player_number = " " + player_number
+                    }
+                    await AVSLfirstPage.drawText(player_number, {
+                        x: 1079,
+                        y: 368-((14*k)),
+                        size: 10,
+                        font: AVSLhelveticaFont
+                    })
+                }
+            }
+
+            // Team A Coaches
+            for (var k = 0; k < Math.min(fixtures[i][20].length, 5); k++) {
+                let name_formatted = fixtures[i][20][k][0][0].toUpperCase() + " " + fixtures[i][20][k][0][1].toUpperCase()
+                if (measureText(name_formatted, 6) >= 49) {
+                    await AVSLfirstPage.drawText(name_formatted, {
+                        x: 972,
+                        y: 142-((14*k)),
+                        size: 6,
+                        font: AVSLhelveticaFont
+                    })
+                } else if (measureText(name_formatted, 6) >= 43) {
+                    console.log(name_formatted)
+                    console.log(measureText(name_formatted, 6))
+                    await AVSLfirstPage.drawText(name_formatted, {
+                        x: 972,
+                        y: 142-((14*k)),
+                        size: 7,
+                        font: AVSLhelveticaFont
+                    })
+                } else if (measureText(name_formatted, 6) >= 32) {
+                    console.log(name_formatted)
+                    console.log(measureText(name_formatted, 6))
+                    await AVSLfirstPage.drawText(name_formatted, {
+                        x: 972,
+                        y: 142-((14*k)),
+                        size: 8,
+                        font: AVSLhelveticaFont
+                    })
+                } else {
+                    await AVSLfirstPage.drawText(name_formatted, {
+                        x: 972,
+                        y: 142-((14*k)),
+                        size: 10,
+                        font: AVSLhelveticaFont
+                    })
+                }
+                // draw number
+                let player_number = fixtures[i][20][k][1]
+                if (player_number.length == 1) {
+                    player_number = " " + player_number
+                }
+                if (player_number == "HC"){player_number = ""}
+                await AVSLfirstPage.drawText(player_number, {
+                    x: 956.5,
+                    y: 142-((14*k)),
+                    size: 10,
+                    font: AVSLhelveticaFont
+                })
+            }
+
+            // Team B Coaches
+            for (var k = 0; k < Math.min(fixtures[i][21].length, 5); k++) {
+                let name_formatted = fixtures[i][21][k][0][0].toUpperCase() + " " + fixtures[i][21][k][0][1].toUpperCase()
+                if (measureText(name_formatted, 6) >= 49) {
+                    await AVSLfirstPage.drawText(name_formatted, {
+                        x: 1094,
+                        y: 142-((14*k)),
+                        size: 6,
+                        font: AVSLhelveticaFont
+                    })
+                } else if (measureText(name_formatted, 6) >= 43) {
+                    console.log(name_formatted)
+                    console.log(measureText(name_formatted, 6))
+                    await AVSLfirstPage.drawText(name_formatted, {
+                        x: 1094,
+                        y: 142-((14*k)),
+                        size: 7,
+                        font: AVSLhelveticaFont
+                    })
+                } else if (measureText(name_formatted, 6) >= 32) {
+                    console.log(name_formatted)
+                    console.log(measureText(name_formatted, 6))
+                    await AVSLfirstPage.drawText(name_formatted, {
+                        x: 1094,
+                        y: 142-((14*k)),
+                        size: 8,
+                        font: AVSLhelveticaFont
+                    })
+                } else {
+                    await AVSLfirstPage.drawText(name_formatted, {
+                        x: 1094,
+                        y: 142-((14*k)),
+                        size: 10,
+                        font: AVSLhelveticaFont
+                    })
+                }
+                // draw number
+                let player_number = fixtures[i][21][k][1]
+                if (player_number.length == 1) {
+                    player_number = " " + player_number
+                }
+                if (player_number == "HC"){player_number = ""}
+                await AVSLfirstPage.drawText(player_number, {
+                    x: 1078.5,
+                    y: 142-((14*k)),
+                    size: 10,
+                    font: AVSLhelveticaFont
+                })
+            }
+
+
             var saved = await AVSLpdfDoc.saveAsBase64();
         } else {
             window.alert("Invalid Scoresheet Type - " + scoresheet_type)
@@ -2832,6 +3172,7 @@ async function modifyPdf(fix, dates, doc, run) {
     return await [merged64]
     //return await total;
 }
+
 
 /**
  * Merge modified PDF's into one single PDF.
@@ -3227,6 +3568,25 @@ function html_to_fixture(venues, leagues, in_date, all_html_prom) {
                                 ]
                             }
                             
+                            let team_a_coaches = [[['', ''], ''],[['', ''], ''],[['', ''], ''],[['', ''], ''],[['', ''], '']]
+                            let team_b_coaches = [[['', ''], ''],[['', ''], ''],[['', ''], ''],[['', ''], ''],[['', ''], '']]
+
+                            if (div.includes("Division") || div.includes("State")) {
+                                let a_pres = __PRESIDENTS__[_team_a.substring(_team_a.indexOf(' ') + 1)];
+                                let b_pres = __PRESIDENTS__[_team_b.substring(_team_b.indexOf(' ') + 1)];
+
+                                if (a_pres == __PRESIDENTS__["a"]){
+                                    a_pres = " ";
+                                }
+
+                                if (b_pres == __PRESIDENTS__["a"]){
+                                    b_pres = " ";
+                                }
+
+                                team_a_coaches[4] = a_pres
+                                team_b_coaches[4] = b_pres
+                            }
+
                             let fixture_scoresheet_type = __CONFIG__.events[event_Name].scoresheet["default"]
                             //console.log(__CONFIG__.events[event_Name].scoresheet.length)
                             console.log(__CONFIG__.events[event_Name].scoresheet)
@@ -3253,7 +3613,7 @@ function html_to_fixture(venues, leagues, in_date, all_html_prom) {
                             fixtures_list.push([zero_venue_split, _venue_0, _venue_1, _venue_2, _venue_full, _court,
                                                 _team_a, _team_b, _duty, _division, _date_dd, _date_mm, _date_yyyy, _time_hr, _time_min,
                                                 _sorting, _time_sorting, [],
-                                                [], fixture_scoresheet_type
+                                                [], fixture_scoresheet_type, team_a_coaches, team_b_coaches
                                                 ])
                             } catch (e) {
                                 console.log(e)
