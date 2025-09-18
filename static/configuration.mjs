@@ -723,7 +723,7 @@ const __CONFIG__ = {
         }*/
     },
     "events":{
-        /*
+        
         "2025 WAVL Season": {
             "name": "2025 WAVL Season",
             "fixture_url": "https://cors-anywhere-og-v5kf.onrender.com/volleyball.exposureevents.com/232730/wavl/documents/schedule?layout=datetime",
@@ -766,7 +766,7 @@ const __CONFIG__ = {
                 "base_url" : "https://cors-anywhere-og-v5kf.onrender.com/volleyball.exposureevents.com/232730/wavl/teamroster?divisionteamid=",
                 "id_array" : []
             }
-        },*/
+        },
         "2025 AVSL Season": {
             "name": "2025 AVSL Season",
             "fixture_url": "https://cors-anywhere-og-v5kf.onrender.com/volleyball.exposureevents.com/253383/2025-mahindra-australian-volleyball-super-league/documents/schedule?layout=datetime",

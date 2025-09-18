@@ -336,6 +336,7 @@ async function parsePlayerList(players_list, upd_fixtures) {
                     }
                 } else {
                     alert_string = alert_string + ev_name + "\r\n"
+                    reject("No Player List")
                 }
             }
         }))
@@ -397,13 +398,15 @@ async function parsePlayerList(players_list, upd_fixtures) {
 
     var new_method = true
 
-    try {
-        
-    } catch (error) {
-        
-    }
+    //try {
+    //    
+    //} catch (error) {
+    //    
+    //}
 
     await successful_player_lists;
+
+    console.log(promise_array)
     
     await Promise.allSettled(promise_array).then(successful_player_lists => {
         //console.log(promise_array)
