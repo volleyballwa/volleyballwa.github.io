@@ -2771,16 +2771,29 @@ async function modifyPdf(fix, dates, doc, run) {
                 }
                 // draw number
                 let player_number = fixtures[i][20][k][1]
+                let player_extra = ""
                 if (player_number.length == 1) {
                     player_number = " " + player_number
                 }
                 if (player_number == "HC"){player_number = ""}
+                if (player_number.length > 2) {
+                    player_extra = player_number.slice(2)
+                    player_number = player_number.slice(0,2)
+                }
                 await AVSLfirstPage.drawText(player_number, {
                     x: 956.5,
                     y: 142-((14*k)),
-                    size: 10,
+                    size: 8,
                     font: AVSLhelveticaFont
                 })
+                await AVSLfirstPage.drawText(player_extra, {
+                    x: 966.5,
+                    y: 148-((14*k)),
+                    size: 5,
+                    font: AVSLhelveticaFont
+                })
+                console.log(player_extra)
+
             }
 
             // Team B Coaches
@@ -2821,16 +2834,28 @@ async function modifyPdf(fix, dates, doc, run) {
                 }
                 // draw number
                 let player_number = fixtures[i][21][k][1]
+                let player_extra = ""
                 if (player_number.length == 1) {
                     player_number = " " + player_number
                 }
                 if (player_number == "HC"){player_number = ""}
+                if (player_number.length > 2) {
+                    player_extra = player_number.slice(2)
+                    player_number = player_number.slice(0,2)
+                }
                 await AVSLfirstPage.drawText(player_number, {
                     x: 1078.5,
                     y: 142-((14*k)),
-                    size: 10,
+                    size: 8,
                     font: AVSLhelveticaFont
                 })
+                await AVSLfirstPage.drawText(player_extra, {
+                    x: 1088.5,
+                    y: 148-((14*k)),
+                    size: 5,
+                    font: AVSLhelveticaFont
+                })
+                console.log(player_extra)
             }
 
 
