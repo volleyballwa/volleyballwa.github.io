@@ -17,10 +17,14 @@ const AVSL_TRICODE = {
 
 const AVSL_COACH_SORTING = {
     "HC": 1,
-    "C2": 20,
-    "C3": 30,
-    "C4": 40,
-    "C5": 50,
+    "AC1": 10,
+    "AC2": 20,
+    "C2": 21,
+    "AC3": 30,
+    "C3": 31,
+    "AC4": 40,
+    "C4": 41,
+    "C5": 51,
     "": 99,
     "President": 100
 }
