@@ -2676,7 +2676,7 @@ async function modifyPdf(fix, dates, doc, run) {
 
             // Team A List
             if (fixtures[i][17].length >= 1 && fixtures[i][17][0] != '' && fixtures[i][17][0][0] != '') {
-                for (var k = 0; k < Math.min(fixtures[i][17].length, 10); k++) {
+                for (var k = 0; k < Math.min(fixtures[i][17].length, 12); k++) {
                     let name_formatted = fixtures[i][17][k][0][0].toUpperCase() + " " + fixtures[i][17][k][0][1].toUpperCase()
                     if (measureText(name_formatted, 6) >= 49) {
                         console.log(name_formatted)
@@ -2730,7 +2730,7 @@ async function modifyPdf(fix, dates, doc, run) {
 
             // Team B List
             if (fixtures[i][18].length >= 1 && fixtures[i][18][0] != '' && fixtures[i][18][0][0] != '') {
-                for (var k = 0; k < Math.min(fixtures[i][18].length, 10); k++) {
+                for (var k = 0; k < Math.min(fixtures[i][18].length, 12); k++) {
                     let name_formatted = fixtures[i][18][k][0][0].toUpperCase() + " " + fixtures[i][18][k][0][1].toUpperCase()
                     if (measureText(name_formatted, 6) >= 49) {
                         console.log(name_formatted)
