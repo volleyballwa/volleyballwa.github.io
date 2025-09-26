@@ -544,9 +544,9 @@ async function parsePlayerList(players_list, upd_fixtures) {
                                 if (isAVSL) {
                                     team_name = all_td[2].innerText+"_"+division
                                 }
-                                
+
                                 if (!(Object.keys(team_staff_object).includes(team_name))) {
-                                    team_staff_object[team_name] = {"HC": "","TS": 1,"M": 1,"AC": 1,"T": 1}
+                                    team_staff_object[team_name] = {"HC": " ","TS": 1,"M": 1,"AC": 1,"T": 1}
                                 }
                                 
                                 if (coach_status == "") {
@@ -560,26 +560,29 @@ async function parsePlayerList(players_list, upd_fixtures) {
                                     if (!(Object.keys(all_coach_lists).includes(team_name))) {
                                         let new_coach_status = coach_translation[coach_status]
                                         let final_coach_status = new_coach_status
-                                        console.log(final_coach_status)
-                                        console.log(team_staff_object)
+                                        //console.log(final_coach_status)
+                                        //console.log(team_staff_object)
                                         console.log(team_staff_object[team_name])
-                                        if (final_coach_status != "HC") {
-                                            final_coach_status = new_coach_status + team_staff_object[team_name][new_coach_status].toString()
+                                        if (final_coach_status != "C") {
+                                            final_coach_status = new_coach_status + team_staff_object[team_name][new_coach_status].toString().trim()
                                             team_staff_object[team_name][new_coach_status] = team_staff_object[team_name][new_coach_status] + 1
                                         }
+                                        console.log(final_coach_status)
                                         
-                                        all_coach_lists[team_name] = [[split_name(player_name.trim()),final_coach_status]]
+                                        all_coach_lists[team_name] = [[split_name(player_name.trim()),final_coach_status.trim()]]
                                     } else {
 
                                         let new_coach_status = coach_translation[coach_status]
                                         let final_coach_status = new_coach_status
                                         console.log(final_coach_status)
-                                        if (final_coach_status != "HC") {
-                                            final_coach_status = new_coach_status + team_staff_object[team_name][new_coach_status].toString()
+                                        if (final_coach_status != "C") {
+                                            console.log(final_coach_status)
+                                            console.log(team_staff_object[team_name][new_coach_status])
+                                            final_coach_status = new_coach_status + team_staff_object[team_name][new_coach_status].toString().trim()
                                             team_staff_object[team_name][new_coach_status] = team_staff_object[team_name][new_coach_status] + 1
                                         }
-
-                                        all_coach_lists[team_name] = [[split_name(player_name.trim()),final_coach_status]]
+                                        console.log(final_coach_status)
+                                        all_coach_lists[team_name].push([split_name(player_name.trim()),final_coach_status.trim()])
                                     }
                                 }
                                 
@@ -2822,6 +2825,10 @@ async function modifyPdf(fix, dates, doc, run) {
                     player_number = " " + player_number
                 }
                 if (player_number == "HC"){player_number = ""}
+                if (player_number[0] == "M") {
+                    player_extra = player_number.slice(1)
+                    player_number = " M"
+                }
                 if (player_number.length > 2) {
                     player_extra = player_number.slice(2)
                     player_number = player_number.slice(0,2)
@@ -2885,6 +2892,10 @@ async function modifyPdf(fix, dates, doc, run) {
                     player_number = " " + player_number
                 }
                 if (player_number == "HC"){player_number = ""}
+                if (player_number[0] == "M") {
+                    player_extra = player_number.slice(1)
+                    player_number = " M"
+                }
                 if (player_number.length > 2) {
                     player_extra = player_number.slice(2)
                     player_number = player_number.slice(0,2)
