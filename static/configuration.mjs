@@ -25,7 +25,7 @@ const AVSL_COACH_SORTING = {
     "AC4": 40,
     "C4": 41,
     "C5": 51,
-    "M": 70,
+    //"M": 70,
     "M1": 71,
     "M2": 72,
     "M3": 73,
@@ -33,6 +33,7 @@ const AVSL_COACH_SORTING = {
     "TS2": 82,
     "TS3": 83,
     "TS4": 84,
+    "Other": 95,
     "": 99,
     "President": 100
 }

@@ -7,8 +7,14 @@
         {
             "type": "chrome",
             "request": "launch",
-            "name": "Launch Chrome against localhost",
+            "name": "Windows Chrome Debug",
             "url": "C:\\Users\\Coding\\Documents\\Github\\vwa\\volleyballwa.github.io\\index.html"
+        },
+        {
+            "type": "chrome",
+            "request": "launch",
+            "name": "MacOS Chrome Debug",
+            "url": "file:///Users/og1764/Documents/Github/Volleyballwa.github.io/volleyballwa.github.io/index.html"
         }
     ]
 }

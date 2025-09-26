@@ -301,6 +301,7 @@ async function parsePlayerList(players_list, upd_fixtures) {
     let successful_player_lists = [];
     let missed_urls = [];
     let all_team_lists = {};
+    let team_staff_object = {};
     let all_coach_lists = {};
     let missed_events = [];
     let completely_missed_events = []
@@ -513,14 +514,39 @@ async function parsePlayerList(players_list, upd_fixtures) {
                                 let team_name = all_td[2].innerText
                                 let player_number = all_td[0].innerText
                                 let coach_status = ""
+                                let coach_translation = {
+                                    "Head Coach": "HC",
+                                    "Other": "TS",
+                                    "Manager": "M",
+                                    "Assistant Coach": "AC",
+                                    "Trainer": "T",
+                                    "Team Staff": "TS",
+                                    
+                                    "HEAD COACH": "HC",
+                                    "OTHER": "TS",
+                                    "MANAGER": "M",
+                                    "ASSISTANT COACH": "AC",
+                                    "TRAINER": "T",
+                                    "TEAM STAFF": "TS"
+                                }
+                                
+                                //let team_staff_counter = {"HC": "","TS": 1,"M": 1,"AC": 1,"T": 1}
+
+                                
+
                                 try {
                                     coach_status = all_rows[j].getElementsByClassName("position")[0].textContent
                                     //console.log(coach_status)
+                                    
                                 } catch (error) {
                                     coach_status = ""
                                 }
                                 if (isAVSL) {
                                     team_name = all_td[2].innerText+"_"+division
+                                }
+                                
+                                if (!(Object.keys(team_staff_object).includes(team_name))) {
+                                    team_staff_object[team_name] = {"HC": "","TS": 1,"M": 1,"AC": 1,"T": 1}
                                 }
                                 
                                 if (coach_status == "") {
@@ -530,10 +556,30 @@ async function parsePlayerList(players_list, upd_fixtures) {
                                         all_team_lists[team_name].push([split_name(player_name.trim()),player_number])
                                     }
                                 } else {
+                                    console.log(coach_status)
                                     if (!(Object.keys(all_coach_lists).includes(team_name))) {
-                                        all_coach_lists[team_name] = [[split_name(player_name.trim()),coach_status]]
+                                        let new_coach_status = coach_translation[coach_status]
+                                        let final_coach_status = new_coach_status
+                                        console.log(final_coach_status)
+                                        console.log(team_staff_object)
+                                        console.log(team_staff_object[team_name])
+                                        if (final_coach_status != "HC") {
+                                            final_coach_status = new_coach_status + team_staff_object[team_name][new_coach_status].toString()
+                                            team_staff_object[team_name][new_coach_status] = team_staff_object[team_name][new_coach_status] + 1
+                                        }
+                                        
+                                        all_coach_lists[team_name] = [[split_name(player_name.trim()),final_coach_status]]
                                     } else {
-                                        all_coach_lists[team_name].push([split_name(player_name.trim()),coach_status])
+
+                                        let new_coach_status = coach_translation[coach_status]
+                                        let final_coach_status = new_coach_status
+                                        console.log(final_coach_status)
+                                        if (final_coach_status != "HC") {
+                                            final_coach_status = new_coach_status + team_staff_object[team_name][new_coach_status].toString()
+                                            team_staff_object[team_name][new_coach_status] = team_staff_object[team_name][new_coach_status] + 1
+                                        }
+
+                                        all_coach_lists[team_name] = [[split_name(player_name.trim()),final_coach_status]]
                                     }
                                 }
                                 
