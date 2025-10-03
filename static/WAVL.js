@@ -541,6 +541,7 @@ async function parsePlayerList(players_list, upd_fixtures) {
                                 } catch (error) {
                                     coach_status = ""
                                 }
+
                                 if (isAVSL) {
                                     team_name = all_td[2].innerText+"_"+division
                                 }
@@ -549,13 +550,14 @@ async function parsePlayerList(players_list, upd_fixtures) {
                                     team_staff_object[team_name] = {"HC": " ","TS": 1,"M": 1,"AC": 1,"T": 1}
                                 }
                                 
-                                if (coach_status == "") {
+                                if (player_number != "") {
                                     if (!(Object.keys(all_team_lists).includes(team_name))) {
                                         all_team_lists[team_name] = [[split_name(player_name.trim()),player_number]]
                                     } else {
                                         all_team_lists[team_name].push([split_name(player_name.trim()),player_number])
                                     }
-                                } else {
+                                }
+                                if (coach_status != "") {
                                     console.log(coach_status)
                                     if (!(Object.keys(all_coach_lists).includes(team_name))) {
                                         let new_coach_status = coach_translation[coach_status]
@@ -2828,7 +2830,10 @@ async function modifyPdf(fix, dates, doc, run) {
                 if (player_number[0] == "M") {
                     player_extra = player_number.slice(1)
                     player_number = " M"
-                }
+                } else if (player_number[0] == "T" && player_number[1] != "S") {
+                    player_extra = player_number.slice(1)
+                    player_number = " T"
+                } 
                 if (player_number.length > 2) {
                     player_extra = player_number.slice(2)
                     player_number = player_number.slice(0,2)
@@ -2895,7 +2900,10 @@ async function modifyPdf(fix, dates, doc, run) {
                 if (player_number[0] == "M") {
                     player_extra = player_number.slice(1)
                     player_number = " M"
-                }
+                } else if (player_number[0] == "T" && player_number[1] != "S") {
+                    player_extra = player_number.slice(1)
+                    player_number = " T"
+                } 
                 if (player_number.length > 2) {
                     player_extra = player_number.slice(2)
                     player_number = player_number.slice(0,2)

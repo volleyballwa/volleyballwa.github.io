@@ -25,10 +25,15 @@ const AVSL_COACH_SORTING = {
     "AC4": 40,
     "C4": 41,
     "C5": 51,
-    //"M": 70,
-    "M1": 71,
-    "M2": 72,
-    "M3": 73,
+    //"M": 60,
+    "M1": 61,
+    "M2": 62,
+    "M3": 63,
+    "M4": 64,
+    "T1": 71,
+    "T2": 72,
+    "T3": 73,
+    "T4": 74,
     "TS1": 81,
     "TS2": 82,
     "TS3": 83,
@@ -120,7 +125,7 @@ const __CONFIG__ = {
             "mid": "",
             "bot": "State Netball Arena",
             "city": "Parkville",
-            "alias": ["State Netball Arena - Parkville", "SNA"]
+            "alias": ["State Netball Arena - Parkville", "SNA", "State Netball Arena"]
         },
         
         
