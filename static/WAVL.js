@@ -2582,8 +2582,8 @@ async function modifyPdf(fix, dates, doc, run) {
             let temp_date = fixtures[i][12].toString()+"-"+fixtures[i][11].toString()+"-"+fixtures[i][10].toString()
             if (AVSL_FINAL_DATES.includes(temp_date)) {
                 pool = "Final"
-            } else if (AVSL_FINAL_DATES.includes(temp_date)) {
-                pool = "Semi"
+            } else if (AVSL_SEMI_DATES.includes(temp_date)) {
+                pool = "Semi-Final"
             }
             
             await AVSLfirstPage.drawText(pool, {
