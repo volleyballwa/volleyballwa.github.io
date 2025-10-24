@@ -2583,7 +2583,7 @@ async function modifyPdf(fix, dates, doc, run) {
             if (AVSL_FINAL_DATES.includes(temp_date)) {
                 pool = "Final"
             } else if (AVSL_SEMI_DATES.includes(temp_date)) {
-                pool = "Semi-Final"
+                pool = "Qual."
             }
             
             await AVSLfirstPage.drawText(pool, {
