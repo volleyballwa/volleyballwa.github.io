@@ -1219,7 +1219,7 @@ async function modifyPdf(fix, dates, doc, run) {
     var newWAVLurl = "https://volleyballwa.github.io/static/new_def.pdf";
     var extraWAVLurl = "https://volleyballwa.github.io/static/extra_def.pdf";
     //var AVSLurl = "https://volleyballwa.github.io/static/AVSL.pdf";
-    var AVSLurl = "https://volleyballwa.github.io/static/AVSL_FINALS.pdf";
+    var AVSLurl = "https://volleyballwa.github.io/static/AVSLfinalsNew.pdf";
     //var newWAVLurl = "https://og1764.github.io/static/new_def.pdf";
     //var extraWAVLurl = "https://og1764.github.io/static/extra_def.pdf";
 
@@ -1267,7 +1267,7 @@ async function modifyPdf(fix, dates, doc, run) {
         var newWAVLurl = "https://volleyballwa.github.io/static/new_def.pdf";
         var extraWAVLurl = "https://volleyballwa.github.io/static/extra_def.pdf";
         //var AVSLurl = "https://volleyballwa.github.io/static/AVSL.pdf";
-        var AVSLurl = "https://volleyballwa.github.io/static/AVSL_FINALS.pdf";
+        var AVSLurl = "https://volleyballwa.github.io/static/AVSLfinalsNew.pdf";
         //var WAVLexistingPdfBytes = await fetch(WAVLurl).then(res => res.arrayBuffer());
 
         var WAVLpdfDoc = await PDFLib.PDFDocument.load(WAVLexistingPdfBytes);
