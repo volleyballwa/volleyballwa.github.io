@@ -1268,6 +1268,7 @@ async function modifyPdf(fix, dates, doc, run) {
         var extraWAVLurl = "https://volleyballwa.github.io/static/extra_def.pdf";
         //var AVSLurl = "https://volleyballwa.github.io/static/AVSL.pdf";
         var AVSLurl = "https://volleyballwa.github.io/static/AVSLfinalsNew.pdf";
+        var EVAurl = "https://volleyballwa.github.io/static/Blank_EVA_Scoresheet.pdf";
         //var WAVLexistingPdfBytes = await fetch(WAVLurl).then(res => res.arrayBuffer());
 
         var WAVLpdfDoc = await PDFLib.PDFDocument.load(WAVLexistingPdfBytes);
@@ -1306,6 +1307,12 @@ async function modifyPdf(fix, dates, doc, run) {
         var AVSLhelveticaBold = await AVSLpdfDoc.embedFont(PDFLib.StandardFonts.HelveticaBold);
         var AVSLpages = await AVSLpdfDoc.getPages();
         var AVSLfirstPage = await AVSLpages[0];
+
+        var EVApdfDoc = await PDFLib.PDFDocument.load(EVAexistingPdfBytes);
+        var EVAhelveticaFont = await EVApdfDoc.embedFont(PDFLib.StandardFonts.Helvetica);
+        var EVAhelveticaBold = await EVApdfDoc.embedFont(PDFLib.StandardFonts.HelveticaBold);
+        var EVApages = await EVApdfDoc.getPages();
+        var EVAfirstPage = await EVApages[0];
 
         // If WAVL Game (Divisions or State League)
         // use OLD scoresheet for divisions (for now)
@@ -2927,6 +2934,8 @@ async function modifyPdf(fix, dates, doc, run) {
 
 
             var saved = await AVSLpdfDoc.saveAsBase64();
+        } else if (scoresheet_type == "EVA"){
+            var saved = await EVApdfDoc.saveAsBase64();
         } else {
             window.alert("Invalid Scoresheet Type - " + scoresheet_type)
             console.log("** ERROR **")

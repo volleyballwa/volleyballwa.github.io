@@ -517,6 +517,13 @@ const __CONFIG__ = {
             "mid": "",
             "bot": "",
             "alias": []
+        },
+        "EBC": {
+            "name": "EBC",
+            "top": "",
+            "mid": "",
+            "bot": "",
+            "alias": ["Esperance Bowling Club Beach Courts", "EBC"]
         }
     },
     "wavl__": {
@@ -779,6 +786,20 @@ const __CONFIG__ = {
                 "honours": "12-sub",
                 "honors": "12-sub",
                 "default": "junior"
+            },
+            "backup_players" : {
+                "base_url" : "https://cors-anywhere-og-v5kf.onrender.com/volleyball.exposureevents.com/232730/wavl/teamroster?divisionteamid=",
+                "id_array" : []
+            }
+        },
+        "EVA Beach 2025/26": {
+            "name": "EVA Beach 2025/26",
+            //"fixture_url": "https://cors-anywhere-og-v5kf.onrender.com/volleyball.exposureevents.com/257723/eva-beach-2025-26/documents/schedule?layout=datetime",
+            "fixture_url": "https://volleyball.exposureevents.com/257723/eva-beach-2025-26/documents/schedule?layout=datetime",
+            "players_url": "https://volleyball.exposureevents.com/257723/eva-beach-2025-26/documents/players?r=434",
+            "printPlayers": "true",
+            "scoresheet": {
+                "default": "EVA"
             },
             "backup_players" : {
                 "base_url" : "https://cors-anywhere-og-v5kf.onrender.com/volleyball.exposureevents.com/232730/wavl/teamroster?divisionteamid=",
