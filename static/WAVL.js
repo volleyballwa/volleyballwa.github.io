@@ -1222,12 +1222,14 @@ async function modifyPdf(fix, dates, doc, run) {
     var AVSLurl = "https://volleyballwa.github.io/static/AVSLfinalsNew.pdf";
     //var newWAVLurl = "https://og1764.github.io/static/new_def.pdf";
     //var extraWAVLurl = "https://og1764.github.io/static/extra_def.pdf";
+    var EVAurl = "https://volleyballwa.github.io/static/Blank_EVA_Scoresheet.pdf";
 
     const WAVLexistingPdfBytes = await fetch(WAVLurl).then(res => res.arrayBuffer());
     const JLexistingPdfBytes = await fetch(JLurl).then(resp => resp.arrayBuffer());
     const newWAVLexistingPdfBytes = await fetch(newWAVLurl).then(res => res.arrayBuffer());
     const extraWAVLexistingPdfBytes = await fetch(extraWAVLurl).then(res => res.arrayBuffer());
     const AVSLexistingPdfBytes = await fetch(AVSLurl).then(res => res.arrayBuffer());
+    const EVAexistingPdfBytes = await fetch(EVAurl).then(res => res.arrayBuffer());
 
     // Used for new venues - converts all aliases back to main name.
     var __venues__ = {};
@@ -2935,7 +2937,89 @@ async function modifyPdf(fix, dates, doc, run) {
 
             var saved = await AVSLpdfDoc.saveAsBase64();
         } else if (scoresheet_type == "EVA"){
+            // Court number
+            await EVAfirstPage.drawText(fixtures[i][5], {
+                x: 630,
+                y: 504,
+                size: 14,
+                font: EVAhelveticaFont
+            })
+
+            try {
+                // Time (hh:mm)
+                let time = parseInt(fixtures[i][13]).toString() + ":" + fixtures[i][14];
+                if (parseInt(fixtures[i][13]).toString().length == 1) {
+                    time = " " + time;
+                }
+                await EVAfirstPage.drawText(time, {
+                    x: 532,
+                    y: 504,
+                    size: 14,
+                    font: EVAhelveticaFont
+                })
+            } catch (e) {
+                console.log(e)
+            }
+
+            try {
+                // Date (dd/mm/yyyy)
+                let dt = parseInt(fixtures[i][10]).toString() + "/" + parseInt(fixtures[i][11]).toString() + "/" + fixtures[i][12]
+                await EVAfirstPage.drawText(dt, {
+                    x: 710,
+                    y: 504,
+                    size: 14,
+                    font: EVAhelveticaFont
+                })
+            } catch (e) {
+                console.log(e)
+            }
+            
+            // Division (Long)
+            
+            await EVAfirstPage.drawText(fixtures[i][9][0], {
+                x: 452,
+                y: 504,
+                size: 14,
+                font: EVAhelveticaFont
+            })
+
+
+            // Team Names
+            if (fixtures[i][6].length > 25 || fixtures[i][7].length > 25) {
+                // Reduce text size if too long.
+                await EVAfirstPage.drawText(fixtures[i][6], {
+                    x: parseInt((520 - measureText(fixtures[i][6], 10)).toString()),
+                    y: 440,
+                    size: 10,
+                    font: EVAhelveticaFont
+                })
+                await EVAfirstPage.drawText(fixtures[i][7], {
+                    x: parseInt((721 - measureText(fixtures[i][7], 10)).toString()),
+                    y: 440,
+                    size: 10,
+                    font: EVAhelveticaFont
+                })
+            } else {
+                EVAfirstPage.TextAlignment = 1;
+                await EVAfirstPage.drawText(fixtures[i][6], {
+                    x: parseInt((520 - measureText(fixtures[i][6], 14)).toString()),
+                    y: 440,
+                    size: 14,
+                    font: EVAhelveticaFont
+                })
+                await EVAfirstPage.drawText(fixtures[i][7], {
+                    x: parseInt((721 - measureText(fixtures[i][7], 14)).toString()),
+                    y: 440,
+                    size: 14,
+                    font: EVAhelveticaFont
+                })
+            }
+            
+            
+            
             var saved = await EVApdfDoc.saveAsBase64();
+
+
         } else {
             window.alert("Invalid Scoresheet Type - " + scoresheet_type)
             console.log("** ERROR **")
