@@ -27,6 +27,7 @@
         <script src="https://www.unpkg.com/exceljs@4.3.0/dist/exceljs.bare.min.js"></script>
         <script src="https://unpkg.com/downloadjs@1.4.7"></script>
         <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.5/xlsx.min.js"></script>
         <script>
             // This code is here to "wake up" the cors anywhere instance on page load, so that it doesn't take so long to do everything else.
             let xhttp = new XMLHttpRequest();
@@ -71,7 +72,7 @@
                         </div>
                     </div>
                     <div id="fileUpload">
-                        <input type="file" id="csvUpload" name="filename" style="display:inline-block;position:absolute;left:450px;top:140px;z-index:59;" accept=".csv">
+                        <input type="file" id="csvUpload" name="filename" style="display:inline-block;position:absolute;left:450px;top:140px;z-index:59;" accept=".csv, .xls, .xlsx">
                     </div>
                     <input id="DatePicker2-input" name="DatePicker2" style="display:none" type="text" value="">
                     <div id="DatePicker2" style="position:absolute;left:69px;top:12px;width:222px;height:213px;z-index:90;"></div>
@@ -176,7 +177,7 @@
                         <td class="cell91" colspan="1" style="background:powderblue;cursor:pointer;" onClick="window.open('../static/PSA_SS.pdf', '_blank', 'fullscreen=yes'); return false;">
                             <div style="text-align:center;font-size:14px">PSA - Senior School<br>Scoresheet</div>
                         </td>
-                        <td class="cell91" colspan="1" style="background:mediumpurple;cursor:pointer;" onClick="window.open('../static/CSVTemplate.csv', '_blank', 'fullscreen=yes'); return false;">
+                        <td class="cell91" colspan="1" style="background:mediumpurple;cursor:pointer;" onClick="window.open('../static/New_Template.xlsx', '_blank', 'fullscreen=yes'); return false;">
                             <div style="text-align:center;font-size:14px">CSV Template</div>
                         </td>
                     </tr>
