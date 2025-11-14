@@ -450,6 +450,7 @@ function jsonToArray(result){
         else if(result.Fixtures[i]["Scoresheet Type"] == "VA - Timed") {submit_row[19] = "VA_T"}
         else if(result.Fixtures[i]["Scoresheet Type"] == "VA - Bo5") {submit_row[19] = "VA_5"}
         else if(result.Fixtures[i]["Scoresheet Type"] == "VA - Bo3") {submit_row[19] = "VA_3"}
+        else if(result.Fixtures[i]["Scoresheet Type"] == "VWA Beach High School") {submit_row[19] = "vwa_hs_beach"}
 
         submit_row[20] = all_coach_lists[result.Fixtures[i]["Team A"]]
         submit_row[21] = all_coach_lists[result.Fixtures[i]["Team B"]]
@@ -1464,6 +1465,7 @@ async function modifyPdf(fix, dates, doc, run) {
     var EVAurl = "https://volleyballwa.github.io/static/Blank_EVA_Scoresheet.pdf";
     var PSAMurl = "https://volleyballwa.github.io/static/PSA_MS.pdf";
     var PSASurl = "https://volleyballwa.github.io/static/PSA_SS.pdf";
+    var vwaHSburl = "https://volleyballwa.github.io/static/vwa_hs_beach.pdf";
 
     const WAVLexistingPdfBytes = await fetch(WAVLurl).then(res => res.arrayBuffer());
     const JLexistingPdfBytes = await fetch(JLurl).then(resp => resp.arrayBuffer());
@@ -1474,6 +1476,7 @@ async function modifyPdf(fix, dates, doc, run) {
     const EVAexistingPdfBytes = await fetch(EVAurl).then(res => res.arrayBuffer());
     const PSAMexistingPdfBytes = await fetch(PSAMurl).then(res => res.arrayBuffer());
     const PSASexistingPdfBytes = await fetch(PSASurl).then(res => res.arrayBuffer());
+    const vwaHSbexistingPdfBytes = await fetch(vwaHSburl).then(res => res.arrayBuffer());
 
     // Used for new venues - converts all aliases back to main name.
     var __venues__ = {};
@@ -4218,6 +4221,75 @@ async function modifyPdf(fix, dates, doc, run) {
                 font: PSAMhelveticaFont
             })
             var saved = await PSAMpdfDoc.saveAsBase64();
+        } else if (scoresheet_type == "vwa_hs_beach"){
+            vwaHSbfirstPage.TextAlignment = 1;
+            await vwaHSbfirstPage.drawText(fixtures[i][6].toString(), {
+                x: parseInt((165 - measureText(fixtures[i][6], 14)).toString()),
+                y: 398,
+                size: 14,
+                font: vwaHSbhelveticaFont
+            })
+            await vwaHSbfirstPage.drawText(fixtures[i][7].toString(), {
+                x: parseInt((610 - measureText(fixtures[i][7], 14)).toString()),
+                y: 398,
+                size: 14,
+                font: vwaHSbhelveticaFont
+            })
+            
+            // Court number
+            await vwaHSbfirstPage.drawText(fixtures[i][5], {
+                x: 532,
+                y: 433,
+                size: 14,
+                font: vwaHSbhelveticaFont
+            })
+
+            // Venue
+            await vwaHSbfirstPage.drawText(fixtures[i][0], {
+                x: 50,
+                y: 433,
+                size: 13,
+                font: vwaHSbhelveticaFont
+            })
+
+            try {
+                // Time (hh:mm)
+                let time = parseInt(fixtures[i][13]).toString() + ":" + fixtures[i][14];
+                if (parseInt(fixtures[i][13]).toString().length == 1) {
+                    time = " " + time;
+                }
+                await vwaHSbfirstPage.drawText(time, {
+                    x: 360,
+                    y: 433,
+                    size: 14,
+                    font: vwaHSbhelveticaFont
+                })
+            } catch (e) {
+                console.log(e)
+            }
+
+            try {
+                // Date (dd/mm/yyyy)
+                let dt = parseInt(fixtures[i][10]).toString().padStart(2,"0") + "/" + parseInt(fixtures[i][11]).toString().padStart(2,"0") + "/" + parseInt(fixtures[i][12]).toString()
+                await vwaHSbfirstPage.drawText(dt, {
+                    x: 200,
+                    y: 433,
+                    size: 14,
+                    font: vwaHSbhelveticaFont
+                })
+            } catch (e) {
+                console.log(e)
+            }
+            
+            // Division (Long)
+            
+            await vwaHSbfirstPage.drawText(fixtures[i][9][0], {
+                x: 700,
+                y: 433,
+                size: 14,
+                font: vwaHSbhelveticaFont
+            })
+            var saved = await vwaHSbpdfDoc.saveAsBase64();
         } else {
             window.alert("Invalid Scoresheet Type - " + scoresheet_type)
             console.log("** ERROR **")
