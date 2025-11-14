@@ -810,7 +810,7 @@ const __CONFIG__ = {
                 "default": "EVA"
             },
             "backup_players" : {
-                "base_url" : "https://cors-anywhere-og-v5kf.onrender.com/volleyball.exposureevents.com/232730/wavl/teamroster?divisionteamid=",
+                "base_url" : "https://cors-anywhere-og-v5kf.onrender.com/volleyball.exposureevents.com/257723/eva-beach-2025-26/teamroster?divisionteamid=",
                 "id_array" : []
             }
         },

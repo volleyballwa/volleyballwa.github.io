@@ -1520,6 +1520,7 @@ async function modifyPdf(fix, dates, doc, run) {
         var EVAurl = "https://volleyballwa.github.io/static/Blank_EVA_Scoresheet.pdf";
         var PSAMurl = "https://volleyballwa.github.io/static/PSA_MS.pdf";
         var PSASurl = "https://volleyballwa.github.io/static/PSA_SS.pdf";
+        var vwaHSburl = "https://volleyballwa.github.io/static/vwa_hs_beach.pdf";
 
         var WAVLpdfDoc = await PDFLib.PDFDocument.load(WAVLexistingPdfBytes);
         var WAVLhelveticaFont = await WAVLpdfDoc.embedFont(PDFLib.StandardFonts.Helvetica);
@@ -1578,6 +1579,12 @@ async function modifyPdf(fix, dates, doc, run) {
         var PSAShelveticaBold = await PSASpdfDoc.embedFont(PDFLib.StandardFonts.HelveticaBold);
         var PSASpages = await PSASpdfDoc.getPages();
         var PSASfirstPage = await PSASpages[0];
+
+        var vwaHSbpdfDoc = await PDFLib.PDFDocument.load(vwaHSbexistingPdfBytes);
+        var vwaHSbhelveticaFont = await vwaHSbpdfDoc.embedFont(PDFLib.StandardFonts.Helvetica);
+        var vwaHSbhelveticaBold = await vwaHSbpdfDoc.embedFont(PDFLib.StandardFonts.HelveticaBold);
+        var vwaHSbpages = await vwaHSbpdfDoc.getPages();
+        var vwaHSbfirstPage = await vwaHSbpages[0];
 
         // If manually added, add venue details to __venues__
         if (fixtures[i][9][2] == "Manual Upload"){
@@ -4000,6 +4007,54 @@ async function modifyPdf(fix, dates, doc, run) {
 
                 var saved = await AVSL_finalpdfDoc.saveAsBase64();
         } else if (scoresheet_type == "EVA"){
+            if (fixtures[i][17].length >= 1 && fixtures[i][17][0] != '' && fixtures[i][17][0][0] != '') {
+                // Team A Players
+                if (fixtures[i][17].length >= 1 && fixtures[i][17][0] != '' && fixtures[i][17][0][0] != '') {
+                    for (var k = 0; k < fixtures[i][18].length; k++) {
+                        // first name, first column
+                        //console.log(fixtures[i][18][k][0].toUpperCase() + ": " + measureText(fixtures[i][18][k][0].toUpperCase(),6))
+                        if (measureText(fixtures[i][17][k][0][0].toUpperCase() + " " + fixtures[i][17][k][0][1].toUpperCase(), 8) >= 50) {
+                            await EVAfirstPage.drawText(fixtures[i][17][k][0][0].toUpperCase() + " " + fixtures[i][17][k][0][1].toUpperCase(), {
+                                x: 452,
+                                y: 400-(19.5*k),
+                                size: 8,
+                                font: EVAhelveticaFont
+                            })
+                        } else {
+                            await EVAfirstPage.drawText(fixtures[i][17][k][0][0].toUpperCase() + " " + fixtures[i][17][k][0][1].toUpperCase(), {
+                                x: 452,
+                                y: 400-(19.5*k),
+                                size: 8,
+                                font: EVAhelveticaFont
+                            })
+                        }
+                    }
+                }
+            }
+
+            // Team B Players
+            if (fixtures[i][18].length >= 1 && fixtures[i][18][0] != '' && fixtures[i][18][0][0] != '') {
+                for (var k = 0; k < fixtures[i][18].length; k++) {
+                    // first name, first column
+                    //console.log(fixtures[i][18][k][0].toUpperCase() + ": " + measureText(fixtures[i][18][k][0].toUpperCase(),6))
+                    if (measureText(fixtures[i][18][k][0][0].toUpperCase() + " " + fixtures[i][18][k][0][1].toUpperCase(), 8) >= 50) {
+                        await EVAfirstPage.drawText(fixtures[i][18][k][0][0].toUpperCase() + " " + fixtures[i][18][k][0][1].toUpperCase(), {
+                            x: 650,
+                            y: 402-(19.5*k),
+                            size: 8,
+                            font: EVAhelveticaFont
+                        })
+                    } else {
+                        await EVAfirstPage.drawText(fixtures[i][18][k][0][0].toUpperCase() + " " + fixtures[i][18][k][0][1].toUpperCase(), {
+                            x: 650,
+                            y: 402-(19.5*k),
+                            size: 8,
+                            font: EVAhelveticaFont
+                        })
+                    }
+                }
+            }
+            
             // Court number
             await EVAfirstPage.drawText(fixtures[i][5], {
                 x: 630,
@@ -4222,32 +4277,230 @@ async function modifyPdf(fix, dates, doc, run) {
             })
             var saved = await PSAMpdfDoc.saveAsBase64();
         } else if (scoresheet_type == "vwa_hs_beach"){
-            vwaHSbfirstPage.TextAlignment = 1;
-            await vwaHSbfirstPage.drawText(fixtures[i][6].toString(), {
-                x: parseInt((165 - measureText(fixtures[i][6], 14)).toString()),
-                y: 398,
-                size: 14,
-                font: vwaHSbhelveticaFont
-            })
-            await vwaHSbfirstPage.drawText(fixtures[i][7].toString(), {
-                x: parseInt((610 - measureText(fixtures[i][7], 14)).toString()),
-                y: 398,
-                size: 14,
-                font: vwaHSbhelveticaFont
-            })
+            if (fixtures[i][17].length >= 1 && fixtures[i][17][0] != '' && fixtures[i][17][0][0] != '') {
+                for (var k = 0; k < fixtures[i][17].length; k++) {
+                    if (k < Math.ceil(fixtures[i][17].length / 2)) {
+                        // first name, first column
+                        console.log("---")
+                        //console.log(fixtures[i][17][k][0].toUpperCase() + ": " + measureText(fixtures[i][17][k][0].toUpperCase(),6))
+                        console.log(k)
+                        console.log(i)
+                        console.log(fixtures[i])
+                        console.log(fixtures[i][17])
+                        console.log(fixtures[i][17][k])
+                        console.log(fixtures[i][17][k][0])
+                        console.log(fixtures[i][17][k][0][0])
+                        if (measureText(fixtures[i][17][k][0][0].toUpperCase(), 6) >= 32) {
+                            await vwaHSbfirstPage.drawText(fixtures[i][17][k][0][0].toUpperCase(), {
+                                x: 102.25,
+                                y: 445-((15.50*k)),
+                                size: 5,
+                                font: vwaHSbhelveticaFont
+                            })
+                        } else {
+                            await vwaHSbfirstPage.drawText(fixtures[i][17][k][0][0].toUpperCase(), {
+                                x: 102.25,
+                                y: 445-((15.50*k)),
+                                size: 6,
+                                font: vwaHSbhelveticaFont
+                            })
+                        }
+
+                        // surname, first column
+                        //console.log(fixtures[i][17][k][1].toUpperCase() + ": " + measureText(fixtures[i][17][k][1].toUpperCase(),6))
+                        //console.log(fixtures[i][17][k][0][1])
+                        if (measureText(fixtures[i][17][k][0][1].toUpperCase(), 6) >= 32) {
+                            await vwaHSbfirstPage.drawText(fixtures[i][17][k][0][1].toUpperCase(), {
+                                x: 102.25,
+                                y: 445-((15.50*k+7.0)),
+                                size: 5,
+                                font: vwaHSbhelveticaFont
+                            })
+                        } else {
+                            await vwaHSbfirstPage.drawText(fixtures[i][17][k][0][1].toUpperCase(), {
+                                x: 102.25,
+                                y: 445-((15.50*k+7.0)),
+                                size: 6,
+                                font: vwaHSbhelveticaFont
+                            })
+                        }
+                    } else {
+                        // first name, second column
+                        //console.log(fixtures[i][17][k][0].toUpperCase() + ": " + measureText(fixtures[i][17][k][0].toUpperCase(),6))
+                        if (measureText(fixtures[i][17][k][0][0].toUpperCase(), 6) >= 32) {
+                            await vwaHSbfirstPage.drawText(fixtures[i][17][k][0][0].toUpperCase(), {
+                                x: 260,
+                                y: 445-((15.50*(k-Math.ceil(fixtures[i][17].length / 2)))),
+                                size: 5,
+                                font: vwaHSbhelveticaFont
+                            })
+                        } else {
+                            await vwaHSbfirstPage.drawText(fixtures[i][17][k][0][0].toUpperCase(), {
+                                x: 260,
+                                y: 445-((15.50*(k-Math.ceil(fixtures[i][17].length / 2)))),
+                                size: 6,
+                                font: vwaHSbhelveticaFont
+                            })
+                        }
+
+                        // surname, second column
+                        //console.log(fixtures[i][17][k][1].toUpperCase() + ": " + measureText(fixtures[i][17][k][1].toUpperCase(),6))
+                        if (measureText(fixtures[i][17][k][0][1].toUpperCase(), 6) >= 32){
+                            await vwaHSbfirstPage.drawText(fixtures[i][17][k][0][1].toUpperCase(), {
+                                x: 260,
+                                y: 445-((15.50*(k-Math.ceil(fixtures[i][17].length / 2))+7.0)),
+                                size: 5,
+                                font: vwaHSbhelveticaFont
+                            })
+                        } else {
+                            await vwaHSbfirstPage.drawText(fixtures[i][17][k][0][1].toUpperCase(), {
+                                x: 260,
+                                y: 445-((15.50*(k-Math.ceil(fixtures[i][17].length / 2))+7.0)),
+                                size: 6,
+                                font: vwaHSbhelveticaFont
+                            })
+                        }
+                    }
+                    
+                }
+                
+                // Team A, Second column numbers
+                if (fixtures[i][17].length > 1) {
+                    let line_y_a = 452 -(15.50*Math.ceil(fixtures[i][17].length /2));
+
+                    //console.log(line_y_a);
+                    await vwaHSbfirstPage.drawLine({
+                        start: { x: 230, y: 452 },
+                        end: { x: 230, y: line_y_a },
+                        thickness: 0.5,
+                        color: rgb(0,0,0),
+                        opacity: 1
+                    })
+                    
+                    await vwaHSbfirstPage.drawLine({
+                        start: { x: 255, y: 452 },
+                        end: { x: 255, y: line_y_a },
+                        thickness: 0.5,
+                        color: rgb(0,0,0),
+                        opacity: 1
+                    })
+                }
+            }
+
+            // Team B Players
+            if (fixtures[i][18].length >= 1 && fixtures[i][18][0] != '' && fixtures[i][18][0][0] != '') {
+                for (var k = 0; k < fixtures[i][18].length; k++) {
+                    if (k < Math.ceil(fixtures[i][18].length / 2)) {
+                        // first name, first column
+                        //console.log(fixtures[i][18][k][0].toUpperCase() + ": " + measureText(fixtures[i][18][k][0].toUpperCase(),6))
+                        if (measureText(fixtures[i][18][k][0][0].toUpperCase(), 6) >= 32) {
+                            await vwaHSbfirstPage.drawText(fixtures[i][18][k][0][0].toUpperCase(), {
+                                x: 525,
+                                y: 445-((15.50*k)),
+                                size: 5,
+                                font: vwaHSbhelveticaFont
+                            })
+                        } else {
+                            await vwaHSbfirstPage.drawText(fixtures[i][18][k][0][0].toUpperCase(), {
+                                x: 525,
+                                y: 445-((15.50*k)),
+                                size: 6,
+                                font: vwaHSbhelveticaFont
+                            })
+                        }
+
+                        // surname, first column
+                        //console.log(fixtures[i][18][k][1].toUpperCase() + ": " + measureText(fixtures[i][18][k][1].toUpperCase(),6))
+                        if (measureText(fixtures[i][18][k][0][1].toUpperCase(), 6) >= 32) {
+                            await vwaHSbfirstPage.drawText(fixtures[i][18][k][0][1].toUpperCase(), {
+                                x: 525,
+                                y: 445-((15.50*k+7.0)),
+                                size: 5,
+                                font: vwaHSbhelveticaFont
+                            })
+                        } else {
+                            await vwaHSbfirstPage.drawText(fixtures[i][18][k][0][1].toUpperCase(), {
+                                x: 525,
+                                y: 445-((15.50*k+7.0)),
+                                size: 6,
+                                font: vwaHSbhelveticaFont
+                            })
+                        }
+                    } else {
+                        // first name, second column
+                        //console.log(fixtures[i][18][k][0].toUpperCase() + ": " + measureText(fixtures[i][18][k][0].toUpperCase(),6))
+                        if (measureText(fixtures[i][18][k][0][0].toUpperCase(), 6) >= 32) {
+                            await vwaHSbfirstPage.drawText(fixtures[i][18][k][0][0].toUpperCase(), {
+                                x: 665,
+                                y: 445-((15.50*(k-Math.ceil(fixtures[i][18].length / 2)))),
+                                size: 5,
+                                font: vwaHSbhelveticaFont
+                            })
+                        } else {
+                            await vwaHSbfirstPage.drawText(fixtures[i][18][k][0][0].toUpperCase(), {
+                                x: 665,
+                                y: 445-((15.50*(k-Math.ceil(fixtures[i][18].length / 2)))),
+                                size: 6,
+                                font: vwaHSbhelveticaFont
+                            })
+                        }
+
+                        // surname, second column
+                        //console.log(fixtures[i][18][k][1].toUpperCase() + ": " + measureText(fixtures[i][18][k][1].toUpperCase(),6))
+                        if (measureText(fixtures[i][18][k][0][1].toUpperCase(), 6) >= 32) {
+                            await vwaHSbfirstPage.drawText(fixtures[i][18][k][0][1].toUpperCase(), {
+                                x: 665,
+                                y: 445-((15.50*(k-Math.ceil(fixtures[i][18].length / 2))+7.0)),
+                                size: 5,
+                                font: vwaHSbhelveticaFont
+                            })
+                        } else {
+                            await vwaHSbfirstPage.drawText(fixtures[i][18][k][0][1].toUpperCase(), {
+                                x: 665,
+                                y: 445-((15.50*(k-Math.ceil(fixtures[i][18].length / 2))+7.0)),
+                                size: 6,
+                                font: vwaHSbhelveticaFont
+                            })
+                        }
+                    }
+                }
+                
+                if (fixtures[i][18].length > 1) {
+                    // Team B, second column numbers
+                    let line_y_b = 452 -(15.50*Math.ceil(fixtures[i][18].length /2));
+                    //console.log(line_y_b);
+
+                    await vwaHSbfirstPage.drawLine({
+                        start: { x: 635, y: 452 },
+                        end: { x: 635, y: line_y_b },
+                        thickness: 0.5,
+                        color: rgb(0,0,0),
+                        opacity: 1
+                    })
+                    
+                    await vwaHSbfirstPage.drawLine({
+                        start: { x: 660, y: 452  },
+                        end: { x: 660, y: line_y_b },
+                        thickness: 0.5,
+                        color: rgb(0,0,0),
+                        opacity: 1
+                    })
+                }
+            }
             
-            // Court number
-            await vwaHSbfirstPage.drawText(fixtures[i][5], {
-                x: 532,
-                y: 433,
-                size: 14,
+
+            // Venue (full)
+            await vwaHSbfirstPage.drawText(fixtures[i][4], {
+                x: parseInt((190 - measureText(fixtures[i][4], 13)).toString()),
+                y: 504,
+                size: 13,
                 font: vwaHSbhelveticaFont
             })
 
-            // Venue
-            await vwaHSbfirstPage.drawText(fixtures[i][0], {
-                x: 50,
-                y: 433,
+            // Court number
+            await vwaHSbfirstPage.drawText(fixtures[i][5], {
+                x: parseInt((562 - measureText(fixtures[i][5], 13)).toString()),
+                y: 504,
                 size: 13,
                 font: vwaHSbhelveticaFont
             })
@@ -4259,9 +4512,9 @@ async function modifyPdf(fix, dates, doc, run) {
                     time = " " + time;
                 }
                 await vwaHSbfirstPage.drawText(time, {
-                    x: 360,
-                    y: 433,
-                    size: 14,
+                    x: 442,
+                    y: 504,
+                    size: 13,
                     font: vwaHSbhelveticaFont
                 })
             } catch (e) {
@@ -4270,11 +4523,11 @@ async function modifyPdf(fix, dates, doc, run) {
 
             try {
                 // Date (dd/mm/yyyy)
-                let dt = parseInt(fixtures[i][10]).toString().padStart(2,"0") + "/" + parseInt(fixtures[i][11]).toString().padStart(2,"0") + "/" + parseInt(fixtures[i][12]).toString()
+                let dt = parseInt(fixtures[i][10]).toString() + "/" + parseInt(fixtures[i][11]).toString() + "/" + parseInt(fixtures[i][12]).toString()
                 await vwaHSbfirstPage.drawText(dt, {
-                    x: 200,
-                    y: 433,
-                    size: 14,
+                    x: 315,
+                    y: 504,
+                    size: 13,
                     font: vwaHSbhelveticaFont
                 })
             } catch (e) {
@@ -4284,11 +4537,52 @@ async function modifyPdf(fix, dates, doc, run) {
             // Division (Long)
             
             await vwaHSbfirstPage.drawText(fixtures[i][9][0], {
-                x: 700,
-                y: 433,
-                size: 14,
+                x: parseInt((721 - measureText(fixtures[i][9][0], 13)).toString()),
+                y: 504,
+                size: 13,
                 font: vwaHSbhelveticaFont
             })
+
+            // Division (Short)
+            /*
+            await vwaHSbfirstPage.drawText(fixtures[i][9][1], {
+                x: parseInt((721 - measureText(fixtures[i][9][1], 13)).toString()),
+                y: 504,
+                size: 13,
+                font: vwaHSbhelveticaFont
+            })
+            */
+
+            // Team Names
+            if (fixtures[i][6].length > 25 || fixtures[i][7].length > 25) {
+                // Reduce text size if too long.
+                await vwaHSbfirstPage.drawText(fixtures[i][6], {
+                    x: parseInt((250 - measureText(fixtures[i][6], 10)).toString()),
+                    y: 472,
+                    size: 10,
+                    font: vwaHSbhelveticaFont
+                })
+                await vwaHSbfirstPage.drawText(fixtures[i][7], {
+                    x: parseInt((660 - measureText(fixtures[i][7], 10)).toString()),
+                    y: 472,
+                    size: 10,
+                    font: vwaHSbhelveticaFont
+                })
+            } else {
+                vwaHSbpdfDoc.TextAlignment = 1;
+                await vwaHSbfirstPage.drawText(fixtures[i][6], {
+                    x: parseInt((250 - measureText(fixtures[i][6], 14)).toString()),
+                    y: 472,
+                    size: 14,
+                    font: vwaHSbhelveticaFont
+                })
+                await vwaHSbfirstPage.drawText(fixtures[i][7], {
+                    x: parseInt((660 - measureText(fixtures[i][7], 14)).toString()),
+                    y: 472,
+                    size: 14,
+                    font: vwaHSbhelveticaFont
+                })
+            }
             var saved = await vwaHSbpdfDoc.saveAsBase64();
         } else {
             window.alert("Invalid Scoresheet Type - " + scoresheet_type)
