@@ -4012,7 +4012,7 @@ async function modifyPdf(fix, dates, doc, run) {
             if (fixtures[i][17].length >= 1 && fixtures[i][17][0] != '' && fixtures[i][17][0][0] != '') {
                 // Team A Players
                 if (fixtures[i][17].length >= 1 && fixtures[i][17][0] != '' && fixtures[i][17][0][0] != '') {
-                    for (var k = 0; k < fixtures[i][18].length; k++) {
+                    for (var k = 0; k < fixtures[i][17].length; k++) {
                         // first name, first column
                         //console.log(fixtures[i][18][k][0].toUpperCase() + ": " + measureText(fixtures[i][18][k][0].toUpperCase(),6))
                         if (measureText(fixtures[i][17][k][0][0].toUpperCase() + " " + fixtures[i][17][k][0][1].toUpperCase(), 8) >= 50) {
