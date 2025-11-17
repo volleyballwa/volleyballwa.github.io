@@ -4009,6 +4009,8 @@ async function modifyPdf(fix, dates, doc, run) {
 
                 var saved = await AVSL_finalpdfDoc.saveAsBase64();
         } else if (scoresheet_type == "EVA"){
+            console.log(fixtures[i])
+            console.log(fixtures[i][17])
             if (fixtures[i][17].length >= 1 && fixtures[i][17][0] != '' && fixtures[i][17][0][0] != '') {
                 // Team A Players
                 if (fixtures[i][17].length >= 1 && fixtures[i][17][0] != '' && fixtures[i][17][0][0] != '') {
