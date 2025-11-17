@@ -843,8 +843,8 @@ async function parsePlayerList(players_list, upd_fixtures) {
                 let fixture_division = upd_fixtures[i][9]
                 let team_a = upd_fixtures[i][6].toUpperCase()//.split(" ")[0];
                 let team_b = upd_fixtures[i][7].toUpperCase()//.split(" ")[0];
-                //console.log(team_a)
-                //console.log(team_b)
+                console.log(team_a)
+                console.log(team_b)
                 if (upd_fixtures[i][9][2] == "2025 AVSL Season") {
                     team_a = team_a + "_" + upd_fixtures[i][9][0]
                     team_b = team_b + "_" + upd_fixtures[i][9][0]
@@ -853,8 +853,8 @@ async function parsePlayerList(players_list, upd_fixtures) {
                 //console.log(all_coach_lists[team_a])
                 //console.log(all_coach_lists[team_b])
 
-                //console.log(all_team_lists[team_a])
-                //console.log(all_team_lists[team_b])
+                console.log(all_team_lists[team_a])
+                console.log(all_team_lists[team_b])
                 upd_fixtures[i][17] = [["",""]];
                 upd_fixtures[i][18] = [["",""]];
                 
