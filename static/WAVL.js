@@ -792,8 +792,10 @@ async function parsePlayerList(players_list, upd_fixtures) {
                                 if ((isAVSL == true && player_number != "") || (isAVSL == false)) {
                                     if (!(Object.keys(all_team_lists).includes(team_name))) {
                                         all_team_lists[team_name] = [[split_name(player_name.trim()),player_number]]
+                                        console.log(player_name)
                                     } else {
                                         all_team_lists[team_name].push([split_name(player_name.trim()),player_number])
+                                        console.log(player_name)
                                     }
                                 }
                                 if (coach_status != "") {
@@ -837,7 +839,7 @@ async function parsePlayerList(players_list, upd_fixtures) {
             console.log(all_team_lists)
             console.log(all_coach_lists)
             console.log(upd_fixtures)
-            console.log("HELP ME_1")
+            console.log("HELP ME_1 VERSION 1")
             for (i = 0; i < upd_fixtures.length; i++) {
                 let fixture_date = upd_fixtures[i][12]+"-"+upd_fixtures[i][11]+"-"+upd_fixtures[i][10]
                 let fixture_division = upd_fixtures[i][9]
