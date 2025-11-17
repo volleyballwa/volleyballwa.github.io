@@ -789,7 +789,7 @@ async function parsePlayerList(players_list, upd_fixtures) {
                                     team_staff_object[team_name] = {"HC": " ","TS": 1,"M": 1,"AC": 1,"T": 1}
                                 }
                                 
-                                if (player_number != "") {
+                                if ((isAVSL == true && player_number != "") || (isAVSL == false)) {
                                     if (!(Object.keys(all_team_lists).includes(team_name))) {
                                         all_team_lists[team_name] = [[split_name(player_name.trim()),player_number]]
                                     } else {
