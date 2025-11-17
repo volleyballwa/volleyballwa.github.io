@@ -750,7 +750,7 @@ async function parsePlayerList(players_list, upd_fixtures) {
                                 let player_name = all_td[1].innerText
                                 player_name = player_name.replace("\uFFFD","")
                                 player_name = player_name.replaceAll("*","");
-                                let team_name = all_td[2].innerText
+                                let team_name = all_td[2].innerText.toUpperCase()
                                 let player_number = all_td[0].innerText
                                 let coach_status = ""
                                 let coach_translation = {
