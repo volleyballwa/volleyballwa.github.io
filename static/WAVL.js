@@ -542,6 +542,46 @@ async function parsePlayerList(players_list, upd_fixtures) {
     let all_team_lists = {};
     let team_staff_object = {};
     let all_coach_lists = {};
+
+    let team_object = {}
+
+    let coach_translation = {
+        "Head Coach": "HC",
+        "Other": "TS",
+        "Manager": "M",
+        "Assistant Coach": "AC",
+        "Trainer": "T",
+        "Team Staff": "TS",
+        
+        "HEAD COACH": "HC",
+        "OTHER": "TS",
+        "MANAGER": "M",
+        "ASSISTANT COACH": "AC",
+        "TRAINER": "T",
+        "TEAM STAFF": "TS"
+    }
+    /*
+    team_object = {
+        unique_name <"div x Balcatta"> : {
+            division: "div x",
+            team_name: "Balcatta",
+            player_list: [
+                            [player_name, player_number],
+                            [player_name, player_number]
+                        ],
+            coach_list: [
+                            [coach_name, coach_position],
+                            [coach_name, coach_position]
+                        ],
+            team_staff_count:
+                {"HC": " ","TS": 1,"M": 1,"AC": 1,"T": 1}
+        }
+    
+    }
+
+
+    */
+
     let missed_events = [];
     let completely_missed_events = []
     let promise_array = [];
@@ -693,22 +733,22 @@ async function parsePlayerList(players_list, upd_fixtures) {
             }*/
 
             for(let k = 0; k < successful_player_lists.length; k++){
-                console.log(successful_player_lists[k].value)
+                //console.log(successful_player_lists[k].value)
                 new_method = true
                 try {
                     current_team = successful_player_lists[k].value.data.Results
-                    console.log(current_team)
+                    //console.log(current_team)
 
                 } catch (error) {
                     try {
                         current_team = successful_player_lists[k].value.request.responseText
-                        console.log(current_team)
+                        //console.log(current_team)
                         new_method = false
                     } catch (error) {
                         new_method = "bypass"
                     }
                 }
-                console.log(new_method)
+                //console.log(new_method)
                 //if (successful_player_lists[k].data.Results) {
                 if (new_method == true) {
                     let current_team = successful_player_lists[k].value.data.Results;
@@ -718,115 +758,314 @@ async function parsePlayerList(players_list, upd_fixtures) {
                     for (let x = 0; x < current_team.length; x++){
                         //console.log(current_team[x])
                         let current_player = current_team[x].Name.trim().replace("\uFFFD","").replaceAll("*","");
-                        let team_name = current_team[x].TeamName.trim().toUpperCase()
-                        if (!(Object.keys(all_team_lists).includes(team_name))) {
-                            all_team_lists[team_name] = [[split_name(current_player.trim()),5]]
-                        } else {
-                            all_team_lists[team_name].push([split_name(current_player.trim()),5])
+                        let _team_name = current_team[x].TeamName.trim().toUpperCase()
+                        let _Number = current_team[x].Number
+                        let _position = current_team[x].Position
+                        let _div = ""
+                        let divID = parseInt(successful_player_lists[k].value.request.responseURL.split("=")[1])
+
+                        for (var zz = 0; zz < Object.keys(__CONFIG__.events).length; zz++) {
+                            if (_div == "") {
+                                let __event = __CONFIG__.events[Object.keys(__CONFIG__.events)[zz]]
+                                let __backup_players = __event["backup_players"]["new_id_array"]
+                                //console.log(__backup_players)
+                                //let index = Object.keys(__CONFIG__.events[events_[i]]["backup_players"]["new_id_array"])[j]
+                                //slow_id_list.concat(__CONFIG__.events[events_[i]]["backup_players"]["new_id_array"][index]) 
+                                for (var yy = 0; yy < Object.keys(__backup_players).length; yy++) {
+                                    if (_div == "") {
+                                        let _index = Object.keys(__backup_players)[yy]
+                                        if (__backup_players[_index].includes(divID)) {
+                                            _div = _index
+                                        }
+                                    }
+                                }
+                            }
                         }
+
+                        let unique_team = _div.toUpperCase() + " " + _team_name.toUpperCase()
+                        
+                        if (!(Object.keys(team_object).includes(unique_team))) {
+                            team_object[unique_team] = {
+                                "division": _div,
+                                "team_name": _team_name,
+                                "player_list": [],
+                                "coach_list": [],
+                                "team_staff_count": {"HC": " ","TS": 1,"M": 1,"AC": 1,"T": 1}
+                            }
+                        }
+
+                        //console.log(current_player)
+                        //console.log(_Number)
+                        //console.log(_position)
+                        //console.log(_position == "null")
+                        
+                        team_object[unique_team]["player_list"].push([split_name(current_player.trim()), _Number])
+                        if (_position != "null" && _position != ""){
+                            let new_coach_status = ""
+                            if (Object.keys(coach_translation).includes(_position)){
+                                new_coach_status = coach_translation[_position]
+                            } else {
+                                new_coach_status = "TS"
+                            }
+
+                            if (new_coach_status != "HC") {
+                                let temp_status = new_coach_status
+                                new_coach_status = new_coach_status + team_object[unique_team]["team_staff_count"][new_coach_status].toString()
+                                team_object[unique_team]["team_staff_count"][temp_status] = team_object[unique_team]["team_staff_count"][temp_status] + 1
+                            }
+
+                            team_object[unique_team]["coach_list"].push([split_name(current_player.trim()), new_coach_status])
+                        }
+
+                        
+                        
                     }
                 } else if (new_method == false){
                     let parser = new DOMParser();
                     let htmlDoc = parser.parseFromString(successful_player_lists[k].value.request.responseText, 'text/html');
                     //console.log(htmlDoc)
-                    let AVSL_check = htmlDoc.getElementsByClassName("title")[0].textContent.trim()
-                    isAVSL = false
-                    if (AVSL_check == "2025 Mahindra Australian Volleyball Super League") {
-                        isAVSL = true
-                    }
-                    let all_tables = htmlDoc.getElementsByClassName("team")
-                    let numFix = all_tables.length;
-                    //console.log(numFix)
-                    for (let i = 0; i < numFix; i = i + 1) {
-                        let division = all_tables[i].getElementsByTagName("h3")[0].textContent
-                        //console.log(division)
-                        let all_divs = all_tables[i].getElementsByClassName("roster")
-                        for (let x = 0; x < all_divs.length; x++) {
-                            let all_rows = all_divs[x].getElementsByTagName("tr")
-                            for (let j = 1; j < all_rows.length; j = j + 1) {
-                                let all_td = all_rows[j].getElementsByTagName("td")
-                                //console.log(all_td)
-                                //console.log(all_td[1])
-                                let player_name = all_td[1].innerText
-                                player_name = player_name.replace("\uFFFD","")
-                                player_name = player_name.replaceAll("*","");
-                                let team_name = all_td[2].innerText
-                                let player_number = all_td[0].innerText
-                                let coach_status = ""
-                                let coach_translation = {
-                                    "Head Coach": "HC",
-                                    "Other": "TS",
-                                    "Manager": "M",
-                                    "Assistant Coach": "AC",
-                                    "Trainer": "T",
-                                    "Team Staff": "TS",
-                                    
-                                    "HEAD COACH": "HC",
-                                    "OTHER": "TS",
-                                    "MANAGER": "M",
-                                    "ASSISTANT COACH": "AC",
-                                    "TRAINER": "T",
-                                    "TEAM STAFF": "TS"
-                                }
-                                
-                                //let team_staff_counter = {"HC": "","TS": 1,"M": 1,"AC": 1,"T": 1}
+                    //let AVSL_check = htmlDoc.getElementsByClassName("title")[0].textContent.trim()
+                    //isAVSL = false
+                    //if (AVSL_check == "2025 Mahindra Australian Volleyball Super League") {
+                    //    isAVSL = true
+                    //}
+                    
+                    let upload_type = ""
 
-                                
+                    if (htmlDoc.getElementsByClassName("eventreports-rosters").length > 0) {upload_type = "roster"}
+                    if (htmlDoc.getElementsByClassName("eventreports-players").length > 0) {upload_type = "athletes"}
+                    
+                    if (upload_type == "") {upload_type = "error"}
 
-                                try {
-                                    coach_status = all_rows[j].getElementsByClassName("position")[0].textContent
-                                    //console.log(coach_status)
-                                    
-                                } catch (error) {
-                                    coach_status = ""
-                                }
+                    if (upload_type == "athletes") {
 
-                                if (isAVSL) {
-                                    team_name = all_td[2].innerText+"_"+division
-                                }
-
-                                if (!(Object.keys(team_staff_object).includes(team_name))) {
-                                    team_staff_object[team_name] = {"HC": " ","TS": 1,"M": 1,"AC": 1,"T": 1}
-                                }
-                                
-                                if (player_number != "") {
-                                    if (!(Object.keys(all_team_lists).includes(team_name))) {
-                                        all_team_lists[team_name] = [[split_name(player_name.trim()),player_number]]
-                                    } else {
-                                        all_team_lists[team_name].push([split_name(player_name.trim()),player_number])
+                        let all_tables = htmlDoc.getElementsByClassName("team")
+                        let numFix = all_tables.length;
+                        //console.log(numFix)
+                        for (let i = 0; i < numFix; i = i + 1) {
+                            let division = all_tables[i].getElementsByTagName("h3")[0].textContent.toUpperCase()
+                            //console.log(division)
+                            let all_divs = all_tables[i].getElementsByClassName("roster")
+                            for (let x = 0; x < all_divs.length; x++) {
+                                let all_rows = all_divs[x].getElementsByTagName("tr")
+                                for (let j = 1; j < all_rows.length; j = j + 1) {
+                                    let all_td = all_rows[j].getElementsByTagName("td")
+                                    //console.log(all_td)
+                                    //console.log(all_td[1])
+                                    let current_player = all_td[1].innerText
+                                    current_player = current_player.replace("\uFFFD","")
+                                    current_player = current_player.replaceAll("*","");
+                                    let team_name = all_td[2].innerText.toUpperCase()
+                                    let unique_team = division.toUpperCase() + " " + team_name.toUpperCase()
+                                    let _Number = all_td[0].innerText
+                                    let _position = "null"
+                                    try {
+                                        _position = all_rows[j].getElementsByClassName("position")[0].textContent
+                                        //console.log(coach_status)
+                                    } catch (error) {
+                                        _position = "null"
                                     }
-                                }
-                                if (coach_status != "") {
-                                    console.log(coach_status)
-                                    if (!(Object.keys(all_coach_lists).includes(team_name))) {
-                                        let new_coach_status = coach_translation[coach_status]
-                                        let final_coach_status = new_coach_status
-                                        //console.log(final_coach_status)
-                                        //console.log(team_staff_object)
-                                        console.log(team_staff_object[team_name])
-                                        if (final_coach_status != "C") {
-                                            final_coach_status = new_coach_status + team_staff_object[team_name][new_coach_status].toString().trim()
-                                            team_staff_object[team_name][new_coach_status] = team_staff_object[team_name][new_coach_status] + 1
-                                        }
-                                        console.log(final_coach_status)
-                                        
-                                        all_coach_lists[team_name] = [[split_name(player_name.trim()),final_coach_status.trim()]]
-                                    } else {
 
-                                        let new_coach_status = coach_translation[coach_status]
-                                        let final_coach_status = new_coach_status
-                                        console.log(final_coach_status)
-                                        if (final_coach_status != "C") {
+                                    //if (isAVSL) {
+                                    //    team_name = all_td[2].innerText+"_"+division
+                                    //}
+
+                                    if (!(Object.keys(team_object).includes(unique_team))) {
+                                        team_object[unique_team] = {
+                                            "division": division,
+                                            "team_name": team_name,
+                                            "player_list": [],
+                                            "coach_list": [],
+                                            "team_staff_count": {"HC": " ","TS": 1,"M": 1,"AC": 1,"T": 1}
+                                        }
+                                    }
+
+                                    //console.log(current_player)
+                                    //console.log(_Number)
+                                    //console.log(_position)
+                                    //console.log(_position == "null")
+                                    
+                                    team_object[unique_team]["player_list"].push([split_name(current_player.trim()), _Number])
+                                    
+                                    if (_position != "null" && _position != ""){
+                                        let new_coach_status = ""
+                                        if (Object.keys(coach_translation).includes(_position)){
+                                            new_coach_status = coach_translation[_position]
+                                        } else {
+                                            new_coach_status = "TS"
+                                        }
+
+                                        if (new_coach_status != "HC") {
+                                            let temp_status = new_coach_status
+                                            new_coach_status = new_coach_status + team_object[unique_team]["team_staff_count"][new_coach_status].toString()
+                                            team_object[unique_team]["team_staff_count"][temp_status] = team_object[unique_team]["team_staff_count"][temp_status] + 1
+                                        }
+
+                                        team_object[unique_team]["coach_list"].push([split_name(current_player.trim()), new_coach_status])
+                                    }
+
+                                    /*
+                                    if (!(Object.keys(team_staff_object).includes(team_name))) {
+                                        team_staff_object[team_name] = {"HC": " ","TS": 1,"M": 1,"AC": 1,"T": 1}
+                                    }
+                                    
+                                    if (player_number != "") {
+                                        if (!(Object.keys(all_team_lists).includes(team_name))) {
+                                            all_team_lists[team_name] = [[split_name(player_name.trim()),player_number]]
+                                        } else {
+                                            all_team_lists[team_name].push([split_name(player_name.trim()),player_number])
+                                        }
+                                    }
+                                    if (coach_status != "") {
+                                        console.log(coach_status)
+                                        if (!(Object.keys(all_coach_lists).includes(team_name))) {
+                                            let new_coach_status = coach_translation[coach_status]
+                                            let final_coach_status = new_coach_status
+                                            //console.log(final_coach_status)
+                                            //console.log(team_staff_object)
+                                            console.log(team_staff_object[team_name])
+                                            if (final_coach_status != "C") {
+                                                final_coach_status = new_coach_status + team_staff_object[team_name][new_coach_status].toString().trim()
+                                                team_staff_object[team_name][new_coach_status] = team_staff_object[team_name][new_coach_status] + 1
+                                            }
                                             console.log(final_coach_status)
-                                            console.log(team_staff_object[team_name][new_coach_status])
-                                            final_coach_status = new_coach_status + team_staff_object[team_name][new_coach_status].toString().trim()
-                                            team_staff_object[team_name][new_coach_status] = team_staff_object[team_name][new_coach_status] + 1
+                                            
+                                            all_coach_lists[team_name] = [[split_name(player_name.trim()),final_coach_status.trim()]]
+                                        } else {
+
+                                            let new_coach_status = coach_translation[coach_status]
+                                            let final_coach_status = new_coach_status
+                                            console.log(final_coach_status)
+                                            if (final_coach_status != "C") {
+                                                console.log(final_coach_status)
+                                                console.log(team_staff_object[team_name][new_coach_status])
+                                                final_coach_status = new_coach_status + team_staff_object[team_name][new_coach_status].toString().trim()
+                                                team_staff_object[team_name][new_coach_status] = team_staff_object[team_name][new_coach_status] + 1
+                                            }
+                                            console.log(final_coach_status)
+                                            all_coach_lists[team_name].push([split_name(player_name.trim()),final_coach_status.trim()])
                                         }
-                                        console.log(final_coach_status)
-                                        all_coach_lists[team_name].push([split_name(player_name.trim()),final_coach_status.trim()])
                                     }
+                                    */
+                                    
                                 }
-                                
+                            }
+                        }
+                    } else if (upload_type == "roster") {
+                        let all_tables = htmlDoc.getElementsByClassName("team")
+                        let numFix = all_tables.length;
+                        //console.log(numFix)
+                        for (let i = 0; i < numFix; i = i + 1) {
+                            let _team_name = all_tables[i].getElementsByTagName("h2")[0].textContent.trim().toUpperCase()
+                            let _div = all_tables[i].getElementsByTagName("i")[0].textContent.split(")")[0].trim().replace("(","").toUpperCase()
+                            let all_people = all_tables[i].getElementsByClassName("roster")
+                            let unique_team = _div.toUpperCase() + " " + _team_name.toUpperCase()
+                            for (let x = 0; x < all_people.length; x++) {
+                                // Players
+                                if (all_people[x].className == "roster") {
+                                    let all_rows = all_people[x].getElementsByTagName("tr")
+                                    for (let j = 1; j < all_rows.length; j = j + 1) {
+                                        let all_td = all_rows[j].getElementsByTagName("td")
+                                        //console.log(all_td)
+                                        //console.log(all_td[1])
+                                        let current_player = all_td[1].innerText
+                                        current_player = current_player.replace("\uFFFD","")
+                                        current_player = current_player.replaceAll("*","");
+                                        //let team_name = all_td[2].innerText
+                                        //let unique_team = division + " " + team_name
+                                        let _Number = all_td[0].innerText
+                                        let _position = "null"
+                                        try {
+                                            _position = all_rows[j].getElementsByClassName("position")[0].textContent
+                                            //console.log(coach_status)
+                                        } catch (error) {
+                                            _position = "null"
+                                        }
+
+                                        //if (isAVSL) {
+                                        //    team_name = all_td[2].innerText+"_"+division
+                                        //}
+
+                                        if (!(Object.keys(team_object).includes(unique_team))) {
+                                            team_object[unique_team] = {
+                                                "division": _div,
+                                                "team_name": _team_name,
+                                                "player_list": [],
+                                                "coach_list": [],
+                                                "team_staff_count": {"HC": " ","TS": 1,"M": 1,"AC": 1,"T": 1}
+                                            }
+                                        }
+
+                                        //console.log(current_player)
+                                        //console.log(_Number)
+                                        //console.log(_position)
+                                        //console.log(_position == "null")
+                                        
+                                        team_object[unique_team]["player_list"].push([split_name(current_player.trim()), _Number])
+                                        
+                                        if (_position != "null" && _position != ""){
+                                            let new_coach_status = ""
+                                            if (Object.keys(coach_translation).includes(_position)){
+                                                new_coach_status = coach_translation[_position]
+                                            } else {
+                                                new_coach_status = "TS"
+                                            }
+
+                                            if (new_coach_status != "HC") {
+                                                let temp_status = new_coach_status
+                                                new_coach_status = new_coach_status + team_object[unique_team]["team_staff_count"][new_coach_status].toString()
+                                                team_object[unique_team]["team_staff_count"][temp_status] = team_object[unique_team]["team_staff_count"][temp_status] + 1
+                                            }
+
+                                            team_object[unique_team]["coach_list"].push([split_name(current_player.trim()), new_coach_status])
+                                        }
+                                    }
+
+                                } else if (all_people[x].className == "roster coach-roster"){
+                                    // Coaches
+
+                                    let all_rows = all_people[x].getElementsByTagName("tr")
+                                    for (let j = 1; j < all_rows.length; j = j + 1) {
+                                        let all_td = all_rows[j].getElementsByTagName("td")
+                                        let current_player = all_td[0].innerText
+                                        current_player = current_player.replace("\uFFFD","")
+                                        current_player = current_player.replaceAll("*","");
+                                        let _position = "null"
+                                        try {
+                                            _position = all_td[1]
+                                        } catch (error) {
+                                            _position = "null"
+                                        }
+
+                                        if (!(Object.keys(team_object).includes(unique_team))) {
+                                            team_object[unique_team] = {
+                                                "division": _div,
+                                                "team_name": _team_name,
+                                                "player_list": [],
+                                                "coach_list": [],
+                                                "team_staff_count": {"HC": " ","TS": 1,"M": 1,"AC": 1,"T": 1}
+                                            }
+                                        }
+                                        if (_position != "null" && _position != ""){
+                                            let new_coach_status = ""
+                                            //console.log(_position)
+                                            if (Object.keys(coach_translation).includes(_position)){
+                                                new_coach_status = coach_translation[_position]
+                                            } else {
+                                                new_coach_status = "TS"
+                                            }
+
+                                            if (new_coach_status != "HC") {
+                                                let temp_status = new_coach_status
+                                                new_coach_status = new_coach_status + team_object[unique_team]["team_staff_count"][new_coach_status].toString()
+                                                team_object[unique_team]["team_staff_count"][temp_status] = team_object[unique_team]["team_staff_count"][temp_status] + 1
+                                            }
+
+                                            team_object[unique_team]["coach_list"].push([split_name(current_player.trim()), new_coach_status])
+                                        }
+                                    }
+
+                                }
                             }
                         }
                     }
@@ -834,21 +1073,26 @@ async function parsePlayerList(players_list, upd_fixtures) {
 
             }
 
-            console.log(all_team_lists)
-            console.log(all_coach_lists)
+            console.log(team_object)
+            //console.log(all_coach_lists)
             console.log(upd_fixtures)
             console.log("HELP ME_1")
             for (i = 0; i < upd_fixtures.length; i++) {
                 let fixture_date = upd_fixtures[i][12]+"-"+upd_fixtures[i][11]+"-"+upd_fixtures[i][10]
                 let fixture_division = upd_fixtures[i][9]
+                console.log(fixture_division)
                 let team_a = upd_fixtures[i][6].toUpperCase()//.split(" ")[0];
                 let team_b = upd_fixtures[i][7].toUpperCase()//.split(" ")[0];
                 //console.log(team_a)
                 //console.log(team_b)
-                if (upd_fixtures[i][9][2] == "2025 AVSL Season") {
-                    team_a = team_a + "_" + upd_fixtures[i][9][0]
-                    team_b = team_b + "_" + upd_fixtures[i][9][0]
-                }
+                let team_a_unique = fixture_division[0].toUpperCase() + " " + team_a
+                let team_b_unique = fixture_division[0].toUpperCase() + " " + team_b
+                //console.log(team_a_unique)
+                //console.log(team_b_unique)
+                //if (upd_fixtures[i][9][2] == "2025 AVSL Season") {
+                //    team_a = team_a + "_" + upd_fixtures[i][9][0]
+                //    team_b = team_b + "_" + upd_fixtures[i][9][0]
+                //}
 
                 //console.log(all_coach_lists[team_a])
                 //console.log(all_coach_lists[team_b])
@@ -859,7 +1103,7 @@ async function parsePlayerList(players_list, upd_fixtures) {
                 upd_fixtures[i][18] = [["",""]];
                 
                 // for AVSL, sort by number
-                if (upd_fixtures[i][9][2] == "2025 AVSL Season") {
+                /*if (upd_fixtures[i][9][2] == "2025 AVSL Season") {
                     if (Object.keys(all_team_lists).includes(team_a)) {
                         upd_fixtures[i][17] = all_team_lists[team_a].sort(function (a, b) {
                             if (isNaN(parseInt(a[1])) || isNaN(parseInt(b[1]))) {
@@ -875,6 +1119,37 @@ async function parsePlayerList(players_list, upd_fixtures) {
                     }
                     if (Object.keys(all_team_lists).includes(team_b)) {
                         upd_fixtures[i][18] = all_team_lists[team_b].sort(function (a, b) {
+                            if (isNaN(parseInt(a[1])) || isNaN(parseInt(b[1]))) {
+                            if (isNaN(parseInt(a[1])) && isNaN(parseInt(b[1]))) {
+                                if (a[0][1] > b[0][1]){return 1} else {return -1}
+                            } else {if (isNaN(parseInt(a[1]))) {return 1} else {return -1}}
+                            } else {
+                            if (parseInt(a[1]) > parseInt(b[1])){ return 1
+                            } else if (parseInt(a[1]) < parseInt(b[1])){ return -1
+                            } else if (parseInt(a[1]) === parseInt(b[1])){if (a[0][1] > b[0][1]){return 1}
+                                return -1
+                        }}})
+                    }
+
+                } else {*/
+                if (upd_fixtures[i][9][2] == "2025 AVSL Season") {
+                    if (Object.keys(team_object).includes(team_a_unique)) {
+                        console.log(team_object[team_a_unique]["player_list"])
+                        upd_fixtures[i][17] = team_object[team_a_unique]["player_list"].sort(function (a, b) {
+                            if (isNaN(parseInt(a[1])) || isNaN(parseInt(b[1]))) {
+                            if (isNaN(parseInt(a[1])) && isNaN(parseInt(b[1]))) {
+                                if (a[0][1] > b[0][1]){return 1} else {return -1}
+                            } else {if (isNaN(parseInt(a[1]))) {return 1} else {return -1}}
+                            } else {
+                            if (parseInt(a[1]) > parseInt(b[1])){ return 1
+                            } else if (parseInt(a[1]) < parseInt(b[1])){ return -1
+                            } else if (parseInt(a[1]) === parseInt(b[1])){if (a[0][1] > b[0][1]){return 1}
+                                return -1
+                        }}})
+                    }
+                    if (Object.keys(team_object).includes(team_b_unique)) {
+                        console.log(team_object[team_b_unique]["player_list"])
+                        upd_fixtures[i][18] = team_object[team_b_unique]["player_list"].sort(function (a, b) {
                             if (isNaN(parseInt(a[1])) || isNaN(parseInt(b[1]))) {
                             if (isNaN(parseInt(a[1])) && isNaN(parseInt(b[1]))) {
                                 if (a[0][1] > b[0][1]){return 1} else {return -1}
@@ -888,8 +1163,9 @@ async function parsePlayerList(players_list, upd_fixtures) {
                     }
 
                 } else {
-                    if (Object.keys(all_team_lists).includes(team_a)) {
-                        upd_fixtures[i][17] = all_team_lists[team_a].sort(function (a, b) {
+                    if (Object.keys(team_object).includes(team_a_unique)) {
+                        console.log(team_object[team_a_unique]["player_list"])
+                        upd_fixtures[i][17] = team_object[team_a_unique]["player_list"].sort(function (a, b) {
                             if (a[0][1] > b[0][1]){ return 1
                                 } else if (a[0][1] < b[0][1]){ return -1
                             } else if (a[0][1] === b[0][1]){if (a[0][0] > b[0][0]){return 1}
@@ -897,8 +1173,9 @@ async function parsePlayerList(players_list, upd_fixtures) {
                             }})
                     }
 
-                    if (Object.keys(all_team_lists).includes(team_b)) {
-                        upd_fixtures[i][18] = all_team_lists[team_b].sort(function (a, b) {
+                    if (Object.keys(team_object).includes(team_b_unique)) {
+                        console.log(team_object[team_b_unique]["player_list"])
+                        upd_fixtures[i][18] = team_object[team_b_unique]["player_list"].sort(function (a, b) {
                             if (a[0][1] > b[0][1]){ return 1
                                 } else if (a[0][1] < b[0][1]){ return -1
                             } else if (a[0][1] === b[0][1]){if (a[0][0] > b[0][0]){return 1}
@@ -908,10 +1185,10 @@ async function parsePlayerList(players_list, upd_fixtures) {
                 }
 
 
-                if (Object.keys(all_coach_lists).includes(team_a)) {
+                if (Object.keys(team_object).includes(team_a_unique)) {
                     let temp = upd_fixtures[i][20]
 
-                    let input_list = all_coach_lists[team_a]
+                    let input_list = team_object[team_a_unique]["coach_list"]
                     input_list.push([['', ''], ''])
                     input_list.push([['', ''], ''])
                     input_list.push([['', ''], ''])
@@ -935,10 +1212,10 @@ async function parsePlayerList(players_list, upd_fixtures) {
                     })
                 }
 
-                if (Object.keys(all_coach_lists).includes(team_b)) {
+                if (Object.keys(team_object).includes(team_b_unique)) {
                     let temp = upd_fixtures[i][21]
 
-                    let input_list = all_coach_lists[team_b]
+                    let input_list = team_object[team_b_unique]["coach_list"]
                     input_list.push([['', ''], ''])
                     input_list.push([['', ''], ''])
                     input_list.push([['', ''], ''])
@@ -1247,7 +1524,14 @@ function pdf_init(venues, wavl, wavjl, dates, events_) {
         var upd_fixtures = html_to_fixture(venues, leagues, dates, fix_val);
         for (var i = 0; i < events_.length; i++) {
             if (__CONFIG__.events[events_[i]]["printPlayers"] == "true") {
-                var slow_id_list = __CONFIG__.events[events_[i]]["backup_players"]["id_array"];
+                //var slow_id_list = __CONFIG__.events[events_[i]]["backup_players"]["id_array"];
+                var slow_id_list = [];
+                for (var j = 0; j < Object.keys(__CONFIG__.events[events_[i]]["backup_players"]["new_id_array"]).length; j++) {
+                    let index = Object.keys(__CONFIG__.events[events_[i]]["backup_players"]["new_id_array"])[j]
+                    console.log(index)
+                    slow_id_list = slow_id_list.concat(__CONFIG__.events[events_[i]]["backup_players"]["new_id_array"][index])   
+                }
+                console.log(slow_id_list)
                 var slow_head = __CONFIG__.events[events_[i]]["backup_players"]["base_url"];
                 for (var j = 0; j < slow_id_list.length; j++) {
                     console.log(slow_id_list[j])
@@ -1456,16 +1740,16 @@ async function modifyPdf(fix, dates, doc, run) {
     var total = new Array(fixtures.length);
 
     fixtures.sort(sorting);
-    var WAVLurl = "https://volleyballwa.github.io/static/def.pdf";
-    var JLurl = "https://volleyballwa.github.io/static/def_jl.pdf";
-    var newWAVLurl = "https://volleyballwa.github.io/static/new_def.pdf";
-    var extraWAVLurl = "https://volleyballwa.github.io/static/extra_def.pdf";
-    var AVSLurl = "https://volleyballwa.github.io/static/AVSL.pdf";
-    var AVSL_final_url = "https://volleyballwa.github.io/static/AVSLfinalsNew.pdf";
-    var EVAurl = "https://volleyballwa.github.io/static/Blank_EVA_Scoresheet.pdf";
-    var PSAMurl = "https://volleyballwa.github.io/static/PSA_MS.pdf";
-    var PSASurl = "https://volleyballwa.github.io/static/PSA_SS.pdf";
-    var vwaHSburl = "https://volleyballwa.github.io/static/vwa_hs_beach.pdf";
+    var WAVLurl = "https://volleyballwa.github.io/static/scoresheets/def.pdf";
+    var JLurl = "https://volleyballwa.github.io/static/scoresheets/def_jl.pdf";
+    var newWAVLurl = "https://volleyballwa.github.io/static/scoresheets/new_def.pdf";
+    var extraWAVLurl = "https://volleyballwa.github.io/static/scoresheets/extra_def.pdf";
+    var AVSLurl = "https://volleyballwa.github.io/static/scoresheets/AVSL.pdf";
+    var AVSL_final_url = "https://volleyballwa.github.io/static/scoresheets/AVSLfinalsNew.pdf";
+    var EVAurl = "https://volleyballwa.github.io/static/scoresheets/Blank_EVA_Scoresheet.pdf";
+    var PSAMurl = "https://volleyballwa.github.io/static/scoresheets/PSA_MS.pdf";
+    var PSASurl = "https://volleyballwa.github.io/static/scoresheets/PSA_SS.pdf";
+    var vwaHSburl = "https://volleyballwa.github.io/static/scoresheets/vwa_hs_beach.pdf";
 
     const WAVLexistingPdfBytes = await fetch(WAVLurl).then(res => res.arrayBuffer());
     const JLexistingPdfBytes = await fetch(JLurl).then(resp => resp.arrayBuffer());
@@ -1511,16 +1795,16 @@ async function modifyPdf(fix, dates, doc, run) {
     for (var i = 0; i < fixtures.length; i++) {
         scoresheet_type = fixtures[i][19]
         // Load WAVL and Junior League scoresheets
-        var WAVLurl = "https://volleyballwa.github.io/static/def.pdf";
-        var JLurl = "https://volleyballwa.github.io/static/def_jl.pdf";
-        var newWAVLurl = "https://volleyballwa.github.io/static/new_def.pdf";
-        var extraWAVLurl = "https://volleyballwa.github.io/static/extra_def.pdf";
-        var AVSLurl = "https://volleyballwa.github.io/static/AVSL.pdf";
-        var AVSL_final_url = "https://volleyballwa.github.io/static/AVSLfinalsNew.pdf";
-        var EVAurl = "https://volleyballwa.github.io/static/Blank_EVA_Scoresheet.pdf";
-        var PSAMurl = "https://volleyballwa.github.io/static/PSA_MS.pdf";
-        var PSASurl = "https://volleyballwa.github.io/static/PSA_SS.pdf";
-        var vwaHSburl = "https://volleyballwa.github.io/static/vwa_hs_beach.pdf";
+        var WAVLurl = "https://volleyballwa.github.io/static/scoresheets/def.pdf";
+        var JLurl = "https://volleyballwa.github.io/static/scoresheets/def_jl.pdf";
+        var newWAVLurl = "https://volleyballwa.github.io/static/scoresheets/new_def.pdf";
+        var extraWAVLurl = "https://volleyballwa.github.io/static/scoresheets/extra_def.pdf";
+        var AVSLurl = "https://volleyballwa.github.io/static/scoresheets/AVSL.pdf";
+        var AVSL_final_url = "https://volleyballwa.github.io/static/scoresheets/AVSLfinalsNew.pdf";
+        var EVAurl = "https://volleyballwa.github.io/static/scoresheets/Blank_EVA_Scoresheet.pdf";
+        var PSAMurl = "https://volleyballwa.github.io/static/scoresheets/PSA_MS.pdf";
+        var PSASurl = "https://volleyballwa.github.io/static/scoresheets/PSA_SS.pdf";
+        var vwaHSburl = "https://volleyballwa.github.io/static/scoresheets/vwa_hs_beach.pdf";
 
         var WAVLpdfDoc = await PDFLib.PDFDocument.load(WAVLexistingPdfBytes);
         var WAVLhelveticaFont = await WAVLpdfDoc.embedFont(PDFLib.StandardFonts.Helvetica);
@@ -4565,7 +4849,7 @@ async function modifyPdf(fix, dates, doc, run) {
         }
 
         //const ExcelJS = require('exceljs');
-        var excel_url = "https://og1764.github.io/static/Ref_Template.xlsx";
+        var excel_url = "https://og1764.github.io/static/scoresheets/Ref_Template.xlsx";
         const default_bytes = await fetch(excel_url).then(res => res.arrayBuffer());
         const workbook = new ExcelJS.Workbook();
         //const excelReader = new FileReader();
