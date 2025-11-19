@@ -1076,7 +1076,7 @@ async function parsePlayerList(players_list, upd_fixtures) {
             console.log(team_object)
             //console.log(all_coach_lists)
             console.log(upd_fixtures)
-            console.log("HELP ME_1")
+            console.log("HELP ME_1 VERSION 1")
             for (i = 0; i < upd_fixtures.length; i++) {
                 let fixture_date = upd_fixtures[i][12]+"-"+upd_fixtures[i][11]+"-"+upd_fixtures[i][10]
                 let fixture_division = upd_fixtures[i][9]
@@ -1097,8 +1097,8 @@ async function parsePlayerList(players_list, upd_fixtures) {
                 //console.log(all_coach_lists[team_a])
                 //console.log(all_coach_lists[team_b])
 
-                //console.log(all_team_lists[team_a])
-                //console.log(all_team_lists[team_b])
+                console.log(all_team_lists[team_a])
+                console.log(all_team_lists[team_b])
                 upd_fixtures[i][17] = [["",""]];
                 upd_fixtures[i][18] = [["",""]];
                 
@@ -4291,10 +4291,12 @@ async function modifyPdf(fix, dates, doc, run) {
 
                 var saved = await AVSL_finalpdfDoc.saveAsBase64();
         } else if (scoresheet_type == "EVA"){
+            console.log(fixtures[i])
+            console.log(fixtures[i][17])
             if (fixtures[i][17].length >= 1 && fixtures[i][17][0] != '' && fixtures[i][17][0][0] != '') {
                 // Team A Players
                 if (fixtures[i][17].length >= 1 && fixtures[i][17][0] != '' && fixtures[i][17][0][0] != '') {
-                    for (var k = 0; k < fixtures[i][18].length; k++) {
+                    for (var k = 0; k < fixtures[i][17].length; k++) {
                         // first name, first column
                         //console.log(fixtures[i][18][k][0].toUpperCase() + ": " + measureText(fixtures[i][18][k][0].toUpperCase(),6))
                         if (measureText(fixtures[i][17][k][0][0].toUpperCase() + " " + fixtures[i][17][k][0][1].toUpperCase(), 8) >= 50) {
