@@ -57,6 +57,39 @@ const SEASON_ID = "27";
 const __CONFIG__ = {
     "venues": {
         
+        "Carrara": {
+            "name": "Carrara",
+            "top": "",
+            "mid": "",
+            "bot": "Carrara",
+            "city": "",
+            "alias": ["GCSLC", "Gold Coast Sports & Leisure Centre", "Gerflor", "Carrara"]
+        },
+        "AB Patterson": {
+            "name": "AB Patterson",
+            "top": "",
+            "mid": "",
+            "bot": "AB Patterson",
+            "city": "",
+            "alias": ["ABP", "AB Patterson", "AB Patterson College"]
+        },
+        "Coomera": {
+            "name": "Coomera",
+            "top": "",
+            "mid": "",
+            "bot": "Coomera",
+            "city": "",
+            "alias": ["CISC", "ACoomera Indoor Sport Centre"]
+        },
+        "Runaway Bay": {
+            "name": "Runaway Bay",
+            "top": "",
+            "mid": "",
+            "bot": "Runaway Bay",
+            "city": "",
+            "alias": ["RBIS", "Runaway Bay", "Runaway Bay Indoor Stadium"]
+        },
+
         "Adelaide 36ers Arena": {
             "name": "Adelaide 36ers Arena",
             "top": "",
@@ -862,6 +895,23 @@ const __CONFIG__ = {
                 "id_array": [],
                 "new_id_array": {"N/A": []}
             }
+        },
+        "Test - 2025 AVSC": {
+            "name": "Test - 2025 AVSC",
+            //"fixture_url": "https://cors-anywhere-og-v5kf.onrender.com/volleyball.exposureevents.com/253383/2025-mahindra-australian-volleyball-super-league/documents/schedule?layout=datetime",
+            "fixture_url": "https://volleyball.exposureevents.com/247701/2025-australian-volleyball-schools-cup/documents/schedule?layout=datetime&r=141",
+            "players_url": "https://volleyball.exposureevents.com/247701/2025-australian-volleyball-schools-cup/documents/players",
+            "printPlayers": "true",
+            "scoresheet": {
+                "default": "VA_T",
+                "honours": "VA_5",
+                "repecharge": "VA_3"
+            },
+            "backup_players" : {
+                "base_url": "N/A",
+                "id_array": [],
+                "new_id_array": {"N/A": []}
+            }
         }/*,
         "Test - 2025 Australian Youth Volleyball Championship": {
             "name": "Test - 2025 Australian Youth Volleyball Championship",
@@ -1103,3 +1153,6 @@ const __TEAMS__ = {
     '231 Murdoch': ['231', 'Murdoch', '1280', 'Division 6 Men']
 }
 
+const __SCORESHEETS__ = {
+    
+}
