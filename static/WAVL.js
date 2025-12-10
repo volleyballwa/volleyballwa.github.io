@@ -1751,9 +1751,9 @@ async function modifyPdf(fix, dates, doc, run) {
     var PSASurl = "https://volleyballwa.github.io/static/scoresheets/PSA_SS.pdf";
     var vwaHSburl = "https://volleyballwa.github.io/static/scoresheets/vwa_hs_beach.pdf";
 
-    var vaTimedurl = "https://volleyballwa.github.io/static/scoresheets/AVSC_Front.pdf";
-    var vaBo3url = "https://volleyballwa.github.io/static/scoresheets/AVSC_Front.pdf";
-    var vaBo5url = "https://volleyballwa.github.io/static/scoresheets/AVSC_Front.pdf";
+    var vaTimedurl = "https://volleyballwa.github.io/static/scoresheets/AVSC_Timed.pdf";
+    var vaBo3url = "https://volleyballwa.github.io/static/scoresheets/AVSC_Bo3.pdf";
+    var vaBo5url = "https://volleyballwa.github.io/static/scoresheets/AVSC_Bo5.pdf";
 
     const WAVLexistingPdfBytes = await fetch(WAVLurl).then(res => res.arrayBuffer());
     const JLexistingPdfBytes = await fetch(JLurl).then(resp => resp.arrayBuffer());
@@ -1898,18 +1898,21 @@ async function modifyPdf(fix, dates, doc, run) {
         var vaTimedhelveticaBold = await vaTimedpdfDoc.embedFont(PDFLib.StandardFonts.HelveticaBold);
         var vaTimedpages = await vaTimedpdfDoc.getPages();
         var vaTimedfirstPage = await vaTimedpages[0];
+        var vaTimedBackPage = await vaTimedpages[1];
 
         var vaBo3pdfDoc = await PDFLib.PDFDocument.load(vaBo3existingPdfBytes);
         var vaBo3helveticaFont = await vaBo3pdfDoc.embedFont(PDFLib.StandardFonts.Helvetica);
         var vaBo3helveticaBold = await vaBo3pdfDoc.embedFont(PDFLib.StandardFonts.HelveticaBold);
         var vaBo3pages = await vaBo3pdfDoc.getPages();
         var vaBo3firstPage = await vaBo3pages[0];
+        var vaBo3BackPage = await vaBo3pages[1];
 
         var vaBo5pdfDoc = await PDFLib.PDFDocument.load(vaBo5existingPdfBytes);
         var vaBo5helveticaFont = await vaBo5pdfDoc.embedFont(PDFLib.StandardFonts.Helvetica);
         var vaBo5helveticaBold = await vaBo5pdfDoc.embedFont(PDFLib.StandardFonts.HelveticaBold);
         var vaBo5pages = await vaBo5pdfDoc.getPages();
         var vaBo5firstPage = await vaBo5pages[0];
+        var vaBo5BackPage = await vaBo5pages[1];
 
 
 
@@ -4751,38 +4754,47 @@ async function modifyPdf(fix, dates, doc, run) {
             }
             var saved = await vwaHSbpdfDoc.saveAsBase64();
         } else if (scoresheet_type == "VA_T" || scoresheet_type == "VA_5" || scoresheet_type == "VA_3") {
-            let currFirstPage = vaTimedfirstPage
-            let currDoc = vaTimedpdfDoc
-
+            console.log(await vaTimedBackPage)
+            console.log(await newWAVLbackpage)
+            
             if (scoresheet_type == "VA_T") {
-                currFirstPage = vaTimedfirstPage
-                currDoc = vaTimedpdfDoc
+                var currFirstPage = await vaTimedfirstPage
+                var currDoc = await vaTimedpdfDoc
+                var currBackPage = await vaTimedBackPage
             } else if (scoresheet_type == "VA_3") {
-                currFirstPage = vaBo3firstPage
-                currDoc = vaBo3pdfDoc
+                var currFirstPage = await vaBo3firstPage
+                var currDoc = await vaBo3pdfDoc
+                var currBackPage = await vaBo3BackPage
             } else if (scoresheet_type == "VA_5") {
-                currFirstPage = vaBo5firstPage
-                currDoc = vaBo5pdfDoc
+                var currFirstPage = await vaBo5firstPage
+                var currDoc = vaBo5pdfDoc
+                var currBackPage = await vaBo5BackPage
             }
 
             
             // Do something here to convert names to initial . surname
 
-
+            let empty_string = " "
+            await currBackPage.drawText(empty_string, {
+                x: 200,
+                y: 813.5,
+                size: 14,
+                font: newWAVLhelveticaBold
+            })
 
             if (fixtures[i][6].length > 22 || fixtures[i][7].length > 22) {
                 // Team A Team List
                 await currFirstPage.drawText(fixtures[i][6], {
-                    x: 285,
-                    y: 744.5, //739
+                    x: 295,
+                    y: 737, //739
                     size: 9,
                     font: newWAVLhelveticaFont
                 })
 
                 // Team B Team List
                 await currFirstPage.drawText(fixtures[i][7], {
-                    x: 450,
-                    y: 744.5,
+                    x: 455,
+                    y: 737,
                     size: 9,
                     font: newWAVLhelveticaFont
                 })
@@ -4790,16 +4802,16 @@ async function modifyPdf(fix, dates, doc, run) {
             } else {
                 // Team A Team List
                 await currFirstPage.drawText(fixtures[i][6], {
-                    x: 285,
-                    y: 743.5, //739
+                    x: 295,
+                    y: 737, //739
                     size: 12,
                     font: newWAVLhelveticaFont
                 })
 
                 // Team B Team List
                 await currFirstPage.drawText(fixtures[i][7], {
-                    x: 450,
-                    y: 743.5,
+                    x: 455,
+                    y: 737,
                     size: 12,
                     font: newWAVLhelveticaFont
                 })
@@ -4829,8 +4841,8 @@ async function modifyPdf(fix, dates, doc, run) {
                     let draw_player_name = fixtures[i][17][k][0][0][0].toUpperCase() + ". " + fixtures[i][17][k][0][1].toUpperCase()
 
                     await currFirstPage.drawText(draw_player_name, {
-                        x: 277.25,
-                        y: 711.5-((15.75*k)),
+                        x: 278,
+                        y: 722-((14*k)),
                         size: 11,
                         font: newWAVLhelveticaFont
                     })
@@ -4841,8 +4853,8 @@ async function modifyPdf(fix, dates, doc, run) {
                         player_number = " " + player_number
                     }
                     await currFirstPage.drawText(player_number, {
-                        x: 260,
-                        y: 711.5-((15.75*k)),
+                        x: 262,
+                        y: 722-((14*k)),
                         size: 11,
                         font: newWAVLhelveticaFont
                     })
@@ -4857,7 +4869,7 @@ async function modifyPdf(fix, dates, doc, run) {
 
                     await currFirstPage.drawText(draw_player_name, {
                         x: 439.5,
-                        y: 711.5-((15.75*k)),
+                        y: 722-((14*k)),
                         size: 11,
                         font: newWAVLhelveticaFont
                     })
@@ -4868,8 +4880,8 @@ async function modifyPdf(fix, dates, doc, run) {
                         player_number = " " + player_number
                     }
                     await currFirstPage.drawText(player_number, {
-                        x: 423,
-                        y: 711.5-((15.75*k)),
+                        x: 422,
+                        y: 722-((14*k)),
                         size: 11,
                         font: newWAVLhelveticaFont
                     })
@@ -4878,18 +4890,18 @@ async function modifyPdf(fix, dates, doc, run) {
 
             // Venue 0
             await currFirstPage.drawText(__venues__[fixtures[i][0]], {
-                x: parseInt((275 - measureText(__venues__[fixtures[i][0]], 10)).toString()),
-                y: 767.5,
-                size: 10,
-                font: newWAVLhelveticaFont
+                x: parseInt((240 - measureText(__venues__[fixtures[i][0]], 8)).toString()),
+                y: 762,
+                size: 8,
+                font: newWAVLhelveticaBold
             })
 
             try {
                 // Court Number
                 await currFirstPage.drawText(fixtures[i][5], {
-                    x: parseInt((388.5 - measureBold(fixtures[i][5], 13).toString()).toString()),
-                    y: 767.5,
-                    size: 13,
+                    x: parseInt((315 - measureBold(fixtures[i][5], 8).toString()).toString()),
+                    y: 762,
+                    size: 8,
                     font: newWAVLhelveticaBold
                 })
             } catch (e) {
@@ -4902,9 +4914,9 @@ async function modifyPdf(fix, dates, doc, run) {
 
                     // Time (hh:mm)
                     await currFirstPage.drawText(time, {
-                        x: parseInt((459 - measureBold(time, 13)).toString()),
-                        y: 767.5,
-                        size: 13,
+                        x: parseInt((385 - measureBold(time, 8)).toString()),
+                        y: 762,
+                        size: 8,
                         font: newWAVLhelveticaBold
                     })
                 }
@@ -4917,25 +4929,25 @@ async function modifyPdf(fix, dates, doc, run) {
             var ddmmyy = fixtures[i][10].toString() + "/" + fixtures[i][11].toString() + "/" + fixtures[i][12].slice(2,4).toString()
 
             await currFirstPage.drawText(ddmmyy, {
-                x: parseInt((547 - measureBold(ddmmyy, 13)).toString()),
-                y: 767.5,
-                size: 13,
+                x: parseInt((500 - measureBold(ddmmyy, 8)).toString()),
+                y: 762,
+                size: 8,
                 font: newWAVLhelveticaBold
             })
 
             // Division (short)
-            await currFirstPage.drawText(fixtures[i][9][1], {
-                x: parseInt((529 - measureBold(fixtures[i][9][1], 13)).toString()),
-                y: 784.5,
-                size: 13,
+            await currFirstPage.drawText(fixtures[i][9][0], {
+                x: parseInt((427 - measureBold(fixtures[i][9][0], 10)).toString()),
+                y: 775.5,
+                size: 10,
                 font: newWAVLhelveticaBold
             })
 
             // Duty team
             await currFirstPage.drawText(fixtures[i][8], {
-                x: parseInt((332 - measureText(fixtures[i][8], 14)).toString()),
-                y: 784.5,
-                size: 14,
+                x: parseInt((278 - measureText(fixtures[i][8], 10)).toString()),
+                y: 776.5,
+                size: 8,
                 font: newWAVLhelveticaFont
             })
 
@@ -4949,7 +4961,7 @@ async function modifyPdf(fix, dates, doc, run) {
                     name_formatted = ""
                 }
                 await currFirstPage.drawText(name_formatted, {
-                    x: 260,
+                    x: 263,
                     y: 524-((15.75*k)),
                     size: 11,
                     font: newWAVLhelveticaFont
@@ -4964,7 +4976,7 @@ async function modifyPdf(fix, dates, doc, run) {
                     name_formatted = ""
                 }
                 await currFirstPage.drawText(name_formatted, {
-                    x: 455,
+                    x: 452,
                     y: 524-((15.75*k)),
                     size: 11,
                     font: newWAVLhelveticaFont
@@ -4976,29 +4988,29 @@ async function modifyPdf(fix, dates, doc, run) {
                 // Reduce text size if too long.
                 await currFirstPage.drawText(fixtures[i][6], {
                     x: parseInt((262 - measureText(fixtures[i][6], 10)).toString()),
-                    y: 804.5,
+                    y: 793,
                     size: 10,
-                    font: newWAVLhelveticaBold
+                    font: newWAVLhelveticaFont
                 })
                 await currFirstPage.drawText(fixtures[i][7], {
                     x: parseInt((480 - measureText(fixtures[i][7], 10)).toString()),
-                    y: 804.5,
+                    y: 793,
                     size: 10,
-                    font: newWAVLhelveticaBold
+                    font: newWAVLhelveticaFont
                 })
             } else {
                 newWAVLpdfDoc.TextAlignment = 1;
                 await currFirstPage.drawText(fixtures[i][6], {
                     x: parseInt((262 - measureText(fixtures[i][6], 14)).toString()),
-                    y: 804.5,
+                    y: 793,
                     size: 14,
-                    font: newWAVLhelveticaBold
+                    font: newWAVLhelveticaFont
                 })
                 await currFirstPage.drawText(fixtures[i][7], {
                     x: parseInt((480 - measureText(fixtures[i][7], 14)).toString()),
-                    y: 804.5,
+                    y: 793,
                     size: 14,
-                    font: newWAVLhelveticaBold
+                    font: newWAVLhelveticaFont
                 })
             }
         
