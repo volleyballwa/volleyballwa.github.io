@@ -1751,9 +1751,9 @@ async function modifyPdf(fix, dates, doc, run) {
     var PSASurl = "https://volleyballwa.github.io/static/scoresheets/PSA_SS.pdf";
     var vwaHSburl = "https://volleyballwa.github.io/static/scoresheets/vwa_hs_beach.pdf";
 
-    var vaTimedurl = "https://volleyballwa.github.io/static/scoresheets/new_def.pdf";
-    var vaBo3url = "https://volleyballwa.github.io/static/scoresheets/new_def.pdf";
-    var vaBo5url = "https://volleyballwa.github.io/static/scoresheets/new_def.pdf";
+    var vaTimedurl = "https://volleyballwa.github.io/static/scoresheets/AVSC_Front.pdf";
+    var vaBo3url = "https://volleyballwa.github.io/static/scoresheets/AVSC_Front.pdf";
+    var vaBo5url = "https://volleyballwa.github.io/static/scoresheets/AVSC_Front.pdf";
 
     const WAVLexistingPdfBytes = await fetch(WAVLurl).then(res => res.arrayBuffer());
     const JLexistingPdfBytes = await fetch(JLurl).then(resp => resp.arrayBuffer());
@@ -1825,9 +1825,9 @@ async function modifyPdf(fix, dates, doc, run) {
         var PSASurl = "https://volleyballwa.github.io/static/scoresheets/PSA_SS.pdf";
         var vwaHSburl = "https://volleyballwa.github.io/static/scoresheets/vwa_hs_beach.pdf";
         
-        var vaTimedurl = "https://volleyballwa.github.io/static/scoresheets/def.pdf";
-        var vaBo3url = "https://volleyballwa.github.io/static/scoresheets/def.pdf";
-        var vaBo5url = "https://volleyballwa.github.io/static/scoresheets/def.pdf";
+        var vaTimedurl = "https://volleyballwa.github.io/static/scoresheets/AVSC_Timed.pdf";
+        var vaBo3url = "https://volleyballwa.github.io/static/scoresheets/AVSC_Bo3.pdf";
+        var vaBo5url = "https://volleyballwa.github.io/static/scoresheets/AVSC_Bo5.pdf";
 
         var WAVLpdfDoc = await PDFLib.PDFDocument.load(WAVLexistingPdfBytes);
         var WAVLhelveticaFont = await WAVLpdfDoc.embedFont(PDFLib.StandardFonts.Helvetica);
