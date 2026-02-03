@@ -5611,7 +5611,7 @@ function html_to_fixture(venues, leagues, in_date, all_html_prom) {
         console.log(numFix)
         let month_lookup = {
             "January":"01",
-            "Febuary":"02",
+            "February":"02",
             "March":"03",
             "April":"04",
             "May":"05",
