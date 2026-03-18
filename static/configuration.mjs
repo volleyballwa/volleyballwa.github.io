@@ -1,6 +1,6 @@
-const FINALS_DATES = ["2022-09-04", "2022-09-11", "2022-09-18", "2023-08-27", "2023-09-03", "2023-09-10", "2024-08-25", "2024-09-01", "2024-09-08"];
+const FINALS_DATES = ["2022-09-04", "2022-09-11", "2022-09-18", "2023-08-27", "2023-09-03", "2023-09-10", "2024-08-25", "2024-09-01", "2024-09-08","2026-08-30", "2026-09-06", "2026-09-13"];
 
-const SL_FINALS_DATES = ["2023-07-14", "2023-07-16", "2023-07-22", "2024-07-19", "2024-07-21", "2024-07-27"]
+const SL_FINALS_DATES = ["2023-07-14", "2023-07-16", "2023-07-22", "2024-07-19", "2024-07-21", "2024-07-27", "2026-08-22"]
 
 const AVSL_FINAL_DATES = ["2025-11-02"]
 
@@ -46,8 +46,9 @@ const AVSL_COACH_SORTING = {
 }
 
 // This is used to convert the "(Pool x)" into "- x"
-const DIV_GRADING_DATES = ["2025-04-06", "2025-04-13", "2025-04-20", "2025-04-27", "2025-05-04", "2025-05-11"]
-const DIV_GRADING_DIVS = ["D2M", "D2W", "D3M"]
+// In 2026, the "grading dates" (ie, the dates that we want to show the Pool for Div 2) is the whole season (except finals)
+const DIV_GRADING_DATES = ['2026-03-18', '2026-03-19', '2026-03-20', '2026-03-21', '2026-03-22', '2026-03-23', '2026-03-24', '2026-03-25', '2026-03-26', '2026-03-27', '2026-03-28', '2026-03-29', '2026-03-30', '2026-03-31', '2026-04-01', '2026-04-02', '2026-04-03', '2026-04-04', '2026-04-05', '2026-04-06', '2026-04-07', '2026-04-08', '2026-04-09', '2026-04-10', '2026-04-11', '2026-04-12', '2026-04-13', '2026-04-14', '2026-04-15', '2026-04-16', '2026-04-17', '2026-04-18', '2026-04-19', '2026-04-20', '2026-04-21', '2026-04-22', '2026-04-23', '2026-04-24', '2026-04-25', '2026-04-26', '2026-04-27', '2026-04-28', '2026-04-29', '2026-04-30', '2026-05-01', '2026-05-02', '2026-05-03', '2026-05-04', '2026-05-05', '2026-05-06', '2026-05-07', '2026-05-08', '2026-05-09', '2026-05-10', '2026-05-11', '2026-05-12', '2026-05-13', '2026-05-14', '2026-05-15', '2026-05-16', '2026-05-17', '2026-05-18', '2026-05-19', '2026-05-20', '2026-05-21', '2026-05-22', '2026-05-23', '2026-05-24', '2026-05-25', '2026-05-26', '2026-05-27', '2026-05-28', '2026-05-29', '2026-05-30', '2026-05-31', '2026-06-01', '2026-06-02', '2026-06-03', '2026-06-04', '2026-06-05', '2026-06-06', '2026-06-07', '2026-06-08', '2026-06-09', '2026-06-10', '2026-06-11', '2026-06-12', '2026-06-13', '2026-06-14', '2026-06-15', '2026-06-16', '2026-06-17', '2026-06-18', '2026-06-19', '2026-06-20', '2026-06-21', '2026-06-22', '2026-06-23', '2026-06-24', '2026-06-25', '2026-06-26', '2026-06-27', '2026-06-28', '2026-06-29', '2026-06-30', '2026-07-01', '2026-07-02', '2026-07-03', '2026-07-04', '2026-07-05', '2026-07-06', '2026-07-07', '2026-07-08', '2026-07-09', '2026-07-10', '2026-07-11', '2026-07-12', '2026-07-13', '2026-07-14', '2026-07-15', '2026-07-16', '2026-07-17', '2026-07-18', '2026-07-19', '2026-07-20', '2026-07-21', '2026-07-22', '2026-07-23', '2026-07-24', '2026-07-25', '2026-07-26', '2026-07-27', '2026-07-28', '2026-07-29', '2026-07-30', '2026-07-31', '2026-08-01', '2026-08-02', '2026-08-03', '2026-08-04', '2026-08-05', '2026-08-06', '2026-08-07', '2026-08-08', '2026-08-09', '2026-08-10', '2026-08-11', '2026-08-12', '2026-08-13', '2026-08-14', '2026-08-15', '2026-08-16', '2026-08-17', '2026-08-18', '2026-08-19', '2026-08-20', '2026-08-21', '2026-08-22', '2026-08-23', '2026-08-24', '2026-08-25', '2026-08-26', '2026-08-27', '2026-08-28', '2026-08-29']
+const DIV_GRADING_DIVS = ["D2M", "D2W"]
 
 const DO_NOT_PRINT = ["David Poulivaati"]
 
@@ -56,509 +57,420 @@ const SEASON_ID = "27";
 
 const __CONFIG__ = {
     "venues": {
-        
+        "Albany Leisure Centre": {
+            "name": "Albany Leisure Centre",
+            "printName": "Albany Leisure Centre",
+            "city": "",
+            "alias": ["ALAC", "Albany Leisure Centre", "Albany Leisure & Aquatic Centre", "Albany Leisure and Aquatic Centre"]
+        },
+        "Aquinas": {
+            "name": "Aquinas",
+            "printName": "Aquinas",
+            "city": "",
+            "alias": ["Aquinas College", "Aquinas Col.", "Aquin"]
+        },
+        "Ashdale Secondary College": {
+            "name": "Ashdale Secondary College",
+            "printName": "Ashdale College",
+            "city": "",
+            "alias": ["ASH", "Ashdale College"]
+        },
+        "Ballajura": {
+            "name": "Ballajura",
+            "printName": "Ballajura",
+            "city": "",
+            "alias": ["Ballajura Indoor Spo"]
+        },
+        "Baldivis": {
+            "name": "Baldivis",
+            "printName": "Baldivis",
+            "city": "",
+            "alias": ["Baldivis", "Baldivis Indoor Sports Complex", "BISC"]
+        },
+        "Belmont Oasis": {
+            "name": "Belmont Oasis",
+            "printName": "Belmont Oasis",
+            "city": "",
+            "alias": ["Belmont Oasis", "Belmot", "BELM"]
+        },
+        "Bendat": {
+            "name": "Bendat",
+            "printName": "Bendat",
+            "city": "Floreat",
+            "alias": ["Bendat Basketball Centre", "BEND", "Benda"]
+        },
+        "Bunbury PCYC": {
+            "name": "Bunbury PCYC",
+            "printName": "Bunbury PCYC",
+            "city": "",
+            "alias": ["Bunbury PCYC", "PCYC"]
+        },
+        "Cannington Leisureplex": {
+            "name": "Cannington Leisureplex",
+            "printName": "Cannington Leisureplex",
+            "city": "",
+            "alias": ["Cannington", "CANN"]
+        },
+        "Cockburn": {
+            "name": "Cockburn",
+            "printName": "Cockburn",
+            "city": "",
+            "alias": ["Cockburn ARC", "CARC"]
+        },
+        "Curtin Stadium": {
+            "name": "Curtin Stadium",
+            "printName": "Curtin",
+            "city": "",
+            "alias": ["Curtin"]
+        },
+        "Cyril Jackson Recreation Centre": {
+            "name": "Cyril Jackson Recreation Centre",
+            "printName": "Cyril Jackson",
+            "city": "",
+            "alias": ["Cyril Jackson", "CJRC"]
+        },
+        "ECU Mt. Lawley": {
+            "name": "ECU Mt. Lawley",
+            "printName": "ECU Mt. Lawley",
+            "city": "",
+            "alias": ["ECU", "ECU Mount Lawley", "ECU Mt Lawley"]
+        },
+        "Geographe Leisure Centre": {
+            "name": "Geographe Leisure Centre",
+            "printName": "Geographe Leisure Centre",
+            "city": "",
+            "alias": ["Geographe", "Geographe Leisure", "Geographe Lei. Centr", "Geographe Lei. Cntr", "Geographe L. Ctr", "Geographe Lei.", "GEO"]
+        },
+        "Gold Netball Centre": {
+            "name": "Gold Netball Centre",
+            "printName": "Gold Netball Centre",
+            "city": "",
+            "alias": ["Gold Netball", "GOLD"]
+        },
+        "Guildford Grammar School": {
+            "name": "Guildford Grammar School",
+            "printName": "Guildford Grammar",
+            "city": "",
+            "alias": ["GGS", "Guildford", "Guildford Grammar", "Guildford Grammar School"]
+        },
+        "Greenwood College": {
+            "name": "Greenwood College",
+            "printName": "Greenwood College",
+            "city": "",
+            "alias": []
+        },
+        "Hale": {
+            "name": "Hale",
+            "printName": "Hale",
+            "city": "",
+            "alias": ["Hale School"]
+        },
+        "Halls Head Recreation Centre": {
+            "name": "Halls Head Recreation Centre",
+            "printName": "Halls Head",
+            "city": "",
+            "alias": ["Halls Head Rec Centr", "Halls Head Rec", "HALLS"]
+        },
+        "Hartfield Park": {
+            "name": "Hartfield Park",
+            "printName": "Hartfield Park",
+            "city": "",
+            "alias": ["Hartfield", "Hartfield Rec Cntr"]
+        },
+        "HBF Stadium Claremont": {
+            "name": "HBF Stadium Claremont",
+            "printName": "HBF Stadium",
+            "city": "",
+            "alias": ["HBF Stad. Claremont", "HBF", "HBF Stadium", "HBF Stad.", "HBF Sta. Claremont", "HBF Stadium Claremont"]
+        },
+        "HBF Arena Joondalup": {
+            "name": "HBF Arena Joondalup",
+            "printName": "HBF Arena",
+            "city": "",
+            "alias": ["HBF Arena", "HBF Joondalup", "JOON"]
+        },
+        "Herb Graham Leisure Centre": {
+            "name": "Herb Graham Leisure Centre",
+            "printName": "Herb Graham",
+            "city": "",
+            "alias": ["Herb Graham", "HERB"]
+        },
+        "John Wollaston": {
+            "name": "John Wollaston",
+            "printName": "John Wollaston",
+            "city": "",
+            "alias": ["John Wollaston ACS C", "John Wollaston ACS", "JOHN"]
+        },
+        "Karratha Leisureplex": {
+            "name": "Karratha Leisureplex",
+            "printName": "Karratha Leisureplex",
+            "city": "",
+            "alias": ["KL", "Karratha", "Karratha Leisureplex"]
+        },
+        "Kingsway": {
+            "name": "Kingsway",
+            "printName": "Kingsway",
+            "city": "",
+            "alias": ["Kingsway Indoor Stad", "Kingsway Indoor", "KING", "Kingsway Stadium"]
+        },
+        "Kwinana Recquatic": {
+            "name": "Kwinana Recquatic",
+            "printName": "Kwinana Recquatic",
+            "city": "",
+            "alias": ["Kwinana Recquatic", "Kwinana", "KWIN"]
+        },
+        "Leschenault Leisure Centre": {
+            "name": "Leschenault Leisure Centre",
+            "printName": "Leschenault Leisure Centre",
+            "city": "",
+            "alias": ["Leschanault", "Leschanault Lei.", "LLC", "Leschenault Leisure"]
+        },
+        "Loftus": {
+            "name": "Loftus",
+            "printName": "Loftus",
+            "city": "",
+            "alias": ["Loft", "Loftus Recreation Centre"]
+        },
+        "Lords": {
+            "name": "Lords",
+            "printName": "Lords",
+            "city": "",
+            "alias": ["LORDS", "Lords Recreation Centre"]
+        },
+        "Lumen Christi": {
+            "name": "Lumen Christi",
+            "printName": "Lumen Christi",
+            "city": "",
+            "alias": ["Lumen Christi College", "Lumen Christi", "LUMEN", "Lumen"]
+        },
+        "Mandurah ARC": {
+            "name": "Mandurah ARC",
+            "printName": "Mandurah ARC",
+            "city": "",
+            "alias": ["MARC"]
+        },
+        "MBC": {
+            "name": "MBC",
+            "printName": "MBC",
+            "city": "",
+            "alias": ["Mandurah Baptist College", "Mandurah Baptist Col", "Mandurah Baptist"]
+        },
+        "Melville LeisureFit": {
+            "name": "Melville LeisureFit",
+            "printName": "Melville LeisureFit",
+            "city": "",
+            "alias": ["Melville Leisure", "MLF"]
+        },
+        "Methodist Ladies College": {
+            "name": "Methodist Ladies College",
+            "printName": "MLC",
+            "city": "",
+            "alias": ["MLC", "Methodist L. Col", "Mthodist Ladies Co"]
+        },
+        "Murdoch Active": {
+            "name": "Murdoch Active",
+            "printName": "Murdoch Active",
+            "city": "",
+            "alias": []
+        },
+        "Naturaliste Community Centre": {
+            "name": "Naturaliste Community Centre",
+            "printName": "Naturaliste",
+            "city": "",
+            "alias": ["NCC"]
+        },
+        "Newman College": {
+            "name": "Newman College",
+            "printName": "Newman College",
+            "city": "",
+            "alias": ["Newman"]
+        },
+        "Penrhos College": {
+            "name": "Penrhos College",
+            "printName": "Penrhos College",
+            "city": "",
+            "alias": ["Penrhos"]
+        },
+        "Rossmoyne": {
+            "name": "Rossmoyne",
+            "printName": "Rossmoyne",
+            "city": "",
+            "alias": ["Rossmoyne SHS", "ROSSY"]
+        },
+        "Sacred Heart": {
+            "name": "Sacred Heart",
+            "printName": "Sacred Heart",
+            "city": "",
+            "alias": ["Sacred Heart College", "SHC"]
+        },
+        "Santa Maria": {
+            "name": "Santa Maria",
+            "printName": "Santa Maria",
+            "city": "",
+            "alias": ["Santa Maria College", "Santa Maria Col."]
+        },
+        "Southern River": {
+            "name": "Southern River",
+            "printName": "Southern River",
+            "city": "",
+            "alias": ["Southern River College", "Southern River Colle", "Southern River Col.", "SRC"]
+        },
+        "South West Sports Centre": {
+            "name": "South West Sports Centre",
+            "printName": "South West Sports Centre",
+            "city": "",
+            "alias": ["SW Sports", "SWSC"]
+        },
+        "Swan Active Midland": {
+            "name": "Swan Active Midland",
+            "printName": "Swan Active Midland",
+            "city": "",
+            "alias": ["Swan Active Midland", "Swan Active", "SAM", "Active Midland"]
+        },
+        "St Mary's": {
+            "name": "St Mary's",
+            "printName": "St Mary's",
+            "city": "",
+            "alias": []
+        },
+        "St James' Anglican School": {
+            "name": "St James' Anglican School",
+            "printName": "St James'",
+            "city": "",
+            "alias": ["SJAS", "St James", "St James' Anglican School", "Saint James"]
+        },
+        "The Rise": {
+            "name": "The Rise",
+            "printName": "The Rise",
+            "city": "",
+            "alias": ["RISE"]
+        },
+        "Trinity College": {
+            "name": "Trinity College",
+            "printName": "Trinity",
+            "city": "",
+            "alias": ["Trinity", "Trinity Col.", "TRIN"]
+        },
+        "UWA Recreation Centre": {
+            "name": "UWA Recreation Centre",
+            "printName": "UWA",
+            "city": "",
+            "alias": ["UWA", "UWA Rec. Centre", "UWA Rec Centre", "UWA Sport"]
+        },
+        "UWA Sport Science": {
+            "name": "UWA Sport Science",
+            "printName": "UWA Sport Science",
+            "city": "",
+            "alias": []
+        },
+        "Wesley College": {
+            "name": "Wesley College",
+            "printName": "Wesley",
+            "city": "",
+            "alias": ["Wesley"]
+        },
+        "Warwick": {
+            "name": "Warwick",
+            "printName": "Warwick",
+            "city": "",
+            "alias": ["Warwick Stadium", "Warwick Stad.", "WARW"]
+        },
+        "TBC": {
+            "name": "TBC",
+            "printName": "TBC",
+            "city": "",
+            "alias": ["To Be Confirmed"]
+        },
+        "Home Round": {
+            "name": "Home Round",
+            "printName": "Home Round",
+            "city": "",
+            "alias": []
+        },
+        "EBC": {
+            "name": "EBC",
+            "printName": "EBC",
+            "city": "",
+            "alias": ["Esperance Bowling Club Beach Courts", "EBC"]
+        },
         "Carrara": {
             "name": "Carrara",
-            "top": "",
-            "mid": "",
-            "bot": "Carrara",
+            "printName": "Carrara",
             "city": "",
             "alias": ["GCSLC", "Gold Coast Sports & Leisure Centre", "Gerflor", "Carrara"]
         },
         "AB Patterson": {
             "name": "AB Patterson",
-            "top": "",
-            "mid": "",
-            "bot": "AB Patterson",
+            "printName": "AB Patterson",
             "city": "",
             "alias": ["ABP", "AB Patterson", "AB Patterson College"]
         },
         "Coomera": {
             "name": "Coomera",
-            "top": "",
-            "mid": "",
-            "bot": "Coomera",
+            "printName": "Coomera",
             "city": "",
             "alias": ["CISC", "ACoomera Indoor Sport Centre"]
         },
         "Runaway Bay": {
             "name": "Runaway Bay",
-            "top": "",
-            "mid": "",
-            "bot": "Runaway Bay",
+            "printName": "Runaway Bay",
             "city": "",
             "alias": ["RBIS", "Runaway Bay", "Runaway Bay Indoor Stadium"]
         },
 
         "Adelaide 36ers Arena": {
             "name": "Adelaide 36ers Arena",
-            "top": "",
-            "mid": "",
-            "bot": "36ers Arena",
+            "printName": "36ers Arena",
             "city": "Findon",
             "alias": ["36ers", "Adelaide 36ers Arena"]
         },
         "Iona College, Lindum QLD": {
             "name": "Iona College, Lindum QLD",
-            "top": "",
-            "mid": "",
-            "bot": "Iona College",
+            "printName": "Iona College",
             "city": "Lindum",
             "alias": ["Iona College, Lindum QLD", "IONA"]
         },
         "Melbourne Sports and Aquatic Centre": {
             "name": "Melbourne Sports and Aquatic Centre",
-            "top": "",
-            "mid": "",
-            "bot": "M S A C",
+            "printName": "M S A C",
             "city": "Albert Park",
             "alias": ["Melbourne Sports and Aquatic Centre", "MSAC"]
         },
         "Netball Central, NSW": {
             "name": "Netball Central, NSW",
-            "top": "",
-            "mid": "",
-            "bot": "Netball Central",
+            "printName": "Netball Central",
             "city": "Sydney Olympic Park",
             "alias": ["Netball Central, NSW", "NC"]
         },
         "Radford College": {
             "name": "Radford College",
-            "top": "",
-            "mid": "",
-            "bot": "Radford College",
+            "printName": "Radford College",
             "city": "Bruce",
             "alias": ["Radford College", "Radfo"]
         },
         "Reynella East College": {
             "name": "Reynella East College",
-            "top": "",
-            "mid": "",
-            "bot": "Reynella East College",
+            "printName": "Reynella East College",
             "city": "Reynella East",
             "alias": ["Reynella East College", "Reyne"]
         },
         "Shoalhaven Indoor Sports Centre": {
             "name": "Shoalhaven Indoor Sports Centre",
-            "top": "",
-            "mid": "",
-            "bot": "Shoalhaven",
+            "printName": "Shoalhaven",
             "city": "Bomaderry",
             "alias": ["Shoalhaven Indoor Sports Centre", "SISC"]
         },
         "South Pine Indoor Sports Centre": {
             "name": "South Pine Indoor Sports Centre",
-            "top": "",
-            "mid": "",
-            "bot": "South Pine",
+            "printName": "South Pine",
             "city": "Brendale",
             "alias": ["South Pine Indoor Sports Centre", "SPine"]
         },
         "State Netball Arena - Parkville": {
             "name": "State Netball Arena - Parkville",
-            "top": "",
-            "mid": "",
-            "bot": "State Netball Arena",
+            "printName": "State Netball Arena",
             "city": "Parkville",
             "alias": ["State Netball Arena - Parkville", "SNA", "State Netball Arena"]
-        },
-        
-        
-        
-        
-        
-        "Albany Leisure Centre": {
-            "name": "Albany Leisure Centre",
-            "top": "Albany",
-            "mid": "Leisure",
-            "bot": "Centre",
-            "alias": ["ALAC", "Albany Leisure Centre", "Albany Leisure & Aquatic Centre", "Albany Leisure and Aquatic Centre"]
-        },
-        "Aquinas": {
-            "name": "Aquinas",
-            "top": "",
-            "mid": "Aquinas",
-            "bot": "College",
-            "alias": ["Aquinas College", "Aquinas Col.", "Aquin"]
-        },
-        "Ashdale Secondary College": {
-            "name": "Ashdale Secondary College",
-            "top": "Ashdale",
-            "mid": "Secondary",
-            "bot": "College",
-            "alias": ["ASH", "Ashdale College"]
-        },
-        "Ballajura": {
-            "name": "Ballajura",
-            "top": "",
-            "mid": "",
-            "bot": "Ballajura",
-            "alias": ["Ballajura Indoor Spo"]
-        },
-        "Baldivis": {
-            "name": "Baldivis",
-            "top": "",
-            "mid": "",
-            "bot": "Baldivis",
-            "alias": ["Baldivis", "Baldivis Indoor Sports Complex", "BISC"]
-        },
-        "Belmont Oasis": {
-            "name": "Belmont Oasis",
-            "top": "",
-            "mid": "",
-            "bot": "Belmont Oasis",
-            "alias": ["Belmont Oasis", "Belmot", "BELM"]
-        },
-        "Bendat": {
-            "name": "Bendat",
-            "top": "",
-            "mid": "",
-            "bot": "Bendat",
-            "city": "Floreat",
-            "alias": ["Bendat Basketball Centre", "BEND", "Benda"]
-        },
-        "Bunbury PCYC": {
-            "name": "Bunbury PCYC",
-            "top": "",
-            "mid": "",
-            "bot": "Bunbury PCYC",
-            "alias": ["Bunbury PCYC", "PCYC"]
-        },
-        "Cannington Leisureplex": {
-            "name": "Cannington Leisureplex",
-            "top": "",
-            "mid": "Cannington",
-            "bot": "Liesureplex",
-            "alias": ["Cannington", "CANN"]
-        },
-        "Cockburn": {
-            "name": "Cockburn",
-            "top": "",
-            "mid": "",
-            "bot": "Cockburn",
-            "alias": ["Cockburn ARC", "CARC"]
-        },
-        "Curtin Stadium": {
-            "name": "Curtin Stadium",
-            "top": "",
-            "mid": "Curtin",
-            "bot": "Stadium",
-            "alias": ["Curtin"]
-        },
-        "Cyril Jackson Recreation Centre": {
-            "name": "Cyril Jackson Recreation Centre",
-            "top": "Cyril Jackson",
-            "mid": "Recreation",
-            "bot": "Centre",
-            "alias": ["Cyril Jackson", "CJRC"]
-        },
-        "ECU Mt. Lawley": {
-            "name": "ECU Mt. Lawley",
-            "top": "",
-            "mid": "ECU",
-            "bot": "Mt. Lawley",
-            "alias": ["ECU", "ECU Mount Lawley", "ECU Mt Lawley"]
-        },
-        "Geographe Leisure Centre": {
-            "name": "Geographe Leisure Centre",
-            "top": "Geographe",
-            "mid": "Leisure",
-            "bot": "Centre",
-            "alias": ["Geographe", "Geographe Leisure", "Geographe Lei. Centr", "Geographe Lei. Cntr", "Geographe L. Ctr", "Geographe Lei.", "GEO"]
-        },
-        "Gold Netball Centre": {
-            "name": "Gold Netball Centre",
-            "top": "Gold",
-            "mid": "Netball",
-            "bot": "Centre",
-            "alias": ["Gold Netball", "GOLD"]
-        },
-        "Guildford Grammar School": {
-            "name": "Guildford Grammar School",
-            "top": "",
-            "mid": "Guildford",
-            "bot": "Grammar",
-            "alias": ["GGS", "Guildford", "Guildford Grammar", "Guildford Grammar School"]
-        },
-        "Greenwood College": {
-            "name": "Greenwood College",
-            "top": "",
-            "mid": "Greenwood",
-            "bot": "College",
-            "alias": []
-        },
-        "Hale": {
-            "name": "Hale",
-            "top": "",
-            "mid": "",
-            "bot": "Hale",
-            "alias": ["Hale School"]
-        },
-        "Halls Head Recreation Centre": {
-            "name": "Halls Head Recreation Centre",
-            "top": "Halls Head",
-            "mid": "Recreation",
-            "bot": "Centre",
-            "alias": ["Halls Head Rec Centr", "Halls Head Rec", "HALLS"]
-        },
-        "Hartfield Park": {
-            "name": "Hartfield Park",
-            "top": "",
-            "mid": "Hartfield",
-            "bot": "Park",
-            "alias": ["Hartfield", "Hartfield Rec Cntr"]
-        },
-        "HBF Stadium Claremont": {
-            "name": "HBF Stadium Claremont",
-            "top": "",
-            "mid": "HBF",
-            "bot": "Stadium",
-            "alias": ["HBF Stad. Claremont", "HBF", "HBF Stadium", "HBF Stad.", "HBF Sta. Claremont", "HBF Stadium Claremont"]
-        },
-        "HBF Arena Joondalup": {
-            "name": "HBF Arena Joondalup",
-            "top": "",
-            "mid": "HBF",
-            "bot": "Arena",
-            "alias": ["HBF Arena", "HBF Joondalup", "JOON"]
-        },
-        "Herb Graham Leisure Centre": {
-            "name": "Herb Graham Leisure Centre",
-            "top": "Herb Graham",
-            "mid": "Leisure",
-            "bot": "Centre",
-            "alias": ["Herb Graham", "HERB"]
-        },
-        "John Wollaston": {
-            "name": "John Wollaston",
-            "top": "",
-            "mid": "John",
-            "bot": "Wollaston",
-            "alias": ["John Wollaston ACS C", "John Wollaston ACS", "JOHN"]
-        },
-        "Karratha Leisureplex": {
-            "name": "Karratha Leisureplex",
-            "top": "",
-            "mid": "Karratha",
-            "bot": "Leisureplex",
-            "alias": ["KL", "Karratha", "Karratha Leisureplex"]
-        },
-        "Kingsway": {
-            "name": "Kingsway",
-            "top": "",
-            "mid": "",
-            "bot": "Kingsway",
-            "alias": ["Kingsway Indoor Stad", "Kingsway Indoor", "KING", "Kingsway Stadium"]
-        },
-        "Kwinana Recquatic": {
-            "name": "Kwinana Recquatic",
-            "top": "",
-            "mid": "Kwinana",
-            "bot": "Recquatic",
-            "alias": ["Kwinana Recquatic", "Kwinana", "KWIN"]
-        },
-        "Leschenault Leisure Centre": {
-            "name": "Leschenault Leisure Centre",
-            "top": "",
-            "mid": "Leschanault",
-            "bot": "Leisure",
-            "alias": ["Leschanault", "Leschanault Lei.", "LLC", "Leschenault Leisure"]
-        },
-        "Loftus": {
-            "name": "Loftus",
-            "top": "",
-            "mid": "",
-            "bot": "Loftus",
-            "alias": ["Loft", "Loftus Recreation Centre"]
-        },
-        "Lords": {
-            "name": "Lords",
-            "top": "",
-            "mid": "",
-            "bot": "Lords",
-            "alias": ["LORDS", "Lords Recreation Centre"]
-        },
-        "Lumen Christi": {
-            "name": "Lumen Christi",
-            "top": "Lumen",
-            "mid": "Christi",
-            "bot": "College",
-            "alias": ["Lumen Christi College", "Lumen Christi", "LUMEN", "Lumen"]
-        },
-        "Mandurah ARC": {
-            "name": "Mandurah ARC",
-            "top": "",
-            "mid": "Mandurah",
-            "bot": "ARC",
-            "alias": ["MARC"]
-        },
-        "MBC": {
-            "name": "MBC",
-            "top": "",
-            "mid": "",
-            "bot": "MBC",
-            "alias": ["Mandurah Baptist College", "Mandurah Baptist Col", "Mandurah Baptist"]
-        },
-        "Melville LeisureFit": {
-            "name": "Melville LeisureFit",
-            "top": "",
-            "mid": "Melville",
-            "bot": "LeisureFit",
-            "alias": ["Melville Leisure", "MLF"]
-        },
-        "Methodist Ladies College": {
-            "name": "Methodist Ladies College",
-            "top": "Methodist",
-            "mid": "Ladies",
-            "bot": "College",
-            "alias": ["MLC", "Methodist L. Col", "Mthodist Ladies Co"]
-        },
-        "Murdoch Active": {
-            "name": "Murdoch Active",
-            "top": "",
-            "mid": "Murdoch",
-            "bot": "Active",
-            "alias": []
-        },
-        "Naturaliste Community Centre": {
-            "name": "Naturaliste Community Centre",
-            "top": "Naturaliste",
-            "mid": "Community",
-            "bot": "Centre",
-            "alias": ["NCC"]
-        },
-        "Newman College": {
-            "name": "Newman College",
-            "top": "",
-            "mid": "Newman",
-            "bot": "College",
-            "alias": ["Newman"]
-        },
-        "Penrhos College": {
-            "name": "Penrhos College",
-            "top": "",
-            "mid": "Penrhos",
-            "bot": "College",
-            "alias": ["Penrhos"]
-        },
-        "Rossmoyne": {
-            "name": "Rossmoyne",
-            "top": "",
-            "mid": "",
-            "bot": "Rossmoyne",
-            "alias": ["Rossmoyne SHS", "ROSSY"]
-        },
-        "Sacred Heart": {
-            "name": "Sacred Heart",
-            "top": "",
-            "mid": "Sacred Heart",
-            "bot": "College",
-            "alias": ["Sacred Heart College", "SHC"]
-        },
-        "Santa Maria": {
-            "name": "Santa Maria",
-            "top": "",
-            "mid": "Santa",
-            "bot": "Maria",
-            "alias": ["Santa Maria College", "Santa Maria Col."]
-        },
-        "Southern River": {
-            "name": "Southern River",
-            "top": "",
-            "mid": "Southern",
-            "bot": "River",
-            "alias": ["Southern River College", "Southern River Colle", "Southern River Col.", "SRC"]
-        },
-        "South West Sports Centre": {
-            "name": "South West Sports Centre",
-            "top": "",
-            "mid": "South West",
-            "bot": "Sports Centre",
-            "alias": ["SW Sports", "SWSC"]
-        },
-        "Swan Active Midland": {
-            "name": "Swan Active Midland",
-            "top": "Swan",
-            "mid": "Active",
-            "bot": "Midland",
-            "alias": ["Swan Active Midland", "Swan Active", "SAM", "Active Midland"]
-        },
-        "St Mary's": {
-            "name": "St Mary's",
-            "top": "",
-            "mid": "",
-            "bot": "St Mary's",
-            "alias": []
-        },
-        "St James' Anglican School": {
-            "name": "St James' Anglican School",
-            "top": "St James'",
-            "mid": "Anglican",
-            "bot": "School",
-            "alias": ["SJAS", "St James", "St James' Anglican School", "Saint James"]
-        },
-        "The Rise": {
-            "name": "The Rise",
-            "top": "",
-            "mid": "",
-            "bot": "The Rise",
-            "alias": ["RISE"]
-        },
-        "Trinity College": {
-            "name": "Trinity College",
-            "top": "",
-            "mid": "",
-            "bot": "Trinity",
-            "alias": ["Trinity", "Trinity Col.", "TRIN"]
-        },
-        "UWA Recreation Centre": {
-            "name": "UWA Recreation Centre",
-            "top": "UWA",
-            "mid": "Recreation",
-            "bot": "Centre",
-            "alias": ["UWA", "UWA Rec. Centre", "UWA Rec Centre", "UWA Sport"]
-        },
-        "UWA Sport Science": {
-            "name": "UWA Sport Science",
-            "top": "UWA",
-            "mid": "Sport",
-            "bot": "Science",
-            "alias": []
-        },
-        "Wesley College": {
-            "name": "Wesley College",
-            "top": "",
-            "mid": "Wesley",
-            "bot": "College",
-            "alias": ["Wesley"]
-        },
-        "Warwick": {
-            "name": "Warwick",
-            "top": "",
-            "mid": "",
-            "bot": "Warwick",
-            "alias": ["Warwick Stadium", "Warwick Stad.", "WARW"]
-        },
-        "TBC": {
-            "name": "TBC",
-            "top": "",
-            "mid": "",
-            "bot": "",
-            "alias": ["To Be Confirmed"]
-        },
-        "Home Round": {
-            "name": "Home Round",
-            "top": "",
-            "mid": "",
-            "bot": "",
-            "alias": []
-        },
-        "EBC": {
-            "name": "EBC",
-            "top": "",
-            "mid": "",
-            "bot": "",
-            "alias": ["Esperance Bowling Club Beach Courts", "EBC"]
         }
     },
     "wavl__": {
@@ -792,7 +704,61 @@ const __CONFIG__ = {
                 "new_id_array": {"N/A": []}
             }
         },
-        "2025 WAVL Season": {
+        "2026 WAVL Season": {
+            "name": "2026 WAVL Season",
+            "fixture_url": "https://volleyball.exposureevents.com/259835/wavl/documents/schedule?layout=datetime",
+            "players_url": "https://volleyball.exposureevents.com/259835/wavl/documents/players",
+            "printPlayers": "true",
+            "scoresheet": {
+                "default": "12-sub"
+            },
+            "backup_players" : {
+                //"base_url" : "https://cors-anywhere-og-v5kf.onrender.com/volleyball.exposureevents.com/232730/wavl/teamroster?divisionteamid=",
+                "base_url" : "https://volleyball.exposureevents.com/259835/wavl/teamroster?divisionteamid=",
+                "id_array" : [4891069, 4891070, 4891071, 4891072, 4891073, 4891074, 4891075, 4891076, 4891077, 4891078, 4891089, 4891090, 4891091, 4891092, 4891093, 4891094, 4891095, 4891096, 4891097, 4891098, 4891099, 4891100, 4891101, 4891102, 4891103, 4891104, 4891105, 4891106, 4891107, 4891108, 4891079, 4891080, 4891081, 4891082, 4891083, 4891084, 4891085, 4891086, 4891087, 4891088, 4891110, 5003252, 4891113, 5003235, 4891117, 5003239, 4891114, 5003240, 5003241, 5003242, 4891115, 5003244, 5003246, 5003245, 4891111, 4891112, 5003248, 5003250, 5003249, 4891118, 5003247, 5015931, 4891109, 5003251, 4891116, 5003256, 5003253, 5003257, 5003254, 4891120, 4891124, 5019091, 5015958, 4891123, 5015959, 4891128, 4891126, 4891122, 4891119, 5015965, 5015966, 5015967, 5015962, 4891125, 5015960, 4891127, 5015961, 5015963, 5015964, 4891131, 4891135, 4891134, 4891130, 4891137, 4891136, 4891129, 4891133, 4891138, 4891132, 4891147, 4891144, 4891140, 4891143, 4891139, 4891146, 4891148, 4891145, 4891141, 4891150, 4891151, 4891154, 4891157, 4891156, 4891149, 4891153, 4891152, 4891158, 4891155, 4891163, 4891168, 4891166, 4891160, 4891161, 4891164, 4891159, 4891165, 4891162, 4891167, 4891178, 4891170, 4891176, 4891174, 4891173, 4891177, 5027401, 4891175, 4891171, 4891172, 4909521, 4891039, 4891040, 4891041, 4891042, 4891043, 4891044, 4891051, 4891052, 4891053, 4891054, 4891055, 4909606, 4891056, 4891057, 4891058, 4891059, 4891060, 4891061, 4891063, 4891064, 4909605, 4891065, 4891066, 4891067, 4891068, 4909522, 4891045, 4891046, 4891047, 4891048, 4891049, 4891050],
+                "new_id_array": {
+                    'Division 1 Men' :              [4891069, 4891070, 4891071, 4891072, 4891073, 4891074, 4891075, 4891076, 4891077, 4891078],
+                    'Division 1 Reserves Men' :     [4891089, 4891090, 4891091, 4891092, 4891093, 4891094, 4891095, 4891096, 4891097, 4891098],
+                    'Division 1 Reserves Women' :   [4891099, 4891100, 4891101, 4891102, 4891103, 4891104, 4891105, 4891106, 4891107, 4891108],
+                    'Division 1 Women' :            [4891079, 4891080, 4891081, 4891082, 4891083, 4891084, 4891085, 4891086, 4891087, 4891088],
+                    'Division 2 Men' :              [4891110, 5003252, 4891113, 5003235, 4891117, 5003239, 4891114, 5003240, 5003241, 5003242, 4891115, 5003244, 5003246, 5003245, 4891111, 4891112, 5003248, 5003250, 5003249, 4891118, 5003247, 5015931, 4891109, 5003251, 4891116, 5003256, 5003253, 5003257, 5003254],
+                    'Division 2 Women' :            [4891120, 4891124, 5019091, 5015958, 4891123, 5015959, 4891128, 4891126, 4891122, 4891119, 5015965, 5015966, 5015967, 5015962, 4891125, 5015960, 4891127, 5015961, 5015963, 5015964],
+                    'Division 3 Men' :              [4891131, 4891135, 4891134, 4891130, 4891137, 4891136, 4891129, 4891133, 4891138, 4891132],
+                    'Division 3 Women' :            [4891147, 4891144, 4891140, 4891143, 4891139, 4891146, 4891148, 4891145, 4891141],
+                    'Division 4 Men' :              [4891150, 4891151, 4891154, 4891157, 4891156, 4891149, 4891153, 4891152, 4891158, 4891155],
+                    'Division 5 Men' :              [4891163, 4891168, 4891166, 4891160, 4891161, 4891164, 4891159, 4891165, 4891162, 4891167],
+                    'Division 6 Men' :              [4891178, 4891170, 4891176, 4891174, 4891173, 4891177, 5027401, 4891175, 4891171, 4891172],
+                    'State League Men' :            [4909521, 4891039, 4891040, 4891041, 4891042, 4891043, 4891044],
+                    'State League Reserves Men' :   [4891051, 4891052, 4891053, 4891054, 4891055, 4909606, 4891056, 4891057, 4891058, 4891059],
+                    'State League Reserves Women' : [4891060, 4891061, 4891063, 4891064, 4909605, 4891065, 4891066, 4891067, 4891068],
+                    'State League Women' :          [4909522, 4891045, 4891046, 4891047, 4891048, 4891049, 4891050]
+                },
+                "Znew_id_array":{"N/A": []}
+
+
+                
+            
+            }
+            // New backup url - https://volleyball.exposureevents.com/232730/wavl/search?eventid=232730
+            // 
+
+        },
+        "EVA Beach 2025/26": {
+            "name": "EVA Beach 2025/26",
+            //"fixture_url": "https://cors-anywhere-og-v5kf.onrender.com/volleyball.exposureevents.com/257723/eva-beach-2025-26/documents/schedule?layout=datetime",
+            "fixture_url": "https://volleyball.exposureevents.com/257723/eva-beach-2025-26/documents/schedule?layout=datetime",
+            "players_url": "https://volleyball.exposureevents.com/257723/eva-beach-2025-26/documents/players?r=434",
+            "printPlayers": "true",
+            "scoresheet": {
+                "default": "EVA"
+            },
+            "backup_players" : {
+                "base_url": "N/A",
+                "id_array": [],
+                "new_id_array": {"N/A": []}
+            }
+        },
+        /*"2025 WAVL Season": {
             "name": "2025 WAVL Season",
             //"fixture_url": "https://cors-anywhere-og-v5kf.onrender.com/volleyball.exposureevents.com/232730/wavl/documents/schedule?layout=datetime",
             "fixture_url": "https://volleyball.exposureevents.com/232730/wavl/documents/schedule?layout=datetime",
@@ -864,23 +830,8 @@ const __CONFIG__ = {
                 "id_array": [],
                 "new_id_array": {"N/A": []}
             }
-        },
-        "EVA Beach 2025/26": {
-            "name": "EVA Beach 2025/26",
-            //"fixture_url": "https://cors-anywhere-og-v5kf.onrender.com/volleyball.exposureevents.com/257723/eva-beach-2025-26/documents/schedule?layout=datetime",
-            "fixture_url": "https://volleyball.exposureevents.com/257723/eva-beach-2025-26/documents/schedule?layout=datetime",
-            "players_url": "https://volleyball.exposureevents.com/257723/eva-beach-2025-26/documents/players?r=434",
-            "printPlayers": "true",
-            "scoresheet": {
-                "default": "EVA"
-            },
-            "backup_players" : {
-                "base_url": "N/A",
-                "id_array": [],
-                "new_id_array": {"N/A": []}
-            }
-        },
-        "2025 AVSL Season": {
+        },*/
+        /*"2025 AVSL Season": {
             "name": "2025 AVSL Season",
             //"fixture_url": "https://cors-anywhere-og-v5kf.onrender.com/volleyball.exposureevents.com/253383/2025-mahindra-australian-volleyball-super-league/documents/schedule?layout=datetime",
             "fixture_url": "https://volleyball.exposureevents.com/253383/2025-mahindra-australian-volleyball-super-league/documents/schedule?layout=datetime",
@@ -912,7 +863,7 @@ const __CONFIG__ = {
                 "id_array": [],
                 "new_id_array": {"N/A": []}
             }
-        }/*,
+        },*//*
         "Test - 2025 Australian Youth Volleyball Championship": {
             "name": "Test - 2025 Australian Youth Volleyball Championship",
             "fixture_url": "https://cors-anywhere-og-v5kf.onrender.com/volleyball.exposureevents.com/245701/2025-australian-youth-volleyball-championships/documents/schedule?layout=datetime&r=321",

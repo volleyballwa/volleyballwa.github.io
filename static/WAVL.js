@@ -2187,14 +2187,14 @@ async function modifyPdf(fix, dates, doc, run) {
                 }
 
                 // Venue 0
-                await extraWAVLfirstPage.drawText(__venues__[fixtures[i][0]], {
-                    x: parseInt((275 - measureText(__venues__[fixtures[i][0]], 10)).toString()),
+                await extraWAVLfirstPage.drawText(__venues__[fixtures[i][1]], {
+                    x: parseInt((275 - measureText(__venues__[fixtures[i][1]], 10)).toString()),
                     y: 781,
                     size: 10,
                     font: extraWAVLhelveticaFont
                 })
-                await extraWAVLbackPage.drawText(__venues__[fixtures[i][0]], {
-                    x: parseInt((275 - measureText(__venues__[fixtures[i][0]], 10)).toString()),
+                await extraWAVLbackPage.drawText(__venues__[fixtures[i][1]], {
+                    x: parseInt((275 - measureText(__venues__[fixtures[i][1]], 10)).toString()),
                     y: 781,
                     size: 10,
                     font: extraWAVLhelveticaFont
@@ -2659,14 +2659,14 @@ async function modifyPdf(fix, dates, doc, run) {
                 }
 
                 // Venue 0
-                await newWAVLfirstPage.drawText(__venues__[fixtures[i][0]], {
-                    x: parseInt((275 - measureText(__venues__[fixtures[i][0]], 10)).toString()),
+                await newWAVLfirstPage.drawText(__venues__[fixtures[i][1]], {
+                    x: parseInt((275 - measureText(__venues__[fixtures[i][1]], 10)).toString()),
                     y: 767.5,
                     size: 10,
                     font: newWAVLhelveticaFont
                 })
-                await newWAVLbackpage.drawText(__venues__[fixtures[i][0]], {
-                    x: parseInt((275 - measureText(__venues__[fixtures[i][0]], 10)).toString()),
+                await newWAVLbackpage.drawText(__venues__[fixtures[i][1]], {
+                    x: parseInt((275 - measureText(__venues__[fixtures[i][1]], 10)).toString()),
                     y: 767.5,
                     size: 10,
                     font: newWAVLhelveticaFont
@@ -3174,15 +3174,17 @@ async function modifyPdf(fix, dates, doc, run) {
         } else if (scoresheet_type == "avsl") {
             if (AVSL_FINAL_DATES.includes(fixtures[i][12]+"-"+fixtures[i][11]+"-"+fixtures[i][10])){
                 // City
-                console.log(fixtures[i][4])
-                console.log(__CONFIG__.venues[fixtures[i][4]])
-                let city = ''
-                try {
-                    city = __CONFIG__.venues[fixtures[i][4]].city
-                } catch (error) {
-                    city = ''
-                }
+                //console.log(fixtures[i][4])
+                //console.log(__CONFIG__.venues[fixtures[i][4]])
+                //let city = ''
+                //try {
+                //    city = __CONFIG__.venues[fixtures[i][4]].city
+                //} catch (error) {
+                //    city = ''
+                //}
                 
+                city = fixtures[i][3]
+
                 await AVSL_finalfirstPage.drawText(city, {
                     x: 65,
                     y: 809,
@@ -3293,7 +3295,7 @@ async function modifyPdf(fix, dates, doc, run) {
                 })
 
                 // Venue
-                await AVSL_finalfirstPage.drawText(fixtures[i][3], {
+                await AVSL_finalfirstPage.drawText(fixtures[i][1], {
                     x: 65,
                     y: 793,
                     size: 14,
@@ -3560,15 +3562,17 @@ async function modifyPdf(fix, dates, doc, run) {
                 var saved = await AVSL_finalpdfDoc.saveAsBase64();
             } else {
                 // City
-                console.log(fixtures[i][4])
-                console.log(__CONFIG__.venues[fixtures[i][4]])
-                let city = ''
-                try {
-                    city = __CONFIG__.venues[fixtures[i][4]].city
-                } catch (error) {
-                    city = ''
-                }
+                //console.log(fixtures[i][4])
+                //console.log(__CONFIG__.venues[fixtures[i][4]])
+                //let city = ''
+                //try {
+                //    city = __CONFIG__.venues[fixtures[i][4]].city
+                //} catch (error) {
+                //    city = ''
+                //}
                 
+                city = fixtures[i][3]
+
                 await AVSLfirstPage.drawText(city, {
                     x: 65,
                     y: 809,
@@ -3679,7 +3683,7 @@ async function modifyPdf(fix, dates, doc, run) {
                 })
 
                 // Venue
-                await AVSLfirstPage.drawText(fixtures[i][3], {
+                await AVSLfirstPage.drawText(fixtures[i][1], {
                     x: 65,
                     y: 793,
                     size: 14,
@@ -3949,14 +3953,16 @@ async function modifyPdf(fix, dates, doc, run) {
             
         } else if (scoresheet_type == "avsl_finals"){
             // City
-                console.log(fixtures[i][4])
-                console.log(__CONFIG__.venues[fixtures[i][4]])
-                let city = ''
-                try {
-                    city = __CONFIG__.venues[fixtures[i][4]].city
-                } catch (error) {
-                    city = ''
-                }
+                //console.log(fixtures[i][4])
+                //console.log(__CONFIG__.venues[fixtures[i][4]])
+                //let city = ''
+                //try {
+                //    city = __CONFIG__.venues[fixtures[i][4]].city
+                //} catch (error) {
+                //    city = ''
+                //}
+
+                city = fixtures[i][3]
                 
                 await AVSL_finalfirstPage.drawText(city, {
                     x: 65,
@@ -4068,7 +4074,7 @@ async function modifyPdf(fix, dates, doc, run) {
                 })
 
                 // Venue
-                await AVSL_finalfirstPage.drawText(fixtures[i][3], {
+                await AVSL_finalfirstPage.drawText(fixtures[i][1], {
                     x: 65,
                     y: 793,
                     size: 14,
@@ -4493,7 +4499,7 @@ async function modifyPdf(fix, dates, doc, run) {
             })
 
             // Venue
-            await PSASfirstPage.drawText(fixtures[i][0], {
+            await PSASfirstPage.drawText(fixtures[i][1], {
                 x: 50,
                 y: 433,
                 size: 13,
@@ -4563,7 +4569,7 @@ async function modifyPdf(fix, dates, doc, run) {
             })
 
             // Venue
-            await PSAMfirstPage.drawText(fixtures[i][0], {
+            await PSAMfirstPage.drawText(fixtures[i][1], {
                 x: 50,
                 y: 433,
                 size: 13,
@@ -4889,8 +4895,8 @@ async function modifyPdf(fix, dates, doc, run) {
             }
 
             // Venue 0
-            await currFirstPage.drawText(__venues__[fixtures[i][0]], {
-                x: parseInt((240 - measureText(__venues__[fixtures[i][0]], 8)).toString()),
+            await currFirstPage.drawText(__venues__[fixtures[i][1]], {
+                x: parseInt((240 - measureText(__venues__[fixtures[i][1]], 8)).toString()),
                 y: 762,
                 size: 8,
                 font: newWAVLhelveticaBold
@@ -5036,15 +5042,15 @@ async function modifyPdf(fix, dates, doc, run) {
         await curr_merged_pdf;
 
         var final = false
-        var curr_venue = fixtures[i][0]
-        var next_venue = fixtures[i][0]
+        var curr_venue = fixtures[i][1]
+        var next_venue = fixtures[i][1]
 
         if (fixtures[i][9][2] == '2025 WAVjL Season') {
             curr_venue = "Junior League"
         }
 
         if (fixtures[i][19] == "VA_T" || fixtures[i][19] == "VA_3" || fixtures[i][19] == "VA_5") {
-            curr_venue = fixtures[i][0] + "_" + fixtures[i][5]
+            curr_venue = fixtures[i][1] + "_" + fixtures[i][5]
         }
 
         if (i == fixtures.length - 1) {
@@ -5056,9 +5062,9 @@ async function modifyPdf(fix, dates, doc, run) {
                 next_venue = "Junior League"
             } else {
                 if (fixtures[i][19] == "VA_T" || fixtures[i][19] == "VA_3" || fixtures[i][19] == "VA_5") {
-                    next_venue = fixtures[i+1][0] + "_" + fixtures[i+1][5]
+                    next_venue = fixtures[i+1][1] + "_" + fixtures[i+1][5]
                 } else {
-                    next_venue = fixtures[i+1][0]
+                    next_venue = fixtures[i+1][1]
                 }
             }
             
@@ -5728,9 +5734,14 @@ function html_to_fixture(venues, leagues, in_date, all_html_prom) {
                             console.log(ven)
                             console.log(zero_venue_split)
                             console.log(venue_realname)
-                            const _venue_0 = __CONFIG__.venues[venue_realname].top;
-                            const _venue_1 = __CONFIG__.venues[venue_realname].mid;
-                            const _venue_2 = __CONFIG__.venues[venue_realname].bot;
+                            //const _venue_0 = __CONFIG__.venues[venue_realname].top;
+                            //const _venue_1 = __CONFIG__.venues[venue_realname].mid;
+                            //const _venue_2 = __CONFIG__.venues[venue_realname].bot;
+
+                            const _venue_print = __CONFIG__.venues[venue_realname].printName
+                            const _venue_name = __CONFIG__.venues[venue_realname].name
+                            const _venue_city = __CONFIG__.venues[venue_realname].city
+
                             console.log(div)
                             div_long = div
                             div_short = div.match(/\b[a-zA-Z]?\d*\/?/g).join('').replaceAll("  ", " ")
@@ -5739,6 +5750,7 @@ function html_to_fixture(venues, leagues, in_date, all_html_prom) {
                             } else {
                                 div_addition = ""
                             }
+
                             console.log("*******************")
                             console.log(div)
                             console.log(div_long)
@@ -5866,7 +5878,7 @@ function html_to_fixture(venues, leagues, in_date, all_html_prom) {
                             } 
 
                             if (push_fix) {
-                                fixtures_list.push([zero_venue_split, _venue_0, _venue_1, _venue_2, _venue_full, _court,
+                                fixtures_list.push([zero_venue_split, _venue_print, _venue_name, _venue_city, _venue_full, _court,
                                                     _team_a, _team_b, _duty, _division, _date_dd, _date_mm, _date_yyyy, _time_hr, _time_min,
                                                     _sorting, _time_sorting, [],
                                                     [], fixture_scoresheet_type, team_a_coaches, team_b_coaches
