@@ -5913,19 +5913,22 @@ function split_name(name){
     let comparator = 99999;
     let front = "";
     let back = "";
+    if (myArray.length == 1) {
+        return [name, " "]
+    } else {
+        for (let i = 0; i < myArray.length-1; i++) {
+            let fr = myArray.slice(0, i+1).join(" ");
+            let bk = myArray.slice(i+1).join(" ");
+            let diff = Math.abs(fr.length - bk.length);
 
-    for (let i = 0; i < myArray.length-1; i++) {
-        let fr = myArray.slice(0, i+1).join(" ");
-        let bk = myArray.slice(i+1).join(" ");
-        let diff = Math.abs(fr.length - bk.length);
-
-        if (diff < comparator){
-            front = fr;
-            back = bk;
-            comparator = diff;
+            if (diff < comparator){
+                front = fr;
+                back = bk;
+                comparator = diff;
+            }
         }
+        return [front, back];
     }
-    return [front, back];
 }
 
 /**
