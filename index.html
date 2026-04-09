@@ -29,12 +29,6 @@
         <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.5/xlsx.min.js"></script>
         <script>
-            // This code is here to "wake up" the cors anywhere instance on page load, so that it doesn't take so long to do everything else.
-            let xhttp = new XMLHttpRequest();
-            xhttp.open("GET", "https://cors-anywhere-og-v5kf.onrender.com/volleyball.exposureevents.com/220866/wavl/documents/schedule?layout=datetime", true);
-            xhttp.send();
-        </script>
-        <script>
             function nextSunday(){
                 var d = new Date()
                 d.setDate(d.getDate() + (0+(7-d.getDay())) % 7);

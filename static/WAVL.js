@@ -1991,201 +1991,214 @@ async function modifyPdf(fix, dates, doc, run) {
                 }
 
                 // Team A Players
-                for (var k = 0; k < fixtures[i][17].length; k++) {
-                    if (k < Math.ceil(fixtures[i][17].length / 2)) {
-                        // first name, first column
+                if (fixtures[i][17].length >= 1 && fixtures[i][17][0] != '' && fixtures[i][17][0][0] != '') {
+                    for (var k = 0; k < fixtures[i][17].length; k++) {
+                        console.log("---")
                         //console.log(fixtures[i][17][k][0].toUpperCase() + ": " + measureText(fixtures[i][17][k][0].toUpperCase(),6))
-                        if (measureText(fixtures[i][17][k][0][0].toUpperCase(), 6) >= 32){
-                            await newWAVLsl_r_firstPage.drawText(fixtures[i][17][k][0][0].toUpperCase(), {
-                                x: 276,
-                                y: 733.5-((12.8*k)),
-                                size: 5,
-                                font: newWAVLsl_r_helveticaFont
-                            })
-                        } else {
-                            await newWAVLsl_r_firstPage.drawText(fixtures[i][17][k][0][0].toUpperCase(), {
-                                x: 276,
-                                y: 733.5-((12.8*k)),
-                                size: 6,
-                                font: newWAVLsl_r_helveticaFont
-                            })
-                        }
+                        console.log(k)
+                        console.log(i)
+                        console.log(fixtures[i])
+                        console.log(fixtures[i][17])
+                        console.log(fixtures[i][17][k])
+                        console.log(fixtures[i][17][k][0])
+                        console.log(fixtures[i][17][k][0][0])
+                        if (k < Math.ceil(fixtures[i][17].length / 2)) {
+                            // first name, first column
+                            //console.log(fixtures[i][17][k][0].toUpperCase() + ": " + measureText(fixtures[i][17][k][0].toUpperCase(),6))
+                            if (measureText(fixtures[i][17][k][0][0].toUpperCase(), 6) >= 32){
+                                await newWAVLsl_r_firstPage.drawText(fixtures[i][17][k][0][0].toUpperCase(), {
+                                    x: 276,
+                                    y: 733.5-((12.8*k)),
+                                    size: 5,
+                                    font: newWAVLsl_r_helveticaFont
+                                })
+                            } else {
+                                await newWAVLsl_r_firstPage.drawText(fixtures[i][17][k][0][0].toUpperCase(), {
+                                    x: 276,
+                                    y: 733.5-((12.8*k)),
+                                    size: 6,
+                                    font: newWAVLsl_r_helveticaFont
+                                })
+                            }
 
-                        // surname, first column
-                        //console.log(fixtures[i][17][k][1].toUpperCase() + ": " + measureText(fixtures[i][17][k][1].toUpperCase(),6))
-                        if (measureText(fixtures[i][17][k][0][1].toUpperCase(), 6) >= 32) {
-                            await newWAVLsl_r_firstPage.drawText(fixtures[i][17][k][0][1].toUpperCase(), {
-                                x: 276,
-                                y: 733.5-((12.8*k+6.0)),
-                                size: 5,
-                                font: newWAVLsl_r_helveticaFont
-                            })
+                            // surname, first column
+                            //console.log(fixtures[i][17][k][1].toUpperCase() + ": " + measureText(fixtures[i][17][k][1].toUpperCase(),6))
+                            if (measureText(fixtures[i][17][k][0][1].toUpperCase(), 6) >= 32) {
+                                await newWAVLsl_r_firstPage.drawText(fixtures[i][17][k][0][1].toUpperCase(), {
+                                    x: 276,
+                                    y: 733.5-((12.8*k+6.0)),
+                                    size: 5,
+                                    font: newWAVLsl_r_helveticaFont
+                                })
+                            } else {
+                                await newWAVLsl_r_firstPage.drawText(fixtures[i][17][k][0][1].toUpperCase(), {
+                                    x: 276,
+                                    y: 733.5-((12.8*k+6.0)),
+                                    size: 6,
+                                    font: newWAVLsl_r_helveticaFont
+                                })
+                            }
                         } else {
-                            await newWAVLsl_r_firstPage.drawText(fixtures[i][17][k][0][1].toUpperCase(), {
-                                x: 276,
-                                y: 733.5-((12.8*k+6.0)),
-                                size: 6,
-                                font: newWAVLsl_r_helveticaFont
-                            })
-                        }
-                    } else {
-                        // first name, second column
-                        //console.log(fixtures[i][17][k][0].toUpperCase() + ": " + measureText(fixtures[i][17][k][0].toUpperCase(),6))
-                        if (measureText(fixtures[i][17][k][0][0].toUpperCase(), 6) >= 32){
-                            await newWAVLsl_r_firstPage.drawText(fixtures[i][17][k][0][0].toUpperCase(), {
-                                x: 355,
-                                y: 733.5-((12.8*(k-Math.ceil(fixtures[i][17].length / 2)))),
-                                size: 5,
-                                font: newWAVLsl_r_helveticaFont
-                            })
-                        } else {
-                            await newWAVLsl_r_firstPage.drawText(fixtures[i][17][k][0][0].toUpperCase(), {
-                                x: 355,
-                                y: 733.5-((12.8*(k-Math.ceil(fixtures[i][17].length / 2)))),
-                                size: 6,
-                                font: newWAVLsl_r_helveticaFont
-                            })
-                        }
+                            // first name, second column
+                            //console.log(fixtures[i][17][k][0].toUpperCase() + ": " + measureText(fixtures[i][17][k][0].toUpperCase(),6))
+                            if (measureText(fixtures[i][17][k][0][0].toUpperCase(), 6) >= 32){
+                                await newWAVLsl_r_firstPage.drawText(fixtures[i][17][k][0][0].toUpperCase(), {
+                                    x: 355,
+                                    y: 733.5-((12.8*(k-Math.ceil(fixtures[i][17].length / 2)))),
+                                    size: 5,
+                                    font: newWAVLsl_r_helveticaFont
+                                })
+                            } else {
+                                await newWAVLsl_r_firstPage.drawText(fixtures[i][17][k][0][0].toUpperCase(), {
+                                    x: 355,
+                                    y: 733.5-((12.8*(k-Math.ceil(fixtures[i][17].length / 2)))),
+                                    size: 6,
+                                    font: newWAVLsl_r_helveticaFont
+                                })
+                            }
 
-                        // surname, second column
-                        //console.log(fixtures[i][17][k][1].toUpperCase() + ": " + measureText(fixtures[i][17][k][1].toUpperCase(),6))
-                        if (measureText(fixtures[i][17][k][0][1].toUpperCase(), 6) >= 32) {
-                            await newWAVLsl_r_firstPage.drawText(fixtures[i][17][k][0][1].toUpperCase(), {
-                                x: 355,
-                                y: 733.5-((12.8*(k-Math.ceil(fixtures[i][17].length / 2))+6.0)),
-                                size: 5,
-                                font: newWAVLsl_r_helveticaFont
-                            })
-                        } else {
-                            await newWAVLsl_r_firstPage.drawText(fixtures[i][17][k][0][1].toUpperCase(), {
-                                x: 355,
-                                y: 733.5-((12.8*(k-Math.ceil(fixtures[i][17].length / 2))+6.0)),
-                                size: 6,
-                                font: newWAVLsl_r_helveticaFont
-                            })
+                            // surname, second column
+                            //console.log(fixtures[i][17][k][1].toUpperCase() + ": " + measureText(fixtures[i][17][k][1].toUpperCase(),6))
+                            if (measureText(fixtures[i][17][k][0][1].toUpperCase(), 6) >= 32) {
+                                await newWAVLsl_r_firstPage.drawText(fixtures[i][17][k][0][1].toUpperCase(), {
+                                    x: 355,
+                                    y: 733.5-((12.8*(k-Math.ceil(fixtures[i][17].length / 2))+6.0)),
+                                    size: 5,
+                                    font: newWAVLsl_r_helveticaFont
+                                })
+                            } else {
+                                await newWAVLsl_r_firstPage.drawText(fixtures[i][17][k][0][1].toUpperCase(), {
+                                    x: 355,
+                                    y: 733.5-((12.8*(k-Math.ceil(fixtures[i][17].length / 2))+6.0)),
+                                    size: 6,
+                                    font: newWAVLsl_r_helveticaFont
+                                })
+                            }
                         }
+                        
                     }
-                    
-                }
 
-                // Team A, Second column numbers
-                if (fixtures[i][17].length > 1) {
-                    let line_y_a = 739-(12.8*Math.ceil(fixtures[i][17].length /2));
-                    //console.log(line_y_a);
-                    await newWAVLsl_r_firstPage.drawLine({
-                        start: { x: 339, y: 738.6 },
-                        end: { x: 339, y: line_y_a },
-                        thickness: 0.5,
-                        color: rgb(0,0,0),
-                        opacity: 1
-                    })
-                    
-                    await newWAVLsl_r_firstPage.drawLine({
-                        start: { x: 354, y: 738.6 },
-                        end: { x: 354, y: line_y_a },
-                        thickness: 0.5,
-                        color: rgb(0,0,0),
-                        opacity: 1
-                    })
+                    // Team A, Second column numbers
+                    if (fixtures[i][17].length > 1) {
+                        let line_y_a = 739-(12.8*Math.ceil(fixtures[i][17].length /2));
+                        //console.log(line_y_a);
+                        await newWAVLsl_r_firstPage.drawLine({
+                            start: { x: 339, y: 738.6 },
+                            end: { x: 339, y: line_y_a },
+                            thickness: 0.5,
+                            color: rgb(0,0,0),
+                            opacity: 1
+                        })
+                        
+                        await newWAVLsl_r_firstPage.drawLine({
+                            start: { x: 354, y: 738.6 },
+                            end: { x: 354, y: line_y_a },
+                            thickness: 0.5,
+                            color: rgb(0,0,0),
+                            opacity: 1
+                        })
+                    }
                 }
 
                 // Team B Players
-                for (var k = 0; k < fixtures[i][18].length; k++) {
-                    if (k < Math.ceil(fixtures[i][18].length / 2)) {
-                        // first name, first column
-                        //console.log(fixtures[i][18][k][0].toUpperCase() + ": " + measureText(fixtures[i][18][k][0].toUpperCase(),6))
-                        if (measureText(fixtures[i][18][k][0][0].toUpperCase(), 6) >= 32) {
-                            await newWAVLsl_r_firstPage.drawText(fixtures[i][18][k][0][0].toUpperCase(), {
-                                x: 440.5,
-                                y: 733.5-((12.8*k)),
-                                size: 5,
-                                font: newWAVLsl_r_helveticaFont
-                            })
-                        } else {
-                            await newWAVLsl_r_firstPage.drawText(fixtures[i][18][k][0][0].toUpperCase(), {
-                                x: 440.5,
-                                y: 733.5-((12.8*k)),
-                                size: 6,
-                                font: newWAVLsl_r_helveticaFont
-                            })
-                        }
+                if (fixtures[i][18].length >= 1 && fixtures[i][18][0] != '' && fixtures[i][18][0][0] != '') {
+                    for (var k = 0; k < fixtures[i][18].length; k++) {
+                        if (k < Math.ceil(fixtures[i][18].length / 2)) {
+                            // first name, first column
+                            //console.log(fixtures[i][18][k][0].toUpperCase() + ": " + measureText(fixtures[i][18][k][0].toUpperCase(),6))
+                            if (measureText(fixtures[i][18][k][0][0].toUpperCase(), 6) >= 32) {
+                                await newWAVLsl_r_firstPage.drawText(fixtures[i][18][k][0][0].toUpperCase(), {
+                                    x: 440.5,
+                                    y: 733.5-((12.8*k)),
+                                    size: 5,
+                                    font: newWAVLsl_r_helveticaFont
+                                })
+                            } else {
+                                await newWAVLsl_r_firstPage.drawText(fixtures[i][18][k][0][0].toUpperCase(), {
+                                    x: 440.5,
+                                    y: 733.5-((12.8*k)),
+                                    size: 6,
+                                    font: newWAVLsl_r_helveticaFont
+                                })
+                            }
 
-                        // surname, first column
-                        //console.log(fixtures[i][18][k][1].toUpperCase() + ": " + measureText(fixtures[i][18][k][1].toUpperCase(),6))
-                        if (measureText(fixtures[i][18][k][0][1].toUpperCase(), 6) >= 32) {
-                            await newWAVLsl_r_firstPage.drawText(fixtures[i][18][k][0][1].toUpperCase(), {
-                                x: 440.5,
-                                y: 733.5-((12.8*k+6.0)),
-                                size: 5,
-                                font: newWAVLsl_r_helveticaFont
-                            })
+                            // surname, first column
+                            //console.log(fixtures[i][18][k][1].toUpperCase() + ": " + measureText(fixtures[i][18][k][1].toUpperCase(),6))
+                            if (measureText(fixtures[i][18][k][0][1].toUpperCase(), 6) >= 32) {
+                                await newWAVLsl_r_firstPage.drawText(fixtures[i][18][k][0][1].toUpperCase(), {
+                                    x: 440.5,
+                                    y: 733.5-((12.8*k+6.0)),
+                                    size: 5,
+                                    font: newWAVLsl_r_helveticaFont
+                                })
+                            } else {
+                                await newWAVLsl_r_firstPage.drawText(fixtures[i][18][k][0][1].toUpperCase(), {
+                                    x: 440.5,
+                                    y: 733.5-((12.8*k+6.0)),
+                                    size: 6,
+                                    font: newWAVLsl_r_helveticaFont
+                                })
+                            }
                         } else {
-                            await newWAVLsl_r_firstPage.drawText(fixtures[i][18][k][0][1].toUpperCase(), {
-                                x: 440.5,
-                                y: 733.5-((12.8*k+6.0)),
-                                size: 6,
-                                font: newWAVLsl_r_helveticaFont
-                            })
-                        }
-                    } else {
-                        // first name, second column
-                        //console.log(fixtures[i][18][k][0].toUpperCase() + ": " + measureText(fixtures[i][18][k][0].toUpperCase(),6))
-                        if (measureText(fixtures[i][18][k][0][0].toUpperCase(), 6) >= 32) {
-                            await newWAVLsl_r_firstPage.drawText(fixtures[i][18][k][0][0].toUpperCase(), {
-                                x: 519.5,
-                                y: 733.5-((12.8*(k-Math.ceil(fixtures[i][18].length / 2)))),
-                                size: 5,
-                                font: newWAVLsl_r_helveticaFont
-                            })
-                        } else {
-                            await newWAVLsl_r_firstPage.drawText(fixtures[i][18][k][0][0].toUpperCase(), {
-                                x: 519.5,
-                                y: 733.5-((12.8*(k-Math.ceil(fixtures[i][18].length / 2)))),
-                                size: 6,
-                                font: newWAVLsl_r_helveticaFont
-                            })
-                        }
+                            // first name, second column
+                            //console.log(fixtures[i][18][k][0].toUpperCase() + ": " + measureText(fixtures[i][18][k][0].toUpperCase(),6))
+                            if (measureText(fixtures[i][18][k][0][0].toUpperCase(), 6) >= 32) {
+                                await newWAVLsl_r_firstPage.drawText(fixtures[i][18][k][0][0].toUpperCase(), {
+                                    x: 519.5,
+                                    y: 733.5-((12.8*(k-Math.ceil(fixtures[i][18].length / 2)))),
+                                    size: 5,
+                                    font: newWAVLsl_r_helveticaFont
+                                })
+                            } else {
+                                await newWAVLsl_r_firstPage.drawText(fixtures[i][18][k][0][0].toUpperCase(), {
+                                    x: 519.5,
+                                    y: 733.5-((12.8*(k-Math.ceil(fixtures[i][18].length / 2)))),
+                                    size: 6,
+                                    font: newWAVLsl_r_helveticaFont
+                                })
+                            }
 
-                        // surname, second column
-                        //console.log(fixtures[i][18][k][1].toUpperCase() + ": " + measureText(fixtures[i][18][k][1].toUpperCase(),6))
-                        if (measureText(fixtures[i][18][k][0][1].toUpperCase(), 6) >= 32) {
-                            await newWAVLsl_r_firstPage.drawText(fixtures[i][18][k][0][1].toUpperCase(), {
-                                x: 519.5,
-                                y: 733.5-((12.8*(k-Math.ceil(fixtures[i][18].length / 2))+6.0)),
-                                size: 5,
-                                font: newWAVLsl_r_helveticaFont
-                            })
-                        } else {
-                            await newWAVLsl_r_firstPage.drawText(fixtures[i][18][k][0][1].toUpperCase(), {
-                                x: 519.5,
-                                y: 733.5-((12.8*(k-Math.ceil(fixtures[i][18].length / 2))+6.0)),
-                                size: 6,
-                                font: newWAVLsl_r_helveticaFont
-                            })
+                            // surname, second column
+                            //console.log(fixtures[i][18][k][1].toUpperCase() + ": " + measureText(fixtures[i][18][k][1].toUpperCase(),6))
+                            if (measureText(fixtures[i][18][k][0][1].toUpperCase(), 6) >= 32) {
+                                await newWAVLsl_r_firstPage.drawText(fixtures[i][18][k][0][1].toUpperCase(), {
+                                    x: 519.5,
+                                    y: 733.5-((12.8*(k-Math.ceil(fixtures[i][18].length / 2))+6.0)),
+                                    size: 5,
+                                    font: newWAVLsl_r_helveticaFont
+                                })
+                            } else {
+                                await newWAVLsl_r_firstPage.drawText(fixtures[i][18][k][0][1].toUpperCase(), {
+                                    x: 519.5,
+                                    y: 733.5-((12.8*(k-Math.ceil(fixtures[i][18].length / 2))+6.0)),
+                                    size: 6,
+                                    font: newWAVLsl_r_helveticaFont
+                                })
+                            }
                         }
                     }
-                }
-                
-                if (fixtures[i][18].length > 1) {
-                    // Team B, second column numbers
-                    let line_y_b = 739-(12.8*Math.ceil(fixtures[i][18].length /2));
-                    //console.log(line_y_b);
-
-                    await newWAVLsl_r_firstPage.drawLine({
-                        start: { x: 518, y: 738.6 },
-                        end: { x: 518, y: line_y_b },
-                        thickness: 0.5,
-                        color: rgb(0,0,0),
-                        opacity: 1
-                    })
                     
-                    await newWAVLsl_r_firstPage.drawLine({
-                        start: { x: 503, y: 738.6 },
-                        end: { x: 503, y: line_y_b },
-                        thickness: 0.5,
-                        color: rgb(0,0,0),
-                        opacity: 1
-                    })
+                    if (fixtures[i][18].length > 1) {
+                        // Team B, second column numbers
+                        let line_y_b = 739-(12.8*Math.ceil(fixtures[i][18].length /2));
+                        //console.log(line_y_b);
+
+                        await newWAVLsl_r_firstPage.drawLine({
+                            start: { x: 518, y: 738.6 },
+                            end: { x: 518, y: line_y_b },
+                            thickness: 0.5,
+                            color: rgb(0,0,0),
+                            opacity: 1
+                        })
+                        
+                        await newWAVLsl_r_firstPage.drawLine({
+                            start: { x: 503, y: 738.6 },
+                            end: { x: 503, y: line_y_b },
+                            thickness: 0.5,
+                            color: rgb(0,0,0),
+                            opacity: 1
+                        })
+                    }
                 }
 
                 // Venue 0
