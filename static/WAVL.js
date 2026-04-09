@@ -1742,8 +1742,8 @@ async function modifyPdf(fix, dates, doc, run) {
     fixtures.sort(sorting);
     var WAVLurl = "https://volleyballwa.github.io/static/scoresheets/def.pdf";
     var JLurl = "https://volleyballwa.github.io/static/scoresheets/def_jl.pdf";
-    var newWAVLurl = "https://volleyballwa.github.io/static/scoresheets/new_def.pdf";
-    var extraWAVLurl = "https://volleyballwa.github.io/static/scoresheets/extra_def.pdf";
+    var newWAVLdivs_url = "https://volleyballwa.github.io/static/scoresheets/WAVL_Div.pdf";
+    var newWAVLsl_r_url = "https://volleyballwa.github.io/static/scoresheets/WAVL_SL_R.pdf";
     var AVSLurl = "https://volleyballwa.github.io/static/scoresheets/AVSL.pdf";
     var AVSL_final_url = "https://volleyballwa.github.io/static/scoresheets/AVSLfinalsNew.pdf";
     var EVAurl = "https://volleyballwa.github.io/static/scoresheets/Blank_EVA_Scoresheet.pdf";
@@ -1757,8 +1757,8 @@ async function modifyPdf(fix, dates, doc, run) {
 
     const WAVLexistingPdfBytes = await fetch(WAVLurl).then(res => res.arrayBuffer());
     const JLexistingPdfBytes = await fetch(JLurl).then(resp => resp.arrayBuffer());
-    const newWAVLexistingPdfBytes = await fetch(newWAVLurl).then(res => res.arrayBuffer());
-    const extraWAVLexistingPdfBytes = await fetch(extraWAVLurl).then(res => res.arrayBuffer());
+    const newWAVLdivs_existingPdfBytes = await fetch(newWAVLdivs_url).then(res => res.arrayBuffer());
+    const newWAVLsl_r_existingPdfBytes = await fetch(newWAVLsl_r_url).then(res => res.arrayBuffer());
     const AVSLexistingPdfBytes = await fetch(AVSLurl).then(res => res.arrayBuffer());
     const AVSL_finalexistingPdfBytes = await fetch(AVSL_final_url).then(res => res.arrayBuffer());
     const EVAexistingPdfBytes = await fetch(EVAurl).then(res => res.arrayBuffer());
@@ -1816,8 +1816,8 @@ async function modifyPdf(fix, dates, doc, run) {
         // Load WAVL and Junior League scoresheets
         var WAVLurl = "https://volleyballwa.github.io/static/scoresheets/def.pdf";
         var JLurl = "https://volleyballwa.github.io/static/scoresheets/def_jl.pdf";
-        var newWAVLurl = "https://volleyballwa.github.io/static/scoresheets/new_def.pdf";
-        var extraWAVLurl = "https://volleyballwa.github.io/static/scoresheets/extra_def.pdf";
+        var newWAVLdivs_url = "https://volleyballwa.github.io/static/scoresheets/WAVL_Div.pdf";
+        var newWAVLsl_r_url = "https://volleyballwa.github.io/static/scoresheets/WAVL_SL_R.pdf";
         var AVSLurl = "https://volleyballwa.github.io/static/scoresheets/AVSL.pdf";
         var AVSL_final_url = "https://volleyballwa.github.io/static/scoresheets/AVSLfinalsNew.pdf";
         var EVAurl = "https://volleyballwa.github.io/static/scoresheets/Blank_EVA_Scoresheet.pdf";
@@ -1835,19 +1835,19 @@ async function modifyPdf(fix, dates, doc, run) {
         var WAVLpages = await WAVLpdfDoc.getPages();
         var WAVLfirstPage = await WAVLpages[0];
 
-        var newWAVLpdfDoc = await PDFLib.PDFDocument.load(newWAVLexistingPdfBytes);
-        var newWAVLhelveticaFont = await newWAVLpdfDoc.embedFont(PDFLib.StandardFonts.Helvetica);
-        var newWAVLhelveticaBold = await newWAVLpdfDoc.embedFont(PDFLib.StandardFonts.HelveticaBold);
-        var newWAVLpages = await newWAVLpdfDoc.getPages();
-        var newWAVLfirstPage = await newWAVLpages[0];
-        var newWAVLbackpage = await newWAVLpages[1];
+        var newWAVLdivs_pdfDoc = await PDFLib.PDFDocument.load(newWAVLdivs_existingPdfBytes);
+        var newWAVLdivs_helveticaFont = await newWAVLdivs_pdfDoc.embedFont(PDFLib.StandardFonts.Helvetica);
+        var newWAVLdivs_helveticaBold = await newWAVLdivs_pdfDoc.embedFont(PDFLib.StandardFonts.HelveticaBold);
+        var newWAVLdivs_pages = await newWAVLdivs_pdfDoc.getPages();
+        var newWAVLdivs_firstPage = await newWAVLdivs_pages[0];
+        var newWAVLdivs_backpage = await newWAVLdivs_pages[1];
 
-        var extraWAVLpdfDoc = await PDFLib.PDFDocument.load(extraWAVLexistingPdfBytes);
-        var extraWAVLhelveticaFont = await extraWAVLpdfDoc.embedFont(PDFLib.StandardFonts.Helvetica);
-        var extraWAVLhelveticaBold = await extraWAVLpdfDoc.embedFont(PDFLib.StandardFonts.HelveticaBold);
-        var extraWAVLpages = await extraWAVLpdfDoc.getPages();
-        var extraWAVLfirstPage = await extraWAVLpages[0];
-        var extraWAVLbackPage = await extraWAVLpages[1];
+        var newWAVLsl_r_pdfDoc = await PDFLib.PDFDocument.load(newWAVLsl_r_existingPdfBytes);
+        var newWAVLsl_r_helveticaFont = await newWAVLsl_r_pdfDoc.embedFont(PDFLib.StandardFonts.Helvetica);
+        var newWAVLsl_r_helveticaBold = await newWAVLsl_r_pdfDoc.embedFont(PDFLib.StandardFonts.HelveticaBold);
+        var newWAVLsl_r_pages = await newWAVLsl_r_pdfDoc.getPages();
+        var newWAVLsl_r_firstPage = await newWAVLsl_r_pages[0];
+        var newWAVLsl_r_backPage = await newWAVLsl_r_pages[1];
 
         var curr_merged_pdf = await merged64;
         
@@ -1932,10 +1932,12 @@ async function modifyPdf(fix, dates, doc, run) {
         //if (fixtures[i][9][0].includes("Division") || fixtures[i][9][0].includes("State")) {
         if (scoresheet_type == "12-sub") {
             // If we need to use the scoresheet with more names
-            if (fixtures[i][17].length > 18 || fixtures[i][18].length > 18){
+            //if (fixtures[i][17].length > 18 || fixtures[i][18].length > 18){
+            // if SL or SLR
+            if (fixtures[i][9][0].includes("State")) {
                 if ((SL_FINALS_DATES.includes(fixtures[i][12]+"-"+fixtures[i][11]+"-"+fixtures[i][10]) && (fixtures[i][9][0] == "State League Men" || fixtures[i][9][0] == "State League Women")) || FINALS_DATES.includes(fixtures[i][12]+"-"+fixtures[i][11]+"-"+fixtures[i][10])){
                     // Rule out MVP Votes
-                    await extraWAVLfirstPage.drawLine({
+                    await newWAVLsl_r_firstPage.drawLine({
                         start: { x: 11, y: 316 },
                         end: { x: 166, y: 388 },
                         thickness: 3,
@@ -1943,7 +1945,7 @@ async function modifyPdf(fix, dates, doc, run) {
                         opacity: 1
                     })
 
-                    await extraWAVLfirstPage.drawLine({
+                    await newWAVLsl_r_firstPage.drawLine({
                         start: { x: 11, y: 388 },
                         end: { x: 166, y: 316 },
                         thickness: 3,
@@ -1954,36 +1956,36 @@ async function modifyPdf(fix, dates, doc, run) {
 
                 if (fixtures[i][6].length > 22 || fixtures[i][7].length > 22) {
                     // Team A Team List
-                    await extraWAVLfirstPage.drawText(fixtures[i][6], {
+                    await newWAVLsl_r_firstPage.drawText(fixtures[i][6], {
                         x: 285,
                         y: 744.5, //739
                         size: 9,
-                        font: extraWAVLhelveticaFont
+                        font: newWAVLsl_r_helveticaFont
                     })
 
                     // Team B Team List
-                    await extraWAVLfirstPage.drawText(fixtures[i][7], {
+                    await newWAVLsl_r_firstPage.drawText(fixtures[i][7], {
                         x: 450,
                         y: 744.5,
                         size: 9,
-                        font: extraWAVLhelveticaFont
+                        font: newWAVLsl_r_helveticaFont
                     })
 
                 } else {
                     // Team A Team List
-                    await extraWAVLfirstPage.drawText(fixtures[i][6], {
+                    await newWAVLsl_r_firstPage.drawText(fixtures[i][6], {
                         x: 285,
                         y: 744, //739
                         size: 12,
-                        font: extraWAVLhelveticaFont
+                        font: newWAVLsl_r_helveticaFont
                     })
 
                     // Team B Team List
-                    await extraWAVLfirstPage.drawText(fixtures[i][7], {
+                    await newWAVLsl_r_firstPage.drawText(fixtures[i][7], {
                         x: 450,
                         y: 744,
                         size: 12,
-                        font: extraWAVLhelveticaFont
+                        font: newWAVLsl_r_helveticaFont
                     })
 
                 }
@@ -1994,72 +1996,72 @@ async function modifyPdf(fix, dates, doc, run) {
                         // first name, first column
                         //console.log(fixtures[i][17][k][0].toUpperCase() + ": " + measureText(fixtures[i][17][k][0].toUpperCase(),6))
                         if (measureText(fixtures[i][17][k][0][0].toUpperCase(), 6) >= 32){
-                            await extraWAVLfirstPage.drawText(fixtures[i][17][k][0][0].toUpperCase(), {
+                            await newWAVLsl_r_firstPage.drawText(fixtures[i][17][k][0][0].toUpperCase(), {
                                 x: 276,
                                 y: 733.5-((12.8*k)),
                                 size: 5,
-                                font: extraWAVLhelveticaFont
+                                font: newWAVLsl_r_helveticaFont
                             })
                         } else {
-                            await extraWAVLfirstPage.drawText(fixtures[i][17][k][0][0].toUpperCase(), {
+                            await newWAVLsl_r_firstPage.drawText(fixtures[i][17][k][0][0].toUpperCase(), {
                                 x: 276,
                                 y: 733.5-((12.8*k)),
                                 size: 6,
-                                font: extraWAVLhelveticaFont
+                                font: newWAVLsl_r_helveticaFont
                             })
                         }
 
                         // surname, first column
                         //console.log(fixtures[i][17][k][1].toUpperCase() + ": " + measureText(fixtures[i][17][k][1].toUpperCase(),6))
                         if (measureText(fixtures[i][17][k][0][1].toUpperCase(), 6) >= 32) {
-                            await extraWAVLfirstPage.drawText(fixtures[i][17][k][0][1].toUpperCase(), {
+                            await newWAVLsl_r_firstPage.drawText(fixtures[i][17][k][0][1].toUpperCase(), {
                                 x: 276,
                                 y: 733.5-((12.8*k+6.0)),
                                 size: 5,
-                                font: extraWAVLhelveticaFont
+                                font: newWAVLsl_r_helveticaFont
                             })
                         } else {
-                            await extraWAVLfirstPage.drawText(fixtures[i][17][k][0][1].toUpperCase(), {
+                            await newWAVLsl_r_firstPage.drawText(fixtures[i][17][k][0][1].toUpperCase(), {
                                 x: 276,
                                 y: 733.5-((12.8*k+6.0)),
                                 size: 6,
-                                font: extraWAVLhelveticaFont
+                                font: newWAVLsl_r_helveticaFont
                             })
                         }
                     } else {
                         // first name, second column
                         //console.log(fixtures[i][17][k][0].toUpperCase() + ": " + measureText(fixtures[i][17][k][0].toUpperCase(),6))
                         if (measureText(fixtures[i][17][k][0][0].toUpperCase(), 6) >= 32){
-                            await extraWAVLfirstPage.drawText(fixtures[i][17][k][0][0].toUpperCase(), {
+                            await newWAVLsl_r_firstPage.drawText(fixtures[i][17][k][0][0].toUpperCase(), {
                                 x: 355,
                                 y: 733.5-((12.8*(k-Math.ceil(fixtures[i][17].length / 2)))),
                                 size: 5,
-                                font: extraWAVLhelveticaFont
+                                font: newWAVLsl_r_helveticaFont
                             })
                         } else {
-                            await extraWAVLfirstPage.drawText(fixtures[i][17][k][0][0].toUpperCase(), {
+                            await newWAVLsl_r_firstPage.drawText(fixtures[i][17][k][0][0].toUpperCase(), {
                                 x: 355,
                                 y: 733.5-((12.8*(k-Math.ceil(fixtures[i][17].length / 2)))),
                                 size: 6,
-                                font: extraWAVLhelveticaFont
+                                font: newWAVLsl_r_helveticaFont
                             })
                         }
 
                         // surname, second column
                         //console.log(fixtures[i][17][k][1].toUpperCase() + ": " + measureText(fixtures[i][17][k][1].toUpperCase(),6))
                         if (measureText(fixtures[i][17][k][0][1].toUpperCase(), 6) >= 32) {
-                            await extraWAVLfirstPage.drawText(fixtures[i][17][k][0][1].toUpperCase(), {
+                            await newWAVLsl_r_firstPage.drawText(fixtures[i][17][k][0][1].toUpperCase(), {
                                 x: 355,
                                 y: 733.5-((12.8*(k-Math.ceil(fixtures[i][17].length / 2))+6.0)),
                                 size: 5,
-                                font: extraWAVLhelveticaFont
+                                font: newWAVLsl_r_helveticaFont
                             })
                         } else {
-                            await extraWAVLfirstPage.drawText(fixtures[i][17][k][0][1].toUpperCase(), {
+                            await newWAVLsl_r_firstPage.drawText(fixtures[i][17][k][0][1].toUpperCase(), {
                                 x: 355,
                                 y: 733.5-((12.8*(k-Math.ceil(fixtures[i][17].length / 2))+6.0)),
                                 size: 6,
-                                font: extraWAVLhelveticaFont
+                                font: newWAVLsl_r_helveticaFont
                             })
                         }
                     }
@@ -2070,7 +2072,7 @@ async function modifyPdf(fix, dates, doc, run) {
                 if (fixtures[i][17].length > 1) {
                     let line_y_a = 739-(12.8*Math.ceil(fixtures[i][17].length /2));
                     //console.log(line_y_a);
-                    await extraWAVLfirstPage.drawLine({
+                    await newWAVLsl_r_firstPage.drawLine({
                         start: { x: 339, y: 738.6 },
                         end: { x: 339, y: line_y_a },
                         thickness: 0.5,
@@ -2078,7 +2080,7 @@ async function modifyPdf(fix, dates, doc, run) {
                         opacity: 1
                     })
                     
-                    await extraWAVLfirstPage.drawLine({
+                    await newWAVLsl_r_firstPage.drawLine({
                         start: { x: 354, y: 738.6 },
                         end: { x: 354, y: line_y_a },
                         thickness: 0.5,
@@ -2093,72 +2095,72 @@ async function modifyPdf(fix, dates, doc, run) {
                         // first name, first column
                         //console.log(fixtures[i][18][k][0].toUpperCase() + ": " + measureText(fixtures[i][18][k][0].toUpperCase(),6))
                         if (measureText(fixtures[i][18][k][0][0].toUpperCase(), 6) >= 32) {
-                            await extraWAVLfirstPage.drawText(fixtures[i][18][k][0][0].toUpperCase(), {
+                            await newWAVLsl_r_firstPage.drawText(fixtures[i][18][k][0][0].toUpperCase(), {
                                 x: 440.5,
                                 y: 733.5-((12.8*k)),
                                 size: 5,
-                                font: extraWAVLhelveticaFont
+                                font: newWAVLsl_r_helveticaFont
                             })
                         } else {
-                            await extraWAVLfirstPage.drawText(fixtures[i][18][k][0][0].toUpperCase(), {
+                            await newWAVLsl_r_firstPage.drawText(fixtures[i][18][k][0][0].toUpperCase(), {
                                 x: 440.5,
                                 y: 733.5-((12.8*k)),
                                 size: 6,
-                                font: extraWAVLhelveticaFont
+                                font: newWAVLsl_r_helveticaFont
                             })
                         }
 
                         // surname, first column
                         //console.log(fixtures[i][18][k][1].toUpperCase() + ": " + measureText(fixtures[i][18][k][1].toUpperCase(),6))
                         if (measureText(fixtures[i][18][k][0][1].toUpperCase(), 6) >= 32) {
-                            await extraWAVLfirstPage.drawText(fixtures[i][18][k][0][1].toUpperCase(), {
+                            await newWAVLsl_r_firstPage.drawText(fixtures[i][18][k][0][1].toUpperCase(), {
                                 x: 440.5,
                                 y: 733.5-((12.8*k+6.0)),
                                 size: 5,
-                                font: extraWAVLhelveticaFont
+                                font: newWAVLsl_r_helveticaFont
                             })
                         } else {
-                            await extraWAVLfirstPage.drawText(fixtures[i][18][k][0][1].toUpperCase(), {
+                            await newWAVLsl_r_firstPage.drawText(fixtures[i][18][k][0][1].toUpperCase(), {
                                 x: 440.5,
                                 y: 733.5-((12.8*k+6.0)),
                                 size: 6,
-                                font: extraWAVLhelveticaFont
+                                font: newWAVLsl_r_helveticaFont
                             })
                         }
                     } else {
                         // first name, second column
                         //console.log(fixtures[i][18][k][0].toUpperCase() + ": " + measureText(fixtures[i][18][k][0].toUpperCase(),6))
                         if (measureText(fixtures[i][18][k][0][0].toUpperCase(), 6) >= 32) {
-                            await extraWAVLfirstPage.drawText(fixtures[i][18][k][0][0].toUpperCase(), {
+                            await newWAVLsl_r_firstPage.drawText(fixtures[i][18][k][0][0].toUpperCase(), {
                                 x: 519.5,
                                 y: 733.5-((12.8*(k-Math.ceil(fixtures[i][18].length / 2)))),
                                 size: 5,
-                                font: extraWAVLhelveticaFont
+                                font: newWAVLsl_r_helveticaFont
                             })
                         } else {
-                            await extraWAVLfirstPage.drawText(fixtures[i][18][k][0][0].toUpperCase(), {
+                            await newWAVLsl_r_firstPage.drawText(fixtures[i][18][k][0][0].toUpperCase(), {
                                 x: 519.5,
                                 y: 733.5-((12.8*(k-Math.ceil(fixtures[i][18].length / 2)))),
                                 size: 6,
-                                font: extraWAVLhelveticaFont
+                                font: newWAVLsl_r_helveticaFont
                             })
                         }
 
                         // surname, second column
                         //console.log(fixtures[i][18][k][1].toUpperCase() + ": " + measureText(fixtures[i][18][k][1].toUpperCase(),6))
                         if (measureText(fixtures[i][18][k][0][1].toUpperCase(), 6) >= 32) {
-                            await extraWAVLfirstPage.drawText(fixtures[i][18][k][0][1].toUpperCase(), {
+                            await newWAVLsl_r_firstPage.drawText(fixtures[i][18][k][0][1].toUpperCase(), {
                                 x: 519.5,
                                 y: 733.5-((12.8*(k-Math.ceil(fixtures[i][18].length / 2))+6.0)),
                                 size: 5,
-                                font: extraWAVLhelveticaFont
+                                font: newWAVLsl_r_helveticaFont
                             })
                         } else {
-                            await extraWAVLfirstPage.drawText(fixtures[i][18][k][0][1].toUpperCase(), {
+                            await newWAVLsl_r_firstPage.drawText(fixtures[i][18][k][0][1].toUpperCase(), {
                                 x: 519.5,
                                 y: 733.5-((12.8*(k-Math.ceil(fixtures[i][18].length / 2))+6.0)),
                                 size: 6,
-                                font: extraWAVLhelveticaFont
+                                font: newWAVLsl_r_helveticaFont
                             })
                         }
                     }
@@ -2169,7 +2171,7 @@ async function modifyPdf(fix, dates, doc, run) {
                     let line_y_b = 739-(12.8*Math.ceil(fixtures[i][18].length /2));
                     //console.log(line_y_b);
 
-                    await extraWAVLfirstPage.drawLine({
+                    await newWAVLsl_r_firstPage.drawLine({
                         start: { x: 518, y: 738.6 },
                         end: { x: 518, y: line_y_b },
                         thickness: 0.5,
@@ -2177,7 +2179,7 @@ async function modifyPdf(fix, dates, doc, run) {
                         opacity: 1
                     })
                     
-                    await extraWAVLfirstPage.drawLine({
+                    await newWAVLsl_r_firstPage.drawLine({
                         start: { x: 503, y: 738.6 },
                         end: { x: 503, y: line_y_b },
                         thickness: 0.5,
@@ -2187,32 +2189,32 @@ async function modifyPdf(fix, dates, doc, run) {
                 }
 
                 // Venue 0
-                await extraWAVLfirstPage.drawText(__venues__[fixtures[i][1]], {
+                await newWAVLsl_r_firstPage.drawText(__venues__[fixtures[i][1]], {
                     x: parseInt((275 - measureText(__venues__[fixtures[i][1]], 10)).toString()),
                     y: 781,
                     size: 10,
-                    font: extraWAVLhelveticaFont
+                    font: newWAVLsl_r_helveticaFont
                 })
-                await extraWAVLbackPage.drawText(__venues__[fixtures[i][1]], {
+                await newWAVLsl_r_backPage.drawText(__venues__[fixtures[i][1]], {
                     x: parseInt((275 - measureText(__venues__[fixtures[i][1]], 10)).toString()),
                     y: 781,
                     size: 10,
-                    font: extraWAVLhelveticaFont
+                    font: newWAVLsl_r_helveticaFont
                 })
 
                 try {
                     // Court Number
-                    await extraWAVLfirstPage.drawText(fixtures[i][5], {
+                    await newWAVLsl_r_firstPage.drawText(fixtures[i][5], {
                         x: parseInt((388 - measureBold(fixtures[i][5], 13).toString()).toString()),
                         y: 781,
                         size: 13,
-                        font: extraWAVLhelveticaBold
+                        font: newWAVLsl_r_helveticaBold
                     })
-                    await extraWAVLbackPage.drawText(fixtures[i][5], {
+                    await newWAVLsl_r_backPage.drawText(fixtures[i][5], {
                         x: parseInt((388 - measureBold(fixtures[i][5], 13).toString()).toString()),
                         y: 781,
                         size: 13,
-                        font: extraWAVLhelveticaBold
+                        font: newWAVLsl_r_helveticaBold
                     })
                 } catch (e) {
                     console.log(e);
@@ -2223,17 +2225,17 @@ async function modifyPdf(fix, dates, doc, run) {
                         time = fixtures[i][13].toString() + ":" + fixtures[i][14].toString()
 
                         // Time (hh:mm)
-                        await extraWAVLfirstPage.drawText(time, {
+                        await newWAVLsl_r_firstPage.drawText(time, {
                             x: parseInt((457 - measureBold(time, 13)).toString()),
                             y: 781,
                             size: 13,
-                            font: extraWAVLhelveticaBold
+                            font: newWAVLsl_r_helveticaBold
                         })
-                        await extraWAVLbackPage.drawText(time, {
+                        await newWAVLsl_r_backPage.drawText(time, {
                             x: parseInt((457 - measureBold(time, 13)).toString()),
                             y: 781,
                             size: 13,
-                            font: extraWAVLhelveticaBold
+                            font: newWAVLsl_r_helveticaBold
                         })
                     }
                 } catch (e) {
@@ -2244,45 +2246,45 @@ async function modifyPdf(fix, dates, doc, run) {
                 // Add a leading space to the day if required.
                 var ddmmyy = fixtures[i][10].toString() + "/" + fixtures[i][11].toString() + "/" + fixtures[i][12].slice(2,4).toString()
 
-                await extraWAVLfirstPage.drawText(ddmmyy, {
+                await newWAVLsl_r_firstPage.drawText(ddmmyy, {
                     x: parseInt((546 - measureBold(ddmmyy, 13)).toString()),
                     y: 781,
                     size: 13,
-                    font: extraWAVLhelveticaBold
+                    font: newWAVLsl_r_helveticaBold
                 })
-                await extraWAVLbackPage.drawText(ddmmyy, {
+                await newWAVLsl_r_backPage.drawText(ddmmyy, {
                     x: parseInt((546 - measureBold(ddmmyy, 13)).toString()),
                     y: 781,
                     size: 13,
-                    font: extraWAVLhelveticaBold
+                    font: newWAVLsl_r_helveticaBold
                 })
 
                 // Division (short)
-                await extraWAVLfirstPage.drawText(fixtures[i][9][1], {
+                await newWAVLsl_r_firstPage.drawText(fixtures[i][9][1], {
                     x: parseInt((528 - measureBold(fixtures[i][9][1], 13)).toString()),
                     y: 797,
                     size: 13,
-                    font: extraWAVLhelveticaBold
+                    font: newWAVLsl_r_helveticaBold
                 })
-                await extraWAVLbackPage.drawText(fixtures[i][9][1], {
+                await newWAVLsl_r_backPage.drawText(fixtures[i][9][1], {
                     x: parseInt((528 - measureBold(fixtures[i][9][1], 13)).toString()),
                     y: 797,
                     size: 13,
-                    font: extraWAVLhelveticaBold
+                    font: newWAVLsl_r_helveticaBold
                 })
 
                 // Duty team
-                await extraWAVLfirstPage.drawText(fixtures[i][8], {
+                await newWAVLsl_r_firstPage.drawText(fixtures[i][8], {
                     x: parseInt((332 - measureText(fixtures[i][8], 14)).toString()),
                     y: 797,
                     size: 14,
-                    font: extraWAVLhelveticaFont
+                    font: newWAVLsl_r_helveticaFont
                 })
-                await extraWAVLbackPage.drawText(fixtures[i][8], {
+                await newWAVLsl_r_backPage.drawText(fixtures[i][8], {
                     x: parseInt((332 - measureText(fixtures[i][8], 14)).toString()),
                     y: 797,
                     size: 14,
-                    font: extraWAVLhelveticaFont
+                    font: newWAVLsl_r_helveticaFont
                 })
 
                 // Club President
@@ -2302,94 +2304,94 @@ async function modifyPdf(fix, dates, doc, run) {
                 }
 
                 if (measureText(a_pres.toUpperCase(), 10) >= 90 || measureText(b_pres.toUpperCase(), 10) >= 90 ) {
-                    await extraWAVLfirstPage.drawText(a_pres, {
+                    await newWAVLsl_r_firstPage.drawText(a_pres, {
                         x: parseInt((328 - measureText(a_pres, 8)).toString()),
                         y: 462,
                         size: 8,
-                        font: extraWAVLhelveticaFont
+                        font: newWAVLsl_r_helveticaFont
                     })
-                    await extraWAVLfirstPage.drawText(b_pres, {
+                    await newWAVLsl_r_firstPage.drawText(b_pres, {
                         x: parseInt((523 - measureText(b_pres, 8)).toString()),
                         y: 462,
                         size: 8,
-                        font: extraWAVLhelveticaFont
+                        font: newWAVLsl_r_helveticaFont
                     })
                 } else {
-                    await extraWAVLfirstPage.drawText(a_pres, {
+                    await newWAVLsl_r_firstPage.drawText(a_pres, {
                         x: parseInt((325 - measureText(a_pres, 10)).toString()),
                         y: 462,
                         size: 10,
-                        font: extraWAVLhelveticaFont
+                        font: newWAVLsl_r_helveticaFont
                     })
-                    await extraWAVLfirstPage.drawText(b_pres, {
+                    await newWAVLsl_r_firstPage.drawText(b_pres, {
                         x: parseInt((520 - measureText(b_pres, 10)).toString()),
                         y: 462,
                         size: 10,
-                        font: extraWAVLhelveticaFont
+                        font: newWAVLsl_r_helveticaFont
                     })
                 }
 
                 // Team Names
                 if (fixtures[i][6].length > 22 || fixtures[i][7].length > 22) {
                     // Reduce text size if too long.
-                    await extraWAVLfirstPage.drawText(fixtures[i][6], {
+                    await newWAVLsl_r_firstPage.drawText(fixtures[i][6], {
                         x: parseInt((262 - measureText(fixtures[i][6], 10)).toString()),
                         y: 813.5,
                         size: 10,
-                        font: extraWAVLhelveticaBold
+                        font: newWAVLsl_r_helveticaBold
                     })
-                    await extraWAVLfirstPage.drawText(fixtures[i][7], {
+                    await newWAVLsl_r_firstPage.drawText(fixtures[i][7], {
                         x: parseInt((480 - measureText(fixtures[i][7], 10)).toString()),
                         y: 813.5,
                         size: 10,
-                        font: extraWAVLhelveticaBold
+                        font: newWAVLsl_r_helveticaBold
                     })
-                    await extraWAVLbackPage.drawText(fixtures[i][6], {
+                    await newWAVLsl_r_backPage.drawText(fixtures[i][6], {
                         x: parseInt((262 - measureText(fixtures[i][6], 10)).toString()),
                         y: 813.5,
                         size: 10,
-                        font: extraWAVLhelveticaBold
+                        font: newWAVLsl_r_helveticaBold
                     })
-                    await extraWAVLbackPage.drawText(fixtures[i][7], {
+                    await newWAVLsl_r_backPage.drawText(fixtures[i][7], {
                         x: parseInt((480 - measureText(fixtures[i][7], 10)).toString()),
                         y: 118133.5,
                         size: 10,
-                        font: extraWAVLhelveticaBold
+                        font: newWAVLsl_r_helveticaBold
                     })
                 } else {
-                    extraWAVLpdfDoc.TextAlignment = 1;
-                    await extraWAVLfirstPage.drawText(fixtures[i][6], {
+                    newWAVLsl_r_pdfDoc.TextAlignment = 1;
+                    await newWAVLsl_r_firstPage.drawText(fixtures[i][6], {
                         x: parseInt((260 - measureText(fixtures[i][6], 14)).toString()),
                         y: 813.5,
                         size: 14,
-                        font: extraWAVLhelveticaBold
+                        font: newWAVLsl_r_helveticaBold
                     })
-                    await extraWAVLfirstPage.drawText(fixtures[i][7], {
+                    await newWAVLsl_r_firstPage.drawText(fixtures[i][7], {
                         x: parseInt((480 - measureText(fixtures[i][7], 14)).toString()),
                         y: 813.5,
                         size: 14,
-                        font: extraWAVLhelveticaBold
+                        font: newWAVLsl_r_helveticaBold
                     })
-                    await extraWAVLbackPage.drawText(fixtures[i][6], {
+                    await newWAVLsl_r_backPage.drawText(fixtures[i][6], {
                         x: parseInt((260 - measureText(fixtures[i][6], 14)).toString()),
                         y: 813.5,
                         size: 14,
-                        font: extraWAVLhelveticaBold
+                        font: newWAVLsl_r_helveticaBold
                     })
-                    await extraWAVLbackPage.drawText(fixtures[i][7], {
+                    await newWAVLsl_r_backPage.drawText(fixtures[i][7], {
                         x: parseInt((480 - measureText(fixtures[i][7], 14)).toString()),
                         y: 813.5,
                         size: 14,
-                        font: extraWAVLhelveticaBold
+                        font: newWAVLsl_r_helveticaBold
                     })
                 }
 
-                var saved = await extraWAVLpdfDoc.saveAsBase64();
+                var saved = await newWAVLsl_r_pdfDoc.saveAsBase64();
                 
             } else {
                 if ((SL_FINALS_DATES.includes(fixtures[i][12]+"-"+fixtures[i][11]+"-"+fixtures[i][10]) && (fixtures[i][9][0] == "State League Men" || fixtures[i][9][0] == "State League Women")) || FINALS_DATES.includes(fixtures[i][12]+"-"+fixtures[i][11]+"-"+fixtures[i][10])){
                     // Rule out MVP Votes
-                    await newWAVLfirstPage.drawLine({
+                    await newWAVLdivs_firstPage.drawLine({
                         start: { x: 11, y: 316 },
                         end: { x: 166, y: 388 },
                         thickness: 3,
@@ -2397,7 +2399,7 @@ async function modifyPdf(fix, dates, doc, run) {
                         opacity: 1
                     })
 
-                    await newWAVLfirstPage.drawLine({
+                    await newWAVLdivs_firstPage.drawLine({
                         start: { x: 11, y: 388 },
                         end: { x: 166, y: 316 },
                         thickness: 3,
@@ -2407,36 +2409,36 @@ async function modifyPdf(fix, dates, doc, run) {
                 }
                 if (fixtures[i][6].length > 22 || fixtures[i][7].length > 22) {
                     // Team A Team List
-                    await newWAVLfirstPage.drawText(fixtures[i][6], {
+                    await newWAVLdivs_firstPage.drawText(fixtures[i][6], {
                         x: 285,
                         y: 744.5, //739
                         size: 9,
-                        font: newWAVLhelveticaFont
+                        font: newWAVLdivs_helveticaFont
                     })
 
                     // Team B Team List
-                    await newWAVLfirstPage.drawText(fixtures[i][7], {
+                    await newWAVLdivs_firstPage.drawText(fixtures[i][7], {
                         x: 450,
                         y: 744.5,
                         size: 9,
-                        font: newWAVLhelveticaFont
+                        font: newWAVLdivs_helveticaFont
                     })
 
                 } else {
                     // Team A Team List
-                    await newWAVLfirstPage.drawText(fixtures[i][6], {
+                    await newWAVLdivs_firstPage.drawText(fixtures[i][6], {
                         x: 285,
                         y: 743.5, //739
                         size: 12,
-                        font: newWAVLhelveticaFont
+                        font: newWAVLdivs_helveticaFont
                     })
 
                     // Team B Team List
-                    await newWAVLfirstPage.drawText(fixtures[i][7], {
+                    await newWAVLdivs_firstPage.drawText(fixtures[i][7], {
                         x: 450,
                         y: 743.5,
                         size: 12,
-                        font: newWAVLhelveticaFont
+                        font: newWAVLdivs_helveticaFont
                     })
                 }
 
@@ -2462,72 +2464,72 @@ async function modifyPdf(fix, dates, doc, run) {
                             //console.log(fixtures[i][17][k][0])
                             //console.log(fixtures[i][17][k][0][0])
                             if (measureText(fixtures[i][17][k][0][0].toUpperCase(), 6) >= 32) {
-                                await newWAVLfirstPage.drawText(fixtures[i][17][k][0][0].toUpperCase(), {
+                                await newWAVLdivs_firstPage.drawText(fixtures[i][17][k][0][0].toUpperCase(), {
                                     x: 276.25,
                                     y: 716-((15.75*k)),
                                     size: 5,
-                                    font: newWAVLhelveticaFont
+                                    font: newWAVLdivs_helveticaFont
                                 })
                             } else {
-                                await newWAVLfirstPage.drawText(fixtures[i][17][k][0][0].toUpperCase(), {
+                                await newWAVLdivs_firstPage.drawText(fixtures[i][17][k][0][0].toUpperCase(), {
                                     x: 276.25,
                                     y: 716-((15.75*k)),
                                     size: 6,
-                                    font: newWAVLhelveticaFont
+                                    font: newWAVLdivs_helveticaFont
                                 })
                             }
 
                             // surname, first column
                             //console.log(fixtures[i][17][k][1].toUpperCase() + ": " + measureText(fixtures[i][17][k][1].toUpperCase(),6))
                             if (measureText(fixtures[i][17][k][0][1].toUpperCase(), 6) >= 32) {
-                                await newWAVLfirstPage.drawText(fixtures[i][17][k][0][1].toUpperCase(), {
+                                await newWAVLdivs_firstPage.drawText(fixtures[i][17][k][0][1].toUpperCase(), {
                                     x: 276.25,
                                     y: 716-((15.75*k+7.0)),
                                     size: 5,
-                                    font: newWAVLhelveticaFont
+                                    font: newWAVLdivs_helveticaFont
                                 })
                             } else {
-                                await newWAVLfirstPage.drawText(fixtures[i][17][k][0][1].toUpperCase(), {
+                                await newWAVLdivs_firstPage.drawText(fixtures[i][17][k][0][1].toUpperCase(), {
                                     x: 276.25,
                                     y: 716-((15.75*k+7.0)),
                                     size: 6,
-                                    font: newWAVLhelveticaFont
+                                    font: newWAVLdivs_helveticaFont
                                 })
                             }
                         } else {
                             // first name, second column
                             //console.log(fixtures[i][17][k][0].toUpperCase() + ": " + measureText(fixtures[i][17][k][0].toUpperCase(),6))
                             if (measureText(fixtures[i][17][k][0][0].toUpperCase(), 6) >= 32) {
-                                await newWAVLfirstPage.drawText(fixtures[i][17][k][0][0].toUpperCase(), {
+                                await newWAVLdivs_firstPage.drawText(fixtures[i][17][k][0][0].toUpperCase(), {
                                     x: 355,
                                     y: 716-((15.75*(k-Math.ceil(fixtures[i][17].length / 2)))),
                                     size: 5,
-                                    font: newWAVLhelveticaFont
+                                    font: newWAVLdivs_helveticaFont
                                 })
                             } else {
-                                await newWAVLfirstPage.drawText(fixtures[i][17][k][0][0].toUpperCase(), {
+                                await newWAVLdivs_firstPage.drawText(fixtures[i][17][k][0][0].toUpperCase(), {
                                     x: 355,
                                     y: 716-((15.75*(k-Math.ceil(fixtures[i][17].length / 2)))),
                                     size: 6,
-                                    font: newWAVLhelveticaFont
+                                    font: newWAVLdivs_helveticaFont
                                 })
                             }
 
                             // surname, second column
                             //console.log(fixtures[i][17][k][1].toUpperCase() + ": " + measureText(fixtures[i][17][k][1].toUpperCase(),6))
                             if (measureText(fixtures[i][17][k][0][1].toUpperCase(), 6) >= 32){
-                                await newWAVLfirstPage.drawText(fixtures[i][17][k][0][1].toUpperCase(), {
+                                await newWAVLdivs_firstPage.drawText(fixtures[i][17][k][0][1].toUpperCase(), {
                                     x: 355,
                                     y: 716-((15.75*(k-Math.ceil(fixtures[i][17].length / 2))+7.0)),
                                     size: 5,
-                                    font: newWAVLhelveticaFont
+                                    font: newWAVLdivs_helveticaFont
                                 })
                             } else {
-                                await newWAVLfirstPage.drawText(fixtures[i][17][k][0][1].toUpperCase(), {
+                                await newWAVLdivs_firstPage.drawText(fixtures[i][17][k][0][1].toUpperCase(), {
                                     x: 355,
                                     y: 716-((15.75*(k-Math.ceil(fixtures[i][17].length / 2))+7.0)),
                                     size: 6,
-                                    font: newWAVLhelveticaFont
+                                    font: newWAVLdivs_helveticaFont
                                 })
                             }
                         }
@@ -2539,7 +2541,7 @@ async function modifyPdf(fix, dates, doc, run) {
                         let line_y_a = 717.5-(15.75*Math.ceil(fixtures[i][17].length /2) - 5);
 
                         //console.log(line_y_a);
-                        await newWAVLfirstPage.drawLine({
+                        await newWAVLdivs_firstPage.drawLine({
                             start: { x: 339, y: 722 },
                             end: { x: 339, y: line_y_a },
                             thickness: 0.5,
@@ -2547,7 +2549,7 @@ async function modifyPdf(fix, dates, doc, run) {
                             opacity: 1
                         })
                         
-                        await newWAVLfirstPage.drawLine({
+                        await newWAVLdivs_firstPage.drawLine({
                             start: { x: 354, y: 722 },
                             end: { x: 354, y: line_y_a },
                             thickness: 0.5,
@@ -2564,72 +2566,72 @@ async function modifyPdf(fix, dates, doc, run) {
                             // first name, first column
                             //console.log(fixtures[i][18][k][0].toUpperCase() + ": " + measureText(fixtures[i][18][k][0].toUpperCase(),6))
                             if (measureText(fixtures[i][18][k][0][0].toUpperCase(), 6) >= 32) {
-                                await newWAVLfirstPage.drawText(fixtures[i][18][k][0][0].toUpperCase(), {
+                                await newWAVLdivs_firstPage.drawText(fixtures[i][18][k][0][0].toUpperCase(), {
                                     x: 439.5,
                                     y: 716-((15.75*k)),
                                     size: 5,
-                                    font: newWAVLhelveticaFont
+                                    font: newWAVLdivs_helveticaFont
                                 })
                             } else {
-                                await newWAVLfirstPage.drawText(fixtures[i][18][k][0][0].toUpperCase(), {
+                                await newWAVLdivs_firstPage.drawText(fixtures[i][18][k][0][0].toUpperCase(), {
                                     x: 439.5,
                                     y: 716-((15.75*k)),
                                     size: 6,
-                                    font: newWAVLhelveticaFont
+                                    font: newWAVLdivs_helveticaFont
                                 })
                             }
 
                             // surname, first column
                             //console.log(fixtures[i][18][k][1].toUpperCase() + ": " + measureText(fixtures[i][18][k][1].toUpperCase(),6))
                             if (measureText(fixtures[i][18][k][0][1].toUpperCase(), 6) >= 32) {
-                                await newWAVLfirstPage.drawText(fixtures[i][18][k][0][1].toUpperCase(), {
+                                await newWAVLdivs_firstPage.drawText(fixtures[i][18][k][0][1].toUpperCase(), {
                                     x: 439.5,
                                     y: 716-((15.75*k+7.0)),
                                     size: 5,
-                                    font: newWAVLhelveticaFont
+                                    font: newWAVLdivs_helveticaFont
                                 })
                             } else {
-                                await newWAVLfirstPage.drawText(fixtures[i][18][k][0][1].toUpperCase(), {
+                                await newWAVLdivs_firstPage.drawText(fixtures[i][18][k][0][1].toUpperCase(), {
                                     x: 439.5,
                                     y: 716-((15.75*k+7.0)),
                                     size: 6,
-                                    font: newWAVLhelveticaFont
+                                    font: newWAVLdivs_helveticaFont
                                 })
                             }
                         } else {
                             // first name, second column
                             //console.log(fixtures[i][18][k][0].toUpperCase() + ": " + measureText(fixtures[i][18][k][0].toUpperCase(),6))
                             if (measureText(fixtures[i][18][k][0][0].toUpperCase(), 6) >= 32) {
-                                await newWAVLfirstPage.drawText(fixtures[i][18][k][0][0].toUpperCase(), {
+                                await newWAVLdivs_firstPage.drawText(fixtures[i][18][k][0][0].toUpperCase(), {
                                     x: 519,
                                     y: 716-((15.75*(k-Math.ceil(fixtures[i][18].length / 2)))),
                                     size: 5,
-                                    font: newWAVLhelveticaFont
+                                    font: newWAVLdivs_helveticaFont
                                 })
                             } else {
-                                await newWAVLfirstPage.drawText(fixtures[i][18][k][0][0].toUpperCase(), {
+                                await newWAVLdivs_firstPage.drawText(fixtures[i][18][k][0][0].toUpperCase(), {
                                     x: 519,
                                     y: 716-((15.75*(k-Math.ceil(fixtures[i][18].length / 2)))),
                                     size: 6,
-                                    font: newWAVLhelveticaFont
+                                    font: newWAVLdivs_helveticaFont
                                 })
                             }
 
                             // surname, second column
                             //console.log(fixtures[i][18][k][1].toUpperCase() + ": " + measureText(fixtures[i][18][k][1].toUpperCase(),6))
                             if (measureText(fixtures[i][18][k][0][1].toUpperCase(), 6) >= 32) {
-                                await newWAVLfirstPage.drawText(fixtures[i][18][k][0][1].toUpperCase(), {
+                                await newWAVLdivs_firstPage.drawText(fixtures[i][18][k][0][1].toUpperCase(), {
                                     x: 519,
                                     y: 716-((15.75*(k-Math.ceil(fixtures[i][18].length / 2))+7.0)),
                                     size: 5,
-                                    font: newWAVLhelveticaFont
+                                    font: newWAVLdivs_helveticaFont
                                 })
                             } else {
-                                await newWAVLfirstPage.drawText(fixtures[i][18][k][0][1].toUpperCase(), {
+                                await newWAVLdivs_firstPage.drawText(fixtures[i][18][k][0][1].toUpperCase(), {
                                     x: 519,
                                     y: 716-((15.75*(k-Math.ceil(fixtures[i][18].length / 2))+7.0)),
                                     size: 6,
-                                    font: newWAVLhelveticaFont
+                                    font: newWAVLdivs_helveticaFont
                                 })
                             }
                         }
@@ -2640,7 +2642,7 @@ async function modifyPdf(fix, dates, doc, run) {
                         let line_y_b = 717.5-(15.75*Math.ceil(fixtures[i][18].length /2) - 5);
                         //console.log(line_y_b);
 
-                        await newWAVLfirstPage.drawLine({
+                        await newWAVLdivs_firstPage.drawLine({
                             start: { x: 518, y: 722 },
                             end: { x: 518, y: line_y_b },
                             thickness: 0.5,
@@ -2648,7 +2650,7 @@ async function modifyPdf(fix, dates, doc, run) {
                             opacity: 1
                         })
                         
-                        await newWAVLfirstPage.drawLine({
+                        await newWAVLdivs_firstPage.drawLine({
                             start: { x: 503, y: 722  },
                             end: { x: 503, y: line_y_b },
                             thickness: 0.5,
@@ -2659,32 +2661,32 @@ async function modifyPdf(fix, dates, doc, run) {
                 }
 
                 // Venue 0
-                await newWAVLfirstPage.drawText(__venues__[fixtures[i][1]], {
+                await newWAVLdivs_firstPage.drawText(__venues__[fixtures[i][1]], {
                     x: parseInt((275 - measureText(__venues__[fixtures[i][1]], 10)).toString()),
                     y: 767.5,
                     size: 10,
-                    font: newWAVLhelveticaFont
+                    font: newWAVLdivs_helveticaFont
                 })
-                await newWAVLbackpage.drawText(__venues__[fixtures[i][1]], {
+                await newWAVLdivs_backpage.drawText(__venues__[fixtures[i][1]], {
                     x: parseInt((275 - measureText(__venues__[fixtures[i][1]], 10)).toString()),
                     y: 767.5,
                     size: 10,
-                    font: newWAVLhelveticaFont
+                    font: newWAVLdivs_helveticaFont
                 })
 
                 try {
                     // Court Number
-                    await newWAVLfirstPage.drawText(fixtures[i][5], {
+                    await newWAVLdivs_firstPage.drawText(fixtures[i][5], {
                         x: parseInt((388.5 - measureBold(fixtures[i][5], 13).toString()).toString()),
                         y: 767.5,
                         size: 13,
-                        font: newWAVLhelveticaBold
+                        font: newWAVLdivs_helveticaBold
                     })
-                    await newWAVLbackpage.drawText(fixtures[i][5], {
+                    await newWAVLdivs_backpage.drawText(fixtures[i][5], {
                         x: parseInt((388.5 - measureBold(fixtures[i][5], 13).toString()).toString()),
                         y: 767.5,
                         size: 13,
-                        font: newWAVLhelveticaBold
+                        font: newWAVLdivs_helveticaBold
                     })
                 } catch (e) {
                     console.log(e);
@@ -2695,17 +2697,17 @@ async function modifyPdf(fix, dates, doc, run) {
                         time = fixtures[i][13].toString() + ":" + fixtures[i][14].toString()
 
                         // Time (hh:mm)
-                        await newWAVLfirstPage.drawText(time, {
+                        await newWAVLdivs_firstPage.drawText(time, {
                             x: parseInt((459 - measureBold(time, 13)).toString()),
                             y: 767.5,
                             size: 13,
-                            font: newWAVLhelveticaBold
+                            font: newWAVLdivs_helveticaBold
                         })
-                        await newWAVLbackpage.drawText(time, {
+                        await newWAVLdivs_backpage.drawText(time, {
                             x: parseInt((459 - measureBold(time, 13)).toString()),
                             y: 767.5,
                             size: 13,
-                            font: newWAVLhelveticaBold
+                            font: newWAVLdivs_helveticaBold
                         })
                     }
                 } catch (e) {
@@ -2716,45 +2718,45 @@ async function modifyPdf(fix, dates, doc, run) {
                 // Add a leading space to the day if required.
                 var ddmmyy = fixtures[i][10].toString() + "/" + fixtures[i][11].toString() + "/" + fixtures[i][12].slice(2,4).toString()
 
-                await newWAVLfirstPage.drawText(ddmmyy, {
+                await newWAVLdivs_firstPage.drawText(ddmmyy, {
                     x: parseInt((547 - measureBold(ddmmyy, 13)).toString()),
                     y: 767.5,
                     size: 13,
-                    font: newWAVLhelveticaBold
+                    font: newWAVLdivs_helveticaBold
                 })
-                await newWAVLbackpage.drawText(ddmmyy, {
+                await newWAVLdivs_backpage.drawText(ddmmyy, {
                     x: parseInt((547 - measureBold(ddmmyy, 13)).toString()),
                     y: 767.5,
                     size: 13,
-                    font: newWAVLhelveticaBold
+                    font: newWAVLdivs_helveticaBold
                 })
 
                 // Division (short)
-                await newWAVLfirstPage.drawText(fixtures[i][9][1], {
+                await newWAVLdivs_firstPage.drawText(fixtures[i][9][1], {
                     x: parseInt((529 - measureBold(fixtures[i][9][1], 13)).toString()),
                     y: 784.5,
                     size: 13,
-                    font: newWAVLhelveticaBold
+                    font: newWAVLdivs_helveticaBold
                 })
-                await newWAVLbackpage.drawText(fixtures[i][9][1], {
+                await newWAVLdivs_backpage.drawText(fixtures[i][9][1], {
                     x: parseInt((529 - measureBold(fixtures[i][9][1], 13)).toString()),
                     y: 784.5,
                     size: 13,
-                    font: newWAVLhelveticaBold
+                    font: newWAVLdivs_helveticaBold
                 })
 
                 // Duty team
-                await newWAVLfirstPage.drawText(fixtures[i][8], {
+                await newWAVLdivs_firstPage.drawText(fixtures[i][8], {
                     x: parseInt((332 - measureText(fixtures[i][8], 14)).toString()),
                     y: 784.5,
                     size: 14,
-                    font: newWAVLhelveticaFont
+                    font: newWAVLdivs_helveticaFont
                 })
-                await newWAVLbackpage.drawText(fixtures[i][8], {
+                await newWAVLdivs_backpage.drawText(fixtures[i][8], {
                     x: parseInt((332 - measureText(fixtures[i][8], 14)).toString()),
                     y: 784.5,
                     size: 14,
-                    font: newWAVLhelveticaFont
+                    font: newWAVLdivs_helveticaFont
                 })
 
                 // Club President
@@ -2771,89 +2773,89 @@ async function modifyPdf(fix, dates, doc, run) {
                 }
 
                 if (measureText(a_pres.toUpperCase(), 10) >= 90 || measureText(b_pres.toUpperCase(), 10) >= 90 ) {
-                    await newWAVLfirstPage.drawText(a_pres, {
+                    await newWAVLdivs_firstPage.drawText(a_pres, {
                         x: parseInt((328 - measureText(a_pres, 8)).toString()),
                         y: 462,
                         size: 8,
-                        font: newWAVLhelveticaFont
+                        font: newWAVLdivs_helveticaFont
                     })
-                    await newWAVLfirstPage.drawText(b_pres, {
+                    await newWAVLdivs_firstPage.drawText(b_pres, {
                         x: parseInt((523 - measureText(b_pres, 8)).toString()),
                         y: 462,
                         size: 8,
-                        font: newWAVLhelveticaFont
+                        font: newWAVLdivs_helveticaFont
                     })
                 } else {
-                    await newWAVLfirstPage.drawText(a_pres, {
+                    await newWAVLdivs_firstPage.drawText(a_pres, {
                         x: parseInt((325 - measureText(a_pres, 10)).toString()),
                         y: 462,
                         size: 10,
-                        font: newWAVLhelveticaFont
+                        font: newWAVLdivs_helveticaFont
                     })
-                    await newWAVLfirstPage.drawText(b_pres, {
+                    await newWAVLdivs_firstPage.drawText(b_pres, {
                         x: parseInt((520 - measureText(b_pres, 10)).toString()),
                         y: 462,
                         size: 10,
-                        font: newWAVLhelveticaFont
+                        font: newWAVLdivs_helveticaFont
                     })
                 }
 
                 // Team Names
                 if (fixtures[i][6].length > 22 || fixtures[i][7].length > 22) {
                     // Reduce text size if too long.
-                    await newWAVLfirstPage.drawText(fixtures[i][6], {
+                    await newWAVLdivs_firstPage.drawText(fixtures[i][6], {
                         x: parseInt((262 - measureText(fixtures[i][6], 10)).toString()),
                         y: 804.5,
                         size: 10,
-                        font: newWAVLhelveticaBold
+                        font: newWAVLdivs_helveticaBold
                     })
-                    await newWAVLfirstPage.drawText(fixtures[i][7], {
+                    await newWAVLdivs_firstPage.drawText(fixtures[i][7], {
                         x: parseInt((480 - measureText(fixtures[i][7], 10)).toString()),
                         y: 804.5,
                         size: 10,
-                        font: newWAVLhelveticaBold
+                        font: newWAVLdivs_helveticaBold
                     })
-                    await newWAVLbackpage.drawText(fixtures[i][6], {
+                    await newWAVLdivs_backpage.drawText(fixtures[i][6], {
                         x: parseInt((262 - measureText(fixtures[i][6], 10)).toString()),
                         y: 804.5,
                         size: 10,
-                        font: newWAVLhelveticaBold
+                        font: newWAVLdivs_helveticaBold
                     })
-                    await newWAVLbackpage.drawText(fixtures[i][7], {
+                    await newWAVLdivs_backpage.drawText(fixtures[i][7], {
                         x: parseInt((480 - measureText(fixtures[i][7], 10)).toString()),
                         y: 804.5,
                         size: 10,
-                        font: newWAVLhelveticaBold
+                        font: newWAVLdivs_helveticaBold
                     })
                 } else {
-                    newWAVLpdfDoc.TextAlignment = 1;
-                    await newWAVLfirstPage.drawText(fixtures[i][6], {
+                    newWAVLdivs_pdfDoc.TextAlignment = 1;
+                    await newWAVLdivs_firstPage.drawText(fixtures[i][6], {
                         x: parseInt((262 - measureText(fixtures[i][6], 14)).toString()),
                         y: 804.5,
                         size: 14,
-                        font: newWAVLhelveticaBold
+                        font: newWAVLdivs_helveticaBold
                     })
-                    await newWAVLfirstPage.drawText(fixtures[i][7], {
+                    await newWAVLdivs_firstPage.drawText(fixtures[i][7], {
                         x: parseInt((480 - measureText(fixtures[i][7], 14)).toString()),
                         y: 804.5,
                         size: 14,
-                        font: newWAVLhelveticaBold
+                        font: newWAVLdivs_helveticaBold
                     })
-                    await newWAVLbackpage.drawText(fixtures[i][6], {
+                    await newWAVLdivs_backpage.drawText(fixtures[i][6], {
                         x: parseInt((262 - measureText(fixtures[i][6], 14)).toString()),
                         y: 804.5,
                         size: 14,
-                        font: newWAVLhelveticaBold
+                        font: newWAVLdivs_helveticaBold
                     })
-                    await newWAVLbackpage.drawText(fixtures[i][7], {
+                    await newWAVLdivs_backpage.drawText(fixtures[i][7], {
                         x: parseInt((480 - measureText(fixtures[i][7], 14)).toString()),
                         y: 804.5,
                         size: 14,
-                        font: newWAVLhelveticaBold
+                        font: newWAVLdivs_helveticaBold
                     })
                 }
 
-                var saved = await newWAVLpdfDoc.saveAsBase64();
+                var saved = await newWAVLdivs_pdfDoc.saveAsBase64();
             }
         } else if (scoresheet_type == "junior") {
             // Junior League
@@ -4761,7 +4763,7 @@ async function modifyPdf(fix, dates, doc, run) {
             var saved = await vwaHSbpdfDoc.saveAsBase64();
         } else if (scoresheet_type == "VA_T" || scoresheet_type == "VA_5" || scoresheet_type == "VA_3") {
             console.log(await vaTimedBackPage)
-            console.log(await newWAVLbackpage)
+            console.log(await newWAVLdivs_backpage)
             
             if (scoresheet_type == "VA_T") {
                 var currFirstPage = await vaTimedfirstPage
@@ -4785,7 +4787,7 @@ async function modifyPdf(fix, dates, doc, run) {
                 x: 200,
                 y: 813.5,
                 size: 14,
-                font: newWAVLhelveticaBold
+                font: newWAVLdivs_helveticaBold
             })
 
             if (fixtures[i][6].length > 22 || fixtures[i][7].length > 22) {
@@ -4794,7 +4796,7 @@ async function modifyPdf(fix, dates, doc, run) {
                     x: 295,
                     y: 737, //739
                     size: 9,
-                    font: newWAVLhelveticaFont
+                    font: newWAVLdivs_helveticaFont
                 })
 
                 // Team B Team List
@@ -4802,7 +4804,7 @@ async function modifyPdf(fix, dates, doc, run) {
                     x: 455,
                     y: 737,
                     size: 9,
-                    font: newWAVLhelveticaFont
+                    font: newWAVLdivs_helveticaFont
                 })
 
             } else {
@@ -4811,7 +4813,7 @@ async function modifyPdf(fix, dates, doc, run) {
                     x: 295,
                     y: 737, //739
                     size: 12,
-                    font: newWAVLhelveticaFont
+                    font: newWAVLdivs_helveticaFont
                 })
 
                 // Team B Team List
@@ -4819,7 +4821,7 @@ async function modifyPdf(fix, dates, doc, run) {
                     x: 455,
                     y: 737,
                     size: 12,
-                    font: newWAVLhelveticaFont
+                    font: newWAVLdivs_helveticaFont
                 })
             }
 
@@ -4850,7 +4852,7 @@ async function modifyPdf(fix, dates, doc, run) {
                         x: 278,
                         y: 722-((14*k)),
                         size: 11,
-                        font: newWAVLhelveticaFont
+                        font: newWAVLdivs_helveticaFont
                     })
                     
                     // draw number
@@ -4862,7 +4864,7 @@ async function modifyPdf(fix, dates, doc, run) {
                         x: 262,
                         y: 722-((14*k)),
                         size: 11,
-                        font: newWAVLhelveticaFont
+                        font: newWAVLdivs_helveticaFont
                     })
                 }
             }
@@ -4877,7 +4879,7 @@ async function modifyPdf(fix, dates, doc, run) {
                         x: 439.5,
                         y: 722-((14*k)),
                         size: 11,
-                        font: newWAVLhelveticaFont
+                        font: newWAVLdivs_helveticaFont
                     })
                     
                     // draw number
@@ -4889,7 +4891,7 @@ async function modifyPdf(fix, dates, doc, run) {
                         x: 422,
                         y: 722-((14*k)),
                         size: 11,
-                        font: newWAVLhelveticaFont
+                        font: newWAVLdivs_helveticaFont
                     })
                 }
             }
@@ -4899,7 +4901,7 @@ async function modifyPdf(fix, dates, doc, run) {
                 x: parseInt((240 - measureText(__venues__[fixtures[i][1]], 8)).toString()),
                 y: 762,
                 size: 8,
-                font: newWAVLhelveticaBold
+                font: newWAVLdivs_helveticaBold
             })
 
             try {
@@ -4908,7 +4910,7 @@ async function modifyPdf(fix, dates, doc, run) {
                     x: parseInt((315 - measureBold(fixtures[i][5], 8).toString()).toString()),
                     y: 762,
                     size: 8,
-                    font: newWAVLhelveticaBold
+                    font: newWAVLdivs_helveticaBold
                 })
             } catch (e) {
                 console.log(e);
@@ -4923,7 +4925,7 @@ async function modifyPdf(fix, dates, doc, run) {
                         x: parseInt((385 - measureBold(time, 8)).toString()),
                         y: 762,
                         size: 8,
-                        font: newWAVLhelveticaBold
+                        font: newWAVLdivs_helveticaBold
                     })
                 }
             } catch (e) {
@@ -4938,7 +4940,7 @@ async function modifyPdf(fix, dates, doc, run) {
                 x: parseInt((500 - measureBold(ddmmyy, 8)).toString()),
                 y: 762,
                 size: 8,
-                font: newWAVLhelveticaBold
+                font: newWAVLdivs_helveticaBold
             })
 
             // Division (short)
@@ -4946,7 +4948,7 @@ async function modifyPdf(fix, dates, doc, run) {
                 x: parseInt((427 - measureBold(fixtures[i][9][0], 10)).toString()),
                 y: 775.5,
                 size: 10,
-                font: newWAVLhelveticaBold
+                font: newWAVLdivs_helveticaBold
             })
 
             // Duty team
@@ -4954,7 +4956,7 @@ async function modifyPdf(fix, dates, doc, run) {
                 x: parseInt((278 - measureText(fixtures[i][8], 10)).toString()),
                 y: 776.5,
                 size: 8,
-                font: newWAVLhelveticaFont
+                font: newWAVLdivs_helveticaFont
             })
 
             // Club President
@@ -4970,7 +4972,7 @@ async function modifyPdf(fix, dates, doc, run) {
                     x: 263,
                     y: 524-((15.75*k)),
                     size: 11,
-                    font: newWAVLhelveticaFont
+                    font: newWAVLdivs_helveticaFont
                 })
             }
 
@@ -4985,7 +4987,7 @@ async function modifyPdf(fix, dates, doc, run) {
                     x: 452,
                     y: 524-((15.75*k)),
                     size: 11,
-                    font: newWAVLhelveticaFont
+                    font: newWAVLdivs_helveticaFont
                 })
             }
 
@@ -4996,27 +4998,27 @@ async function modifyPdf(fix, dates, doc, run) {
                     x: parseInt((262 - measureText(fixtures[i][6], 10)).toString()),
                     y: 793,
                     size: 10,
-                    font: newWAVLhelveticaFont
+                    font: newWAVLdivs_helveticaFont
                 })
                 await currFirstPage.drawText(fixtures[i][7], {
                     x: parseInt((480 - measureText(fixtures[i][7], 10)).toString()),
                     y: 793,
                     size: 10,
-                    font: newWAVLhelveticaFont
+                    font: newWAVLdivs_helveticaFont
                 })
             } else {
-                newWAVLpdfDoc.TextAlignment = 1;
+                newWAVLdivs_pdfDoc.TextAlignment = 1;
                 await currFirstPage.drawText(fixtures[i][6], {
                     x: parseInt((262 - measureText(fixtures[i][6], 14)).toString()),
                     y: 793,
                     size: 14,
-                    font: newWAVLhelveticaFont
+                    font: newWAVLdivs_helveticaFont
                 })
                 await currFirstPage.drawText(fixtures[i][7], {
                     x: parseInt((480 - measureText(fixtures[i][7], 14)).toString()),
                     y: 793,
                     size: 14,
-                    font: newWAVLhelveticaFont
+                    font: newWAVLdivs_helveticaFont
                 })
             }
         
