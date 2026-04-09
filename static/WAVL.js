@@ -2301,7 +2301,7 @@ async function modifyPdf(fix, dates, doc, run) {
                 })
 
                 // Club President
-                let a_pres = __PRESIDENTS__[fixtures[i][6].substring(fixtures[i][6].indexOf(' ') + 1)];
+                /*let a_pres = __PRESIDENTS__[fixtures[i][6].substring(fixtures[i][6].indexOf(' ') + 1)];
                 let b_pres = __PRESIDENTS__[fixtures[i][7].substring(fixtures[i][7].indexOf(' ') + 1)];
 
                 if (a_pres == __PRESIDENTS__["a"]){
@@ -2314,6 +2314,19 @@ async function modifyPdf(fix, dates, doc, run) {
                     b_pres = [['', ''], ''];
                 } else {
                     b_pres = [[__PRESIDENTS__[fixtures[i][7].substring(fixtures[i][7].indexOf(' ') + 1)], ''], '']
+                }*/
+
+                // Club President
+                let a_pres = __PRESIDENTS__[fixtures[i][6].substring(fixtures[i][6].indexOf(' ') + 1)];
+                let b_pres = __PRESIDENTS__[fixtures[i][7].substring(fixtures[i][7].indexOf(' ') + 1)];
+                
+
+                if (a_pres == __PRESIDENTS__["a"]){
+                    a_pres = " ";
+                }
+
+                if (b_pres == __PRESIDENTS__["a"]){
+                    b_pres = " ";
                 }
 
                 if (measureText(a_pres.toUpperCase(), 10) >= 90 || measureText(b_pres.toUpperCase(), 10) >= 90 ) {
