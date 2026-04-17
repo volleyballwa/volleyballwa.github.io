@@ -2202,14 +2202,14 @@ async function modifyPdf(fix, dates, doc, run) {
                 }
 
                 // Venue 0
-                await newWAVLsl_r_firstPage.drawText(__venues__[fixtures[i][1]], {
-                    x: parseInt((275 - measureText(__venues__[fixtures[i][1]], 10)).toString()),
+                await newWAVLsl_r_firstPage.drawText(fixtures[i][1], {
+                    x: parseInt((275 - measureText(fixtures[i][1], 10)).toString()),
                     y: 781,
                     size: 10,
                     font: newWAVLsl_r_helveticaFont
                 })
-                await newWAVLsl_r_backPage.drawText(__venues__[fixtures[i][1]], {
-                    x: parseInt((275 - measureText(__venues__[fixtures[i][1]], 10)).toString()),
+                await newWAVLsl_r_backPage.drawText(fixtures[i][1], {
+                    x: parseInt((275 - measureText(fixtures[i][1], 10)).toString()),
                     y: 781,
                     size: 10,
                     font: newWAVLsl_r_helveticaFont
@@ -2687,14 +2687,14 @@ async function modifyPdf(fix, dates, doc, run) {
                 }
 
                 // Venue 0
-                await newWAVLdivs_firstPage.drawText(__venues__[fixtures[i][1]], {
-                    x: parseInt((275 - measureText(__venues__[fixtures[i][1]], 10)).toString()),
+                await newWAVLdivs_firstPage.drawText(fixtures[i][1], {
+                    x: parseInt((275 - measureText(fixtures[i][1], 10)).toString()),
                     y: 767.5,
                     size: 10,
                     font: newWAVLdivs_helveticaFont
                 })
-                await newWAVLdivs_backpage.drawText(__venues__[fixtures[i][1]], {
-                    x: parseInt((275 - measureText(__venues__[fixtures[i][1]], 10)).toString()),
+                await newWAVLdivs_backpage.drawText(fixtures[i][1], {
+                    x: parseInt((275 - measureText(fixtures[i][1], 10)).toString()),
                     y: 767.5,
                     size: 10,
                     font: newWAVLdivs_helveticaFont
@@ -4923,8 +4923,8 @@ async function modifyPdf(fix, dates, doc, run) {
             }
 
             // Venue 0
-            await currFirstPage.drawText(__venues__[fixtures[i][1]], {
-                x: parseInt((240 - measureText(__venues__[fixtures[i][1]], 8)).toString()),
+            await currFirstPage.drawText(fixtures[i][1], {
+                x: parseInt((240 - measureText(fixtures[i][1], 8)).toString()),
                 y: 762,
                 size: 8,
                 font: newWAVLdivs_helveticaBold
