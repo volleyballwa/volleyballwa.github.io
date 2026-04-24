@@ -75,6 +75,12 @@ const __CONFIG__ = {
             "city": "",
             "alias": ["ASH", "Ashdale College"]
         },
+        "Balcatta SHS": {
+            "name": "Balcatta SHS",
+            "printName": "Balcatta SHS",
+            "city": "",
+            "alias": ["Balcatta SHS", "BSHS"]
+        },
         "Ballajura": {
             "name": "Ballajura",
             "printName": "Ballajura",
