@@ -153,6 +153,12 @@ const __CONFIG__ = {
             "city": "",
             "alias": ["Gold Netball", "GOLD"]
         },
+        "Goldfields Oasis Recreation Centre": {
+            "name": "Goldfields Oasis Recreation Centre",
+            "printName": "Goldfields Oasis",
+            "city": "",
+            "alias": ["Goldfields Oasis Recreation Centre", "GORC"]
+        },
         "Guildford Grammar School": {
             "name": "Guildford Grammar School",
             "printName": "Guildford Grammar",
@@ -163,7 +169,7 @@ const __CONFIG__ = {
             "name": "Greenwood College",
             "printName": "Greenwood College",
             "city": "",
-            "alias": []
+            "alias": ["Greenwood College", "GRE"]
         },
         "Hale": {
             "name": "Hale",
@@ -259,7 +265,7 @@ const __CONFIG__ = {
             "name": "MBC",
             "printName": "MBC",
             "city": "",
-            "alias": ["Mandurah Baptist College", "Mandurah Baptist Col", "Mandurah Baptist"]
+            "alias": ["Mandurah Baptist College", "Mandurah Baptist Col", "Mandurah Baptist", "MBC"]
         },
         "Melville LeisureFit": {
             "name": "Melville LeisureFit",
@@ -271,13 +277,13 @@ const __CONFIG__ = {
             "name": "Methodist Ladies College",
             "printName": "MLC",
             "city": "",
-            "alias": ["MLC", "Methodist L. Col", "Mthodist Ladies Co"]
+            "alias": ["MLC", "Methodist L. Col", "Mthodist Ladies Co", "Methodist Ladies College"]
         },
         "Murdoch Active": {
             "name": "Murdoch Active",
             "printName": "Murdoch Active",
             "city": "",
-            "alias": []
+            "alias": ["Murdoch Active", "MURD"]
         },
         "Naturaliste Community Centre": {
             "name": "Naturaliste Community Centre",
@@ -290,6 +296,12 @@ const __CONFIG__ = {
             "printName": "Newman College",
             "city": "",
             "alias": ["Newman"]
+        },
+        "Perth Modern": {
+            "name": "Perth Modern",
+            "printName": "Perth Modern",
+            "city": "",
+            "alias": ["Perth Mod", "PMOD", "P.MOD"]
         },
         "Penrhos College": {
             "name": "Penrhos College",
@@ -749,6 +761,34 @@ const __CONFIG__ = {
             // 
 
         },
+        "2026 WAVjL Season": {
+            "name": "2026 WAVjL Season",
+            "fixture_url": "https://volleyball.exposureevents.com/267727/wavjl-2026/documents/schedule?layout=datetime",
+            "players_url": "https://volleyball.exposureevents.com/267727/wavjl-2026/documents/players",
+            "printPlayers": "false",
+            "scoresheet": {
+                "default": "junior"
+            },
+            "backup_players" : {
+                "base_url": "N/A",
+                "id_array": [],
+                "new_id_array": {"N/A": []}
+            }
+        },
+        "EVA Indoor 2026": {
+            "name": "EVA Indoor 2026",
+            "fixture_url": "https://volleyball.exposureevents.com/267958/esperance-va-indoor-2026/documents/schedule?layout=datetime",
+            "players_url": "https://volleyball.exposureevents.com/267958/esperance-va-indoor-2026/documents/players?r=434",
+            "printPlayers": "true",
+            "scoresheet": {
+                "default": "EVA_indoor"
+            },
+            "backup_players" : {
+                "base_url": "N/A",
+                "id_array": [],
+                "new_id_array": {"N/A": []}
+            }
+        },
         "EVA Beach 2025/26": {
             "name": "EVA Beach 2025/26",
             //"fixture_url": "https://cors-anywhere-og-v5kf.onrender.com/volleyball.exposureevents.com/257723/eva-beach-2025-26/documents/schedule?layout=datetime",
@@ -756,7 +796,7 @@ const __CONFIG__ = {
             "players_url": "https://volleyball.exposureevents.com/257723/eva-beach-2025-26/documents/players?r=434",
             "printPlayers": "true",
             "scoresheet": {
-                "default": "EVA"
+                "default": "EVA_beach"
             },
             "backup_players" : {
                 "base_url": "N/A",
