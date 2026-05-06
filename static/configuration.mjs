@@ -141,6 +141,12 @@ const __CONFIG__ = {
             "city": "",
             "alias": ["ECU", "ECU Mount Lawley", "ECU Mt Lawley"]
         },
+        "Esperance Indoor Stadium": {
+            "name": "Esperance Indoor Stadium",
+            "printName": "Esperance Indoor Stadium",
+            "city": "",
+            "alias": ["Esperance Indoor Stadium", "EIS"]
+        },
         "Geographe Leisure Centre": {
             "name": "Geographe Leisure Centre",
             "printName": "Geographe Leisure Centre",
