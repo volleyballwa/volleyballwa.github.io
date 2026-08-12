@@ -810,6 +810,24 @@ const __CONFIG__ = {
                 "new_id_array": {"N/A": []}
             }
         },
+        "2026 VWA Schools Cup": {
+            "name": "2026 VWA Schools Cup",
+            "fixture_url": "https://volleyball.exposureevents.com/271866/wa-schools-cup-2026/documents/schedule?layout=datetime&r=321",
+            //"fixture_url": "https://volleyball.exposureevents.com/271866/wa-schools-cup-2026/documents/schedule?layout=datetime",
+            "players_url": "https://volleyball.exposureevents.com/271866/wa-schools-cup-2026/documents/players?r=434",
+            "printPlayers": "true",
+            "scoresheet": {
+                "10 honours": "12-sub",
+                "11 honours": "12-sub",
+                "open honours": "12-sub",
+                "default": "junior"
+            },
+            "backup_players" : {
+                "base_url": "N/A",
+                "id_array": [],
+                "new_id_array": {"N/A": []}
+            }
+        },*/
         /*"2025 WAVL Season": {
             "name": "2025 WAVL Season",
             //"fixture_url": "https://cors-anywhere-og-v5kf.onrender.com/volleyball.exposureevents.com/232730/wavl/documents/schedule?layout=datetime",
