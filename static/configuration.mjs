@@ -827,7 +827,7 @@ const __CONFIG__ = {
                 "id_array": [],
                 "new_id_array": {"N/A": []}
             }
-        },*/
+        },
         /*"2025 WAVL Season": {
             "name": "2025 WAVL Season",
             //"fixture_url": "https://cors-anywhere-og-v5kf.onrender.com/volleyball.exposureevents.com/232730/wavl/documents/schedule?layout=datetime",
