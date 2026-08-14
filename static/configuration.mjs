@@ -205,7 +205,7 @@ const __CONFIG__ = {
             "name": "HBF Arena Joondalup",
             "printName": "HBF Arena",
             "city": "",
-            "alias": ["HBF Arena", "HBF Joondalup", "JOON"]
+            "alias": ["HBF Arena", "HBF Joondalup", "JOON", "Arena Joondalup"]
         },
         "Herb Graham Leisure Centre": {
             "name": "Herb Graham Leisure Centre",

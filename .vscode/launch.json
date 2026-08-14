@@ -8,7 +8,7 @@
             "type": "chrome",
             "request": "launch",
             "name": "Windows Chrome Debug",
-            "url": "C:\\Users\\Coding\\Documents\\Github\\vwa\\volleyballwa.github.io\\index.html"
+            "url": "D:\\Github\\volleyballwa.github.io\\index.html"
         },
         {
             "type": "chrome",
