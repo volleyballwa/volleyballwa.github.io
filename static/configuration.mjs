@@ -828,6 +828,21 @@ const __CONFIG__ = {
                 "new_id_array": {"N/A": []}
             }
         },
+        "2026 ATA WA State Championships": {
+            "name": "2026 ATA WA State Championships",
+            "fixture_url": "https://volleyball.exposureevents.com/270890/ata-wa-country-state-championships-2026/documents/schedule?layout=datetime",
+            //"fixture_url": "https://volleyball.exposureevents.com/271866/wa-schools-cup-2026/documents/schedule?layout=datetime",
+            "players_url": "https://volleyball.exposureevents.com/270890/ata-wa-country-state-championships-2026/players?r=434",
+            "printPlayers": "true",
+            "scoresheet": {
+                "default": "12-sub"
+            },
+            "backup_players" : {
+                "base_url": "N/A",
+                "id_array": [],
+                "new_id_array": {"N/A": []}
+            }
+        },
         /*"2025 WAVL Season": {
             "name": "2025 WAVL Season",
             //"fixture_url": "https://cors-anywhere-og-v5kf.onrender.com/volleyball.exposureevents.com/232730/wavl/documents/schedule?layout=datetime",
