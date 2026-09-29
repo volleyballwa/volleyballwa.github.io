@@ -126,8 +126,8 @@ const __CONFIG__ = {
         "Curtin Stadium": {
             "name": "Curtin Stadium",
             "printName": "Curtin",
-            "city": "",
-            "alias": ["Curtin"]
+            "city": "Perth",
+            "alias": ["Curtin", "CUR"]
         },
         "Cyril Jackson Recreation Centre": {
             "name": "Cyril Jackson Recreation Centre",
@@ -396,8 +396,8 @@ const __CONFIG__ = {
         "Warwick": {
             "name": "Warwick",
             "printName": "Warwick",
-            "city": "",
-            "alias": ["Warwick Stadium", "Warwick Stad.", "WARW"]
+            "city": "Warwick",
+            "alias": ["Warwick Stadium", "Warwick Stad.", "WARW", "WAR"]
         },
         "TBC": {
             "name": "TBC",
@@ -420,8 +420,8 @@ const __CONFIG__ = {
         "Carrara": {
             "name": "Carrara",
             "printName": "Carrara",
-            "city": "",
-            "alias": ["GCSLC", "Gold Coast Sports & Leisure Centre", "Gerflor", "Carrara"]
+            "city": "Carrara",
+            "alias": ["GCSLC", "Gold Coast Sports & Leisure Centre", "Gerflor", "Carrara", "CISS"]
         },
         "AB Patterson": {
             "name": "AB Patterson",
@@ -453,6 +453,12 @@ const __CONFIG__ = {
             "printName": "Iona College",
             "city": "Lindum",
             "alias": ["Iona College, Lindum QLD", "IONA"]
+        },
+        "Lights Community & Sports Centre": {
+            "name": "Lights Community & Sports Centre",
+            "printName": "Lights Community & Sports Centre",
+            "city": "Prospect",
+            "alias": ["Lights Community & Sports Centre", "Lights Community & Sports Centre, SA", "LCSC"]
         },
         "Melbourne Sports and Aquatic Centre": {
             "name": "Melbourne Sports and Aquatic Centre",
@@ -843,6 +849,22 @@ const __CONFIG__ = {
                 "new_id_array": {"N/A": []}
             }
         },
+        "2026 AVSL Season": {
+            "name": "2026 AVSL Season",
+            //"fixture_url": "https://cors-anywhere-og-v5kf.onrender.com/volleyball.exposureevents.com/253383/2025-mahindra-australian-volleyball-super-league/documents/schedule?layout=datetime",
+            "fixture_url": "https://volleyball.exposureevents.com/273148/2026-mahindra-australian-volleyball-super-league/documents/schedule?layout=datetime",
+            "players_url": "https://volleyball.exposureevents.com/273148/2026-mahindra-australian-volleyball-super-league/documents/players",
+            "printPlayers": "true",
+            "scoresheet": {
+                "default": "avsl",
+                "finals": "avsl_finals"
+            },
+            "backup_players" : {
+                "base_url": "N/A",
+                "id_array": [],
+                "new_id_array": {"N/A": []}
+            }
+        }
         /*"2025 WAVL Season": {
             "name": "2025 WAVL Season",
             //"fixture_url": "https://cors-anywhere-og-v5kf.onrender.com/volleyball.exposureevents.com/232730/wavl/documents/schedule?layout=datetime",
