@@ -2,11 +2,11 @@ const FINALS_DATES = ["2022-09-04", "2022-09-11", "2022-09-18", "2023-08-27", "2
 
 const SL_FINALS_DATES = ["2023-07-14", "2023-07-16", "2023-07-22", "2024-07-19", "2024-07-21", "2024-07-27", "2026-08-22"]
 
-const AVSL_FINAL_DATES = ["2025-11-02"]
+const AVSL_FINAL_DATES = ["2025-11-02", "2026-11-21", "2025-11-22"]
 
-const AVSL_SEMI_DATES = ["2025-10-26"]
+const AVSL_SEMI_DATES = ["2025-10-26", "2026-11-14", "2025-11-15"]
 
-const AVSL_FINALS_DATES = ["2025-11-02","2025-10-26"]
+const AVSL_FINALS_DATES = ["2025-11-02","2025-10-26", "2026-11-14", "2025-11-15", "2026-11-21", "2025-11-22"]
 
 const AVSL_TRICODE = {
     "Adelaide Storm" : "S  T  M",
@@ -126,7 +126,7 @@ const __CONFIG__ = {
         "Curtin Stadium": {
             "name": "Curtin Stadium",
             "printName": "Curtin",
-            "city": "Perth",
+            "city": "Bentley",
             "alias": ["Curtin", "CUR"]
         },
         "Cyril Jackson Recreation Centre": {
@@ -456,13 +456,13 @@ const __CONFIG__ = {
         },
         "Lights Community & Sports Centre": {
             "name": "Lights Community & Sports Centre",
-            "printName": "Lights Community & Sports Centre",
+            "printName": "The Lights",
             "city": "Prospect",
             "alias": ["Lights Community & Sports Centre", "Lights Community & Sports Centre, SA", "LCSC"]
         },
         "Melbourne Sports and Aquatic Centre": {
             "name": "Melbourne Sports and Aquatic Centre",
-            "printName": "M S A C",
+            "printName": "M  S  A  C",
             "city": "Albert Park",
             "alias": ["Melbourne Sports and Aquatic Centre", "MSAC"]
         },

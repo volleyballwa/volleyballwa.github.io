@@ -1133,7 +1133,7 @@ async function parsePlayerList(players_list, upd_fixtures) {
                     }
 
                 } else {*/
-                if (upd_fixtures[i][9][2] == "2025 AVSL Season") {
+                if (upd_fixtures[i][9][2] == "2026 AVSL Season") {
                     if (Object.keys(team_object).includes(team_a_unique)) {
                         console.log(team_object[team_a_unique]["player_list"])
                         upd_fixtures[i][17] = team_object[team_a_unique]["player_list"].sort(function (a, b) {
