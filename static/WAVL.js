@@ -3352,53 +3352,55 @@ async function modifyPdf(fix, dates, doc, run) {
                 // Team A List
                 if (fixtures[i][17].length >= 1 && fixtures[i][17][0] != '' && fixtures[i][17][0][0] != '') {
                     for (var k = 0; k < Math.min(fixtures[i][17].length, 12); k++) {
-                        let name_formatted = fixtures[i][17][k][0][0].toUpperCase() + " " + fixtures[i][17][k][0][1].toUpperCase()
-                        if (measureText(name_formatted, 6) >= 49) {
-                            console.log(name_formatted)
-                            console.log(measureText(name_formatted, 6))
-                            await AVSL_finalfirstPage.drawText(name_formatted, {
-                                x: 972,
-                                y: 368-((14*k)),
-                                size: 6,
-                                font: AVSL_finalhelveticaFont
-                            })
-                        } else if (measureText(name_formatted, 6) >= 43) {
-                            console.log(name_formatted)
-                            console.log(measureText(name_formatted, 6))
-                            await AVSL_finalfirstPage.drawText(name_formatted, {
-                                x: 972,
-                                y: 368-((14*k)),
-                                size: 7,
-                                font: AVSL_finalhelveticaFont
-                            })
-                        } else if (measureText(name_formatted, 6) >= 32) {
-                            console.log(name_formatted)
-                            console.log(measureText(name_formatted, 6))
-                            await AVSL_finalfirstPage.drawText(name_formatted, {
-                                x: 972,
-                                y: 368-((14*k)),
-                                size: 8,
-                                font: AVSL_finalhelveticaFont
-                            })
-                        } else {
-                            await AVSL_finalfirstPage.drawText(name_formatted, {
-                                x: 972,
+                        if (fixtures[i][17][k][1] != '') {
+                            let name_formatted = fixtures[i][17][k][0][0].toUpperCase() + " " + fixtures[i][17][k][0][1].toUpperCase()
+                            if (measureText(name_formatted, 6) >= 49) {
+                                console.log(name_formatted)
+                                console.log(measureText(name_formatted, 6))
+                                await AVSL_finalfirstPage.drawText(name_formatted, {
+                                    x: 972,
+                                    y: 368-((14*k)),
+                                    size: 6,
+                                    font: AVSL_finalhelveticaFont
+                                })
+                            } else if (measureText(name_formatted, 6) >= 43) {
+                                console.log(name_formatted)
+                                console.log(measureText(name_formatted, 6))
+                                await AVSL_finalfirstPage.drawText(name_formatted, {
+                                    x: 972,
+                                    y: 368-((14*k)),
+                                    size: 7,
+                                    font: AVSL_finalhelveticaFont
+                                })
+                            } else if (measureText(name_formatted, 6) >= 32) {
+                                console.log(name_formatted)
+                                console.log(measureText(name_formatted, 6))
+                                await AVSL_finalfirstPage.drawText(name_formatted, {
+                                    x: 972,
+                                    y: 368-((14*k)),
+                                    size: 8,
+                                    font: AVSL_finalhelveticaFont
+                                })
+                            } else {
+                                await AVSL_finalfirstPage.drawText(name_formatted, {
+                                    x: 972,
+                                    y: 368-((14*k)),
+                                    size: 10,
+                                    font: AVSL_finalhelveticaFont
+                                })
+                            }
+                            // draw number
+                            let player_number = fixtures[i][17][k][1]
+                            if (player_number.length == 1) {
+                                player_number = " " + player_number
+                            }
+                            await AVSL_finalfirstPage.drawText(player_number, {
+                                x: 957,
                                 y: 368-((14*k)),
                                 size: 10,
                                 font: AVSL_finalhelveticaFont
                             })
                         }
-                        // draw number
-                        let player_number = fixtures[i][17][k][1]
-                        if (player_number.length == 1) {
-                            player_number = " " + player_number
-                        }
-                        await AVSL_finalfirstPage.drawText(player_number, {
-                            x: 957,
-                            y: 368-((14*k)),
-                            size: 10,
-                            font: AVSL_finalhelveticaFont
-                        })
                     }
 
                 }
@@ -3406,54 +3408,58 @@ async function modifyPdf(fix, dates, doc, run) {
                 // Team B List
                 if (fixtures[i][18].length >= 1 && fixtures[i][18][0] != '' && fixtures[i][18][0][0] != '') {
                     for (var k = 0; k < Math.min(fixtures[i][18].length, 12); k++) {
-                        let name_formatted = fixtures[i][18][k][0][0].toUpperCase() + " " + fixtures[i][18][k][0][1].toUpperCase()
-                        if (measureText(name_formatted, 6) >= 49) {
-                            console.log(name_formatted)
-                            console.log(measureText(name_formatted, 6))
-                            await AVSL_finalfirstPage.drawText(name_formatted, {
-                                x: 1094,
-                                y: 368-((14*k)),
-                                size: 6,
-                                font: AVSL_finalhelveticaFont
-                            })
-                        } else if (measureText(name_formatted, 6) >= 43) {
-                            console.log(name_formatted)
-                            console.log(measureText(name_formatted, 6))
-                            await AVSL_finalfirstPage.drawText(name_formatted, {
-                                x: 1094,
-                                y: 368-((14*k)),
-                                size: 7,
-                                font: AVSL_finalhelveticaFont
-                            })
-                        } else if (measureText(name_formatted, 6) >= 32) {
-                            console.log(name_formatted)
-                            console.log(measureText(name_formatted, 6))
-                            await AVSL_finalfirstPage.drawText(name_formatted, {
-                                x: 1094,
-                                y: 368-((14*k)),
-                                size: 8,
-                                font: AVSL_finalhelveticaFont
-                            })
-                        } else {
-                            await AVSL_finalfirstPage.drawText(name_formatted, {
-                                x: 1094,
+                        if (fixtures[i][18][k][1] != '') {
+                            console.log(fixtures[i][18][k][1])
+                            console.log("PLAYER NUMBER ^^")
+                            let name_formatted = fixtures[i][18][k][0][0].toUpperCase() + " " + fixtures[i][18][k][0][1].toUpperCase()
+                            if (measureText(name_formatted, 6) >= 49) {
+                                console.log(name_formatted)
+                                console.log(measureText(name_formatted, 6))
+                                await AVSL_finalfirstPage.drawText(name_formatted, {
+                                    x: 1094,
+                                    y: 368-((14*k)),
+                                    size: 6,
+                                    font: AVSL_finalhelveticaFont
+                                })
+                            } else if (measureText(name_formatted, 6) >= 43) {
+                                console.log(name_formatted)
+                                console.log(measureText(name_formatted, 6))
+                                await AVSL_finalfirstPage.drawText(name_formatted, {
+                                    x: 1094,
+                                    y: 368-((14*k)),
+                                    size: 7,
+                                    font: AVSL_finalhelveticaFont
+                                })
+                            } else if (measureText(name_formatted, 6) >= 32) {
+                                console.log(name_formatted)
+                                console.log(measureText(name_formatted, 6))
+                                await AVSL_finalfirstPage.drawText(name_formatted, {
+                                    x: 1094,
+                                    y: 368-((14*k)),
+                                    size: 8,
+                                    font: AVSL_finalhelveticaFont
+                                })
+                            } else {
+                                await AVSL_finalfirstPage.drawText(name_formatted, {
+                                    x: 1094,
+                                    y: 368-((14*k)),
+                                    size: 10,
+                                    font: AVSL_finalhelveticaFont
+                                })
+                            }
+                            
+                            // draw number
+                            let player_number = fixtures[i][18][k][1]
+                            if (player_number.length == 1) {
+                                player_number = " " + player_number
+                            }
+                            await AVSL_finalfirstPage.drawText(player_number, {
+                                x: 1079,
                                 y: 368-((14*k)),
                                 size: 10,
                                 font: AVSL_finalhelveticaFont
                             })
                         }
-                        
-                        // draw number
-                        let player_number = fixtures[i][18][k][1]
-                        if (player_number.length == 1) {
-                            player_number = " " + player_number
-                        }
-                        await AVSL_finalfirstPage.drawText(player_number, {
-                            x: 1079,
-                            y: 368-((14*k)),
-                            size: 10,
-                            font: AVSL_finalhelveticaFont
-                        })
                     }
                 }
 
@@ -3740,53 +3746,55 @@ async function modifyPdf(fix, dates, doc, run) {
                 // Team A List
                 if (fixtures[i][17].length >= 1 && fixtures[i][17][0] != '' && fixtures[i][17][0][0] != '') {
                     for (var k = 0; k < Math.min(fixtures[i][17].length, 12); k++) {
-                        let name_formatted = fixtures[i][17][k][0][0].toUpperCase() + " " + fixtures[i][17][k][0][1].toUpperCase()
-                        if (measureText(name_formatted, 6) >= 49) {
-                            console.log(name_formatted)
-                            console.log(measureText(name_formatted, 6))
-                            await AVSLfirstPage.drawText(name_formatted, {
-                                x: 972,
-                                y: 368-((14*k)),
-                                size: 6,
-                                font: AVSLhelveticaFont
-                            })
-                        } else if (measureText(name_formatted, 6) >= 43) {
-                            console.log(name_formatted)
-                            console.log(measureText(name_formatted, 6))
-                            await AVSLfirstPage.drawText(name_formatted, {
-                                x: 972,
-                                y: 368-((14*k)),
-                                size: 7,
-                                font: AVSLhelveticaFont
-                            })
-                        } else if (measureText(name_formatted, 6) >= 32) {
-                            console.log(name_formatted)
-                            console.log(measureText(name_formatted, 6))
-                            await AVSLfirstPage.drawText(name_formatted, {
-                                x: 972,
-                                y: 368-((14*k)),
-                                size: 8,
-                                font: AVSLhelveticaFont
-                            })
-                        } else {
-                            await AVSLfirstPage.drawText(name_formatted, {
-                                x: 972,
+                        if (fixtures[i][17][k][1] != '') {
+                            let name_formatted = fixtures[i][17][k][0][0].toUpperCase() + " " + fixtures[i][17][k][0][1].toUpperCase()
+                            if (measureText(name_formatted, 6) >= 49) {
+                                console.log(name_formatted)
+                                console.log(measureText(name_formatted, 6))
+                                await AVSLfirstPage.drawText(name_formatted, {
+                                    x: 972,
+                                    y: 368-((14*k)),
+                                    size: 6,
+                                    font: AVSLhelveticaFont
+                                })
+                            } else if (measureText(name_formatted, 6) >= 43) {
+                                console.log(name_formatted)
+                                console.log(measureText(name_formatted, 6))
+                                await AVSLfirstPage.drawText(name_formatted, {
+                                    x: 972,
+                                    y: 368-((14*k)),
+                                    size: 7,
+                                    font: AVSLhelveticaFont
+                                })
+                            } else if (measureText(name_formatted, 6) >= 32) {
+                                console.log(name_formatted)
+                                console.log(measureText(name_formatted, 6))
+                                await AVSLfirstPage.drawText(name_formatted, {
+                                    x: 972,
+                                    y: 368-((14*k)),
+                                    size: 8,
+                                    font: AVSLhelveticaFont
+                                })
+                            } else {
+                                await AVSLfirstPage.drawText(name_formatted, {
+                                    x: 972,
+                                    y: 368-((14*k)),
+                                    size: 10,
+                                    font: AVSLhelveticaFont
+                                })
+                            }
+                            // draw number
+                            let player_number = fixtures[i][17][k][1]
+                            if (player_number.length == 1) {
+                                player_number = " " + player_number
+                            }
+                            await AVSLfirstPage.drawText(player_number, {
+                                x: 957,
                                 y: 368-((14*k)),
                                 size: 10,
                                 font: AVSLhelveticaFont
                             })
                         }
-                        // draw number
-                        let player_number = fixtures[i][17][k][1]
-                        if (player_number.length == 1) {
-                            player_number = " " + player_number
-                        }
-                        await AVSLfirstPage.drawText(player_number, {
-                            x: 957,
-                            y: 368-((14*k)),
-                            size: 10,
-                            font: AVSLhelveticaFont
-                        })
                     }
 
                 }
@@ -3794,54 +3802,56 @@ async function modifyPdf(fix, dates, doc, run) {
                 // Team B List
                 if (fixtures[i][18].length >= 1 && fixtures[i][18][0] != '' && fixtures[i][18][0][0] != '') {
                     for (var k = 0; k < Math.min(fixtures[i][18].length, 12); k++) {
-                        let name_formatted = fixtures[i][18][k][0][0].toUpperCase() + " " + fixtures[i][18][k][0][1].toUpperCase()
-                        if (measureText(name_formatted, 6) >= 49) {
-                            console.log(name_formatted)
-                            console.log(measureText(name_formatted, 6))
-                            await AVSLfirstPage.drawText(name_formatted, {
-                                x: 1094,
-                                y: 368-((14*k)),
-                                size: 6,
-                                font: AVSLhelveticaFont
-                            })
-                        } else if (measureText(name_formatted, 6) >= 43) {
-                            console.log(name_formatted)
-                            console.log(measureText(name_formatted, 6))
-                            await AVSLfirstPage.drawText(name_formatted, {
-                                x: 1094,
-                                y: 368-((14*k)),
-                                size: 7,
-                                font: AVSLhelveticaFont
-                            })
-                        } else if (measureText(name_formatted, 6) >= 32) {
-                            console.log(name_formatted)
-                            console.log(measureText(name_formatted, 6))
-                            await AVSLfirstPage.drawText(name_formatted, {
-                                x: 1094,
-                                y: 368-((14*k)),
-                                size: 8,
-                                font: AVSLhelveticaFont
-                            })
-                        } else {
-                            await AVSLfirstPage.drawText(name_formatted, {
-                                x: 1094,
+                        if (fixtures[i][18][k][1] != '') {
+                            let name_formatted = fixtures[i][18][k][0][0].toUpperCase() + " " + fixtures[i][18][k][0][1].toUpperCase()
+                            if (measureText(name_formatted, 6) >= 49) {
+                                console.log(name_formatted)
+                                console.log(measureText(name_formatted, 6))
+                                await AVSLfirstPage.drawText(name_formatted, {
+                                    x: 1094,
+                                    y: 368-((14*k)),
+                                    size: 6,
+                                    font: AVSLhelveticaFont
+                                })
+                            } else if (measureText(name_formatted, 6) >= 43) {
+                                console.log(name_formatted)
+                                console.log(measureText(name_formatted, 6))
+                                await AVSLfirstPage.drawText(name_formatted, {
+                                    x: 1094,
+                                    y: 368-((14*k)),
+                                    size: 7,
+                                    font: AVSLhelveticaFont
+                                })
+                            } else if (measureText(name_formatted, 6) >= 32) {
+                                console.log(name_formatted)
+                                console.log(measureText(name_formatted, 6))
+                                await AVSLfirstPage.drawText(name_formatted, {
+                                    x: 1094,
+                                    y: 368-((14*k)),
+                                    size: 8,
+                                    font: AVSLhelveticaFont
+                                })
+                            } else {
+                                await AVSLfirstPage.drawText(name_formatted, {
+                                    x: 1094,
+                                    y: 368-((14*k)),
+                                    size: 10,
+                                    font: AVSLhelveticaFont
+                                })
+                            }
+                            
+                            // draw number
+                            let player_number = fixtures[i][18][k][1]
+                            if (player_number.length == 1) {
+                                player_number = " " + player_number
+                            }
+                            await AVSLfirstPage.drawText(player_number, {
+                                x: 1079,
                                 y: 368-((14*k)),
                                 size: 10,
                                 font: AVSLhelveticaFont
                             })
                         }
-                        
-                        // draw number
-                        let player_number = fixtures[i][18][k][1]
-                        if (player_number.length == 1) {
-                            player_number = " " + player_number
-                        }
-                        await AVSLfirstPage.drawText(player_number, {
-                            x: 1079,
-                            y: 368-((14*k)),
-                            size: 10,
-                            font: AVSLhelveticaFont
-                        })
                     }
                 }
 
