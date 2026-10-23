@@ -421,7 +421,7 @@ const __CONFIG__ = {
             "name": "Carrara",
             "printName": "Carrara",
             "city": "Carrara",
-            "alias": ["GCSLC", "Gold Coast Sports & Leisure Centre", "Gerflor", "Carrara", "CISS"]
+            "alias": ["GCSLC", "Gold Coast Sports & Leisure Centre", "Gerflor", "Carrara", "CISS", "Carrara Indoor Sports Stadium, QLD"]
         },
         "AB Patterson": {
             "name": "AB Patterson",
