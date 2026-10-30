@@ -397,7 +397,7 @@ const __CONFIG__ = {
             "name": "Warwick",
             "printName": "Warwick",
             "city": "Warwick",
-            "alias": ["Warwick Stadium", "Warwick Stad.", "WARW", "WAR"]
+            "alias": ["Warwick Stadium", "Warwick Stad.", "WARW", "WAR", "Warwick Stadium, WA"]
         },
         "TBC": {
             "name": "TBC",
