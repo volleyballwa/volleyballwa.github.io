@@ -801,11 +801,10 @@ const __CONFIG__ = {
                 "new_id_array": {"N/A": []}
             }
         },
-        "EVA Beach 2025/26": {
-            "name": "EVA Beach 2025/26",
-            //"fixture_url": "https://cors-anywhere-og-v5kf.onrender.com/volleyball.exposureevents.com/257723/eva-beach-2025-26/documents/schedule?layout=datetime",
-            "fixture_url": "https://volleyball.exposureevents.com/257723/eva-beach-2025-26/documents/schedule?layout=datetime",
-            "players_url": "https://volleyball.exposureevents.com/257723/eva-beach-2025-26/documents/players?r=434",
+        "EVA Beach 2026/27": {
+            "name": "EVA Beach 2026/27",
+            "fixture_url": "https://volleyball.exposureevents.com/280958/eva-beach-2026-27/documents/schedule?layout=datetime",
+            "players_url": "https://volleyball.exposureevents.com/280958/eva-beach-2026-27/documents/players?r=434",
             "printPlayers": "true",
             "scoresheet": {
                 "default": "EVA_beach"
