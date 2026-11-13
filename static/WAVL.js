@@ -1745,7 +1745,8 @@ async function modifyPdf(fix, dates, doc, run) {
     var JLurl = "https://volleyballwa.github.io/static/scoresheets/def_jl.pdf";
     var newWAVLdivs_url = "https://volleyballwa.github.io/static/scoresheets/WAVL_Div.pdf";
     var newWAVLsl_r_url = "https://volleyballwa.github.io/static/scoresheets/WAVL_SL_R.pdf";
-    var AVSLurl = "https://volleyballwa.github.io/static/scoresheets/AVSL.pdf";
+    //var AVSLurl = "https://volleyballwa.github.io/static/scoresheets/AVSL.pdf";
+    var AVSLurl = "https://volleyballwa.github.io/static/scoresheets/AVSLfinalsNew.pdf";
     var AVSL_final_url = "https://volleyballwa.github.io/static/scoresheets/AVSLfinalsNew.pdf";
     var EVAburl = "https://volleyballwa.github.io/static/scoresheets/Blank_EVA_Scoresheet.pdf";
     var EVAiurl = "https://volleyballwa.github.io/static/scoresheets/EVA_Indoor.pdf";
@@ -1821,7 +1822,8 @@ async function modifyPdf(fix, dates, doc, run) {
         var JLurl = "https://volleyballwa.github.io/static/scoresheets/def_jl.pdf";
         var newWAVLdivs_url = "https://volleyballwa.github.io/static/scoresheets/WAVL_Div.pdf";
         var newWAVLsl_r_url = "https://volleyballwa.github.io/static/scoresheets/WAVL_SL_R.pdf";
-        var AVSLurl = "https://volleyballwa.github.io/static/scoresheets/AVSL.pdf";
+        //var AVSLurl = "https://volleyballwa.github.io/static/scoresheets/AVSL.pdf";
+        var AVSLurl = "https://volleyballwa.github.io/static/scoresheets/AVSLfinalsNew.pdf";
         var AVSL_final_url = "https://volleyballwa.github.io/static/scoresheets/AVSLfinalsNew.pdf";
         var EVAburl = "https://volleyballwa.github.io/static/scoresheets/Blank_EVA_Scoresheet.pdf";
         var EVAiurl = "https://volleyballwa.github.io/static/scoresheets/EVA_Indoor.pdf";
